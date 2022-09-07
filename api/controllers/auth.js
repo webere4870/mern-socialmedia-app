@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 const CreateToken = require('./../utils/CreateToken')
 const ValidateJWT = require('./../utils/ValidateJWT')
 const FindOrCreate = require('./../MongoDB/FindOrCreate')
+const VerifyUser = require('./../MongoDB/VerifyUser')
+const UserSchema = require('./../MongoDB/Schema')
 const { OAuth2Client } = require('google-auth-library')
 require('dotenv').config()
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID) 
@@ -18,19 +20,60 @@ router.post("/api/v1/auth/google", async (req, res) => {
         audience: process.env.GOOGLE_CLIENT_ID
     });
     const { name, email, picture } = ticket.getPayload();    
-    console.log(name)
-    let [jwt, profile] = CreateToken({name:name, email: email, picture: picture})
-    console.log("JWT", jwt)
-    res.cookie("jwt", jwt, {
-        domain: 'http://localhost',
-        httpOnly: true,
-        sameSite: 'none',
-      })
-    res.json({success: true, data: true, jwt: jwt})
+    let response = await FindOrCreate(email, "", "google", name, null)
+    if(response.accepted == true)
+    {
+        let [jwt, profile] = CreateToken({name:name, email: email, picture: picture})
+        res.json({success: true, data: true, jwt: jwt})
+    }
+    else
+    {
+        res.json({success: false})
+    }
+})
+
+router.post("/login", async (req,res)=>
+{
+    let {email, password} = req.body
+    let user = await UserSchema.findOne({_id: email})
+    if(user)
+    {
+        let isValid = await VerifyUser(email, password)
+        if(isValid)
+        {
+            let [token, profile] = CreateToken({email: email, password: password, picture: null})
+            res.json({success: true, jwt: token})
+        }
+        else
+        {
+            res.json({success: false, message: "Invalid password"})
+        }
+        
+    }
+    else
+    {
+        res.json({success: false, message: "User does not exist"})
+    }
+})
+
+router.post("/register", async (req,res)=>
+{
+    let {name,email, password} = req.body
+    let response = await FindOrCreate(email, password, null, name, "")
+    if(response.accepted == true)
+    {
+        res.json({success: true})
+    }
+    else
+    {
+        res.json({success: false})
+    }
+    
 })
 
 router.get("/test", ValidateJWT, (req, res)=>
 {
+    console.log(req.JWT)
     res.json({jwt: req.JWT, success: true, bag: "Secured"})
 })
 

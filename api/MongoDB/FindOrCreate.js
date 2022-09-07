@@ -1,4 +1,4 @@
-let UserSchema = require('./Schema')
+const UserSchema = require('./../MongoDB/Schema')
 let bcrypt = require('bcrypt')
 
 async function FindOrCreate(username, password, provider, name, picture)

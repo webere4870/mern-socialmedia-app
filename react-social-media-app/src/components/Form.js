@@ -1,7 +1,8 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link, Navigate} from 'react-router-dom'
 import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google'
 import { useCookies } from 'react-cookie';
+import {} from 'react-facebook-login'
 import UserContext from './Context';
 
 
@@ -11,6 +12,10 @@ import UserContext from './Context';
 export default function Form(props)
 {
     let {user, setUser}= React.useContext(UserContext)
+    let [form, setForm] = React.useState({email: "", password: "", name: ""})
+    let [error, setError] = React.useState("")
+    let [dummyData, setDummyData] = React.useState("")
+
     const handleLogin = async googleData => {
         const res = await fetch("http://localhost:5000/api/v1/auth/google", {
             method: "POST",
@@ -22,11 +27,18 @@ export default function Form(props)
           }
         })
         let json = await res.json()
-        console.log(json)
-        setUser((prev)=>
+        if(json.success==true)
         {
-            return json.jwt
-        })
+            console.log(json)
+            setUser((prev)=>
+            {
+                return json.jwt
+            })
+        }
+        else
+        {
+            setError("Invalid credentials")
+        }
         // store returned user somehow
       }
     async function testRequest()
@@ -39,10 +51,8 @@ export default function Form(props)
        
         return json;
     }
-   
-    console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID)
-    let [form, setForm] = React.useState({email: "", password: "", name: ""})
-    let [dummyData, setDummyData] = React.useState("")
+
+    
     async function changeForm(evt)
     {
         let name = evt.currentTarget.name
@@ -61,13 +71,42 @@ export default function Form(props)
         evt.preventDefault()
         if(props.page == "login")
         {
-            let data = await fetch("/login", {
+            let data = await fetch("http://localhost:5000/login", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(form)
             })
             let json = await data.json()
-            setDummyData(JSON.stringify(json))
+            if(json.success==true)
+            {
+                console.log(json)
+                setUser((prev)=>
+                {
+                    return json.jwt
+                })
+                window.location.pathname="/"
+            }
+            else
+            {
+                setError("User already exists")
+            }
+        }
+        else
+        {
+            let data = await fetch("http://localhost:5000/register", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(form)
+            })
+            let json = await data.json()
+            if(json.success==true)
+            {
+                window.location.pathname ="/login"
+            }
+            else
+            {
+                setError("User already exists")
+            }
         }
     }
 
@@ -92,7 +131,7 @@ export default function Form(props)
                 <form>
                     <h1>Sign in</h1>
                     <div className="social-container">
-                        <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
+                        
                         <GoogleOAuthProvider clientId={"79040393211-3oclbp3abpnsuoq5gfl5skg45qfn6558.apps.googleusercontent.com"}><GoogleLogin
                             clientId={`79040393211-3oclbp3abpnsuoq5gfl5skg45qfn6558.apps.googleusercontent.com`}
                             buttonText="Log in with Google"
@@ -100,10 +139,12 @@ export default function Form(props)
                             onFailure={handleLogin}
                             cookiePolicy={'single_host_origin'}
                             redirectUri={"http://localhost:5000/google/callback"}
-                        /></GoogleOAuthProvider>;
+                        /></GoogleOAuthProvider>
                         
                     </div>
+                    {error && <p className='formError'>{error}</p>}
                     <span>or use your account</span>
+                    {props.page == "register" && <input type="text" name='name' placeholder="Name" onChange={changeForm} value={form.name}/>}
                     <input type="email" name='email' placeholder="Email" onChange={changeForm} value={form.email}/>
                     <input type="password" name='password' onChange={changeForm} placeholder="Password" value={form.password}/>
                     <a href="#">Forgot your password?</a>

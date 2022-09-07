@@ -4,6 +4,9 @@ let authRouter = require('./controllers/auth')
 let cookieParser = require('cookie-parser')
 let cors = require('cors')
 let session = require('express-session')
+let mongoose = require('mongoose')
+require('./MongoDB/Mongo')
+require('./MongoDB/Schema')
 var corsOptions = {
     origin: [
         "http://localhost:3000",
