@@ -1,6 +1,7 @@
 let express = require('express')
 let app = express()
 let authRouter = require('./controllers/auth')
+let mainRouter = require('./controllers/main')
 let cookieParser = require('cookie-parser')
 let cors = require('cors')
 let session = require('express-session')
@@ -31,17 +32,7 @@ app.use(cors({
       credentials: true
 }))
 
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: "sessions",
-    cookie:
-    {
-        maxAge: 600000, 
-        sameSite: "none",
-        secure: true
-    }
-}))
+
 
 
 app.use(express.urlencoded({extended: false}))
@@ -49,6 +40,7 @@ app.use(express.json())
 
 
 app.use("/",authRouter)
+app.use("/", mainRouter)
 
 
 app.listen(5000, ()=>

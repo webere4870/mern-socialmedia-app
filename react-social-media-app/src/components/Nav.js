@@ -8,5 +8,6 @@ export default function Nav()
     <nav>
         <p><Link to={"/home"}>Home</Link></p>
         <p><Link to={"/login"}>Login</Link></p>
+        <p><Link to={"/profile"}>Profile</Link></p>
     </nav>)
 }

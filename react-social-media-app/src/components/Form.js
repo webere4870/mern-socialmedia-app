@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, Navigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google'
 import { useCookies } from 'react-cookie';
 import {} from 'react-facebook-login'
@@ -11,11 +11,11 @@ import UserContext from './Context';
 
 export default function Form(props)
 {
-    let {user, setUser}= React.useContext(UserContext)
+    let [user, setUser]= React.useContext(UserContext)
     let [form, setForm] = React.useState({email: "", password: "", name: ""})
     let [error, setError] = React.useState("")
     let [dummyData, setDummyData] = React.useState("")
-
+    let navigate = useNavigate()
     const handleLogin = async googleData => {
         const res = await fetch("http://localhost:5000/api/v1/auth/google", {
             method: "POST",
@@ -32,8 +32,10 @@ export default function Form(props)
             console.log(json)
             setUser((prev)=>
             {
-                return json.jwt
+                return json
             })
+            
+            navigate("/", { replace: true });
         }
         else
         {
@@ -84,7 +86,7 @@ export default function Form(props)
                 {
                     return json.jwt
                 })
-                window.location.pathname="/"
+                navigate("/", { replace: true });
             }
             else
             {
@@ -101,7 +103,7 @@ export default function Form(props)
             let json = await data.json()
             if(json.success==true)
             {
-                window.location.pathname ="/login"
+                navigate("/login", { replace: true });
             }
             else
             {
@@ -159,7 +161,7 @@ export default function Form(props)
                         <button className="ghost" id="signIn">Sign In</button>
                     </div>
                     <div className="overlay-panel overlay-right">
-                        <h1>Hello, {user.jwt}</h1>
+                        <h1>Hello</h1>
                         <p>Enter your personal details and start journey with us</p>
                         {props.page == "login"? <Link to={"/register"}><button className="ghost" id="signUp">Sign Up</button></Link>  : <Link to={"/login"}><button className="ghost" id="signUp">Login</button></Link> }
                         
