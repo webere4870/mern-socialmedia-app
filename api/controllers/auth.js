@@ -24,7 +24,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
     if(response.accepted == true)
     {
         let [jwt, profile] = CreateToken({name:name, email: email, picture: picture})
-        res.json({success: true, data: true, jwt: jwt})
+        res.json({success: true, data: true, jwt: jwt, profile: profile})
     }
     else
     {
@@ -42,7 +42,7 @@ router.post("/login", async (req,res)=>
         if(isValid)
         {
             let [token, profile] = CreateToken({email: email, password: password, picture: null})
-            res.json({success: true, jwt: token})
+            res.json({success: true, jwt: token, profile: profile})
         }
         else
         {

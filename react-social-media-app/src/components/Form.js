@@ -32,7 +32,7 @@ export default function Form(props)
             console.log(json)
             setUser((prev)=>
             {
-                return json
+                return {jwt: json.jwt, name: json.name, email: json.email, picture: json.picture}
             })
             
             navigate("/", { replace: true });
@@ -84,7 +84,7 @@ export default function Form(props)
                 console.log(json)
                 setUser((prev)=>
                 {
-                    return json.jwt
+                    return {jwt: json.jwt, name: json.name, email: json.email, picture: json.picture}
                 })
                 navigate("/", { replace: true });
             }

@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/storage-blob": "^12.11.0",
+    "azure-storage": "^2.10.7",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -19,6 +21,9 @@
     "google-auth-library": "^8.5.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.4",
+    "multer": "^1.4.5-lts.1",
+    "multer-azure": "^2.0.1",
+    "multer-azure-storage": "^0.2.0",
     "nodemon": "^2.0.19",
     "passport": "^0.6.0",
     "passport-facebook": "^3.0.0",
