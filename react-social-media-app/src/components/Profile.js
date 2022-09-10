@@ -3,6 +3,8 @@ import Nav from './Nav'
 import UserContext from './Context'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import Bio from './Bio'
+import Map from './Map'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 
@@ -12,12 +14,10 @@ export default function Profile(props)
         imagePreviewUrl: "", 
         picFile: null
      })
-     let fileInput = React.createRef(); 
+     let fileInput = React.createRef();
      
-     // Activates user file input to set div
-     const editProfilePic = () => {
-        fileInput.current.click();
-     } 
+     let [isBioShown, setIsBioShown] = React.useState(false) 
+     let bioStyle = {right: isBioShown ? 0 : "-40vw"}
      // Handles the image that was input by user
      const handleImageChange = e => {
         e.preventDefault();
@@ -38,6 +38,8 @@ export default function Profile(props)
     let [profile, setProfile] = React.useState({})
     let [form, setForm] = React.useState({})
     let navigate = useNavigate()
+
+
     const handleSubmit = async() => {
         let config = {
             headers: {
@@ -79,13 +81,27 @@ export default function Profile(props)
     return (
         <div>
             <Nav/>
-            <h1>Hello, {profile.name}</h1>
-            <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
-            <input type="file"
-           accept="image/*"
-           onChange={handleImageChange}
-           ref={fileInput}/>
-            <button onClick={handleSubmit}>Change profile picture</button>
+            {isBioShown && <Bio bioStyle={bioStyle} setIsBioShown={setIsBioShown}/>}
+            <div className='rowFlex'>
+                <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
+                <div className='colFlex'>
+                <h1>{profile.name}</h1>
+                <input type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                ref={fileInput}/>
+                    <button onClick={handleSubmit}>Change profile picture</button>
+                </div>
+            </div>
+            
+            
+            <p>Bio: {profile.bio && profile.bio}</p>
+            <p>Tenant or Landlord {profile.status}</p>
+            <div id='profileMap'>
+                <Map/>
+            </div>
+            
+            <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
         </div>
     )
 }

@@ -20,7 +20,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
         audience: process.env.GOOGLE_CLIENT_ID
     });
     const { name, email, picture } = ticket.getPayload();    
-    let response = await FindOrCreate(email, "", "google", name, null)
+    let response = await FindOrCreate(email, "", "google", name, picture)
     if(response.accepted == true)
     {
         let [jwt, profile] = CreateToken({name:name, email: email, picture: picture})
