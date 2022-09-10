@@ -17,11 +17,11 @@ function App() {
           <Router>
             <Routes>
               <Route index element={<Home />} />
-              <Route path="home" element={<Home />} />
+              {user && <Route path="home" element={<Home />}/>}
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register/>}/>
-              <Route path="profile" element={<Profile/>}/>
-              <Route path="*" element={<Home />} />
+              {user && <Route path="profile" element={<Profile/>}/>}
+              <Route path="*" element={<Login />} />
             </Routes>
           </Router>
         </CookiesProvider>

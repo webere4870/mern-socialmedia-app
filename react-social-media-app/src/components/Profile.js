@@ -76,12 +76,11 @@ export default function Profile(props)
             })
         })()
     }, [])
-
     return (
         <div>
             <Nav/>
-            <h1>Hello, {user.name}</h1>
-            <img src={user.picture} alt="" style={{height: "60px", width: "60px"}}/>
+            <h1>Hello, {profile.name}</h1>
+            <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
             <input type="file"
            accept="image/*"
            onChange={handleImageChange}

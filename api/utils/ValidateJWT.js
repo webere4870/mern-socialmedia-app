@@ -3,9 +3,7 @@ require('dotenv').config()
 
 function ValidateJWT(req, res, next)
 {
-    console.log("validation")
     const token = req.headers['x-access-token']
-    console.log(token)
     if(token)
     {
             try{
@@ -14,7 +12,6 @@ function ValidateJWT(req, res, next)
                {
                 req.JWT = valid
                 next()
-                console.log("VAILD")
                } 
                else{
                 res.json({success: false})
