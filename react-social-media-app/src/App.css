@@ -11,7 +11,7 @@
   --secondaryColor: #FF416C;
 }
 
-body
+body, html
 {
   overflow-x: hidden;
 }
@@ -67,6 +67,25 @@ body
 	height: 400px;
 }
 
+#searchMap
+{
+	width: 75vw;
+	height: 100vh;
+	overflow: hidden;
+}
+
+#searchBar
+{
+	width: 25vw;
+	height: 100vh;
+	z-index: 4;
+	box-shadow: 0 0 20px gray;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
 .profileBig
 {
 	height: 150px;
@@ -77,6 +96,9 @@ body
 
 nav
 {
+	position: fixed;
+	top: 0;
+	left: 0;
   width: 100vw;
   height: 70px;
   background: white;
@@ -124,7 +146,7 @@ body {
 	flex-direction: column;
 	font-family: 'Montserrat', sans-serif;
 	min-height: 100vh;
-	margin: -20px 0 50px;
+
 	width: 100vw;
 }
 

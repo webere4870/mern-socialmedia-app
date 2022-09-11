@@ -4,6 +4,7 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Register from './components/Register'
 import Profile from './components/Profile'
+import Search from './components/Search';
 import {Routes, Route, Link, BrowserRouter as Router} from 'react-router-dom'
 import { CookiesProvider } from 'react-cookie';
 import UserContext from './components/Context';
@@ -21,6 +22,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register/>}/>
               {user && <Route path="profile" element={<Profile/>}/>}
+              <Route path="search" element={<Search/>}/>
               <Route path="*" element={<Login />} />
             </Routes>
           </Router>
