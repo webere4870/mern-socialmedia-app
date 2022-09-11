@@ -18,8 +18,16 @@ let path = require('path')
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
     let jwt = req.jwt || req.JWT
-    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, name: 1, picture: 1})
+    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1})
     res.json({success: true, user: user})
+})
+
+router.post("/profile", ValidateJWT, async (req,res)=>
+{
+    let {bio, city, state} = req.body
+    let item = await UserSchema.updateOne({_id: req.JWT.email}, {bio: bio[0], city: city[0], state: state[0]})
+    let newProfile = await UserSchema.findOne({_id: req.JWT.email})
+    res.json({success: true, profile: newProfile})
 })
 
 router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req, res)=>

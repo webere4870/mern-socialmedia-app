@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import Bio from './Bio'
 import Map from './Map'
+import Fetch from './../utils/fetch'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 
@@ -36,8 +37,27 @@ export default function Profile(props)
 
     let [user, setUser] = React.useContext(UserContext)
     let [profile, setProfile] = React.useState({})
-    let [form, setForm] = React.useState({})
+    let [bioState, setBioState] = React.useState({})
     let navigate = useNavigate()
+
+    const inputChange = async (evt) =>
+    {
+        setProfile((prev)=>
+        {
+            return {...prev, [evt.currentTarget.name]: [evt.currentTarget.value]}
+        })
+        
+    }
+
+    const submitProfile = async(evt)=>
+    {
+        let response = await Fetch("profile", {method: "POST", headers:{"x-access-token": user.jwt, "Content-Type": "application/json"}, body: JSON.stringify(profile)})
+        
+        setProfile((prev)=>
+        {
+            return response.profile
+        })
+    }
 
 
     const handleSubmit = async() => {
@@ -79,9 +99,9 @@ export default function Profile(props)
         })()
     }, [])
     return (
-        <div>
+        <div className='colFlex'>
             <Nav/>
-            {isBioShown && <Bio bioStyle={bioStyle} setIsBioShown={setIsBioShown}/>}
+            {isBioShown && <Bio bioStyle={bioStyle} bioForm={profile} inputChange={inputChange} submitProfile={submitProfile} setIsBioShown={setIsBioShown}/>}
             <div className='rowFlex'>
                 <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
                 <div className='colFlex'>
@@ -95,7 +115,8 @@ export default function Profile(props)
             </div>
             
             
-            <p>Bio: {profile.bio && profile.bio}</p>
+            <p>Bio: {profile.bio}</p>
+            <p>Location: {profile.city}, {profile.state}</p>
             <p>Tenant or Landlord {profile.status}</p>
             <div id='profileMap'>
                 <Map/>
