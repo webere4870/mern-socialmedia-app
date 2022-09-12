@@ -11,15 +11,17 @@ const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storag
 
 export default function Profile(props)
 {
-    const [values, setValues] = React.useState({
-        imagePreviewUrl: "", 
-        picFile: null
-     })
-     let fileInput = React.createRef();
+    
      
      let [isBioShown, setIsBioShown] = React.useState(false) 
      let bioStyle = {right: isBioShown ? 0 : "-40vw"}
      // Handles the image that was input by user
+
+     const [values, setValues] = React.useState({
+        imagePreviewUrl: "", 
+        picFile: null
+     })
+     let fileInput = React.createRef();
      const handleImageChange = e => {
         e.preventDefault();
         let reader = new FileReader();

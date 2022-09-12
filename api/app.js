@@ -8,6 +8,7 @@ let session = require('express-session')
 let mongoose = require('mongoose')
 require('./MongoDB/Mongo')
 require('./MongoDB/Schema')
+require('./MongoDB/ListingSchema')
 var corsOptions = {
     origin: [
         "http://localhost:3000",

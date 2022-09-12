@@ -1,0 +1,8 @@
+1. Create listing page
+    -Picture uploads
+    -Cost
+    -Address w/ coordinates
+2. Show listings on user profiles
+3. Implement listings onto search page
+4. Create profile search pages for leaving reviews
+5. Create messaging system

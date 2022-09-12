@@ -4,6 +4,9 @@ let router = express.Router()
 let UserSchema = require('./../MongoDB/Schema')
 const multer  = require('multer')
 const fs = require('fs')
+const {randomUUID} = require('crypto')
+const UUID = require('uuid')
+const ListingSchema = require('./../MongoDB/ListingSchema')
 
 
 const upload = multer({ dest: 'uploads/' })
@@ -42,5 +45,29 @@ router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req,
     fs.rm(path.join(__dirname, "\\..\\uploads\\"+req.file.filename))
     res.json({success: true})
 })
+
+router.post("/listing", ValidateJWT, upload.any('avatar'), async (req, res)=>
+{
+    //const stream = fs.createWriteStream(path.join(__dirname, "\\..\\uploads\\"+req.file.filename));
+    let [address, city, state, zip] = req.body.state
+    console.log(req.files, address, city, state, zip)
+    let pictureArray = []
+    for(let file of req.files)
+    {
+        console.log("Succes")
+        const buf = fs.readFileSync(path.join(__dirname, "\\..\\uploads\\"+file.filename));
+        buf.toString('utf8'); 
+        let newID = UUID.v4()
+        pictureArray.push(newID)
+        let client = container.getBlockBlobClient(newID)
+        const options = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+        await client.uploadData(buf, options)
+        fs.rm(path.join(__dirname, "\\..\\uploads\\"+file.filename))
+    }
+    let upsert = new ListingSchema({address: address, city: city, state: state, ZIP: Number(zip), pictures: pictureArray})
+    await upsert.save()
+    res.json({success: true})
+})
+
 
 module.exports = router

@@ -9,5 +9,6 @@ export default function Nav()
         <p><Link to={"/home"}>Home</Link></p>
         <p><Link to={"/search"}>Search</Link></p>
         <p><Link to={"/profile"}>Profile</Link></p>
+        <p><Link to={"/listing"}>Listing</Link></p>
     </nav>)
 }
