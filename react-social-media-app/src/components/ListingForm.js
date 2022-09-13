@@ -2,8 +2,9 @@ import React from 'react'
 
 export default function SearchForm(props)
 {
-    let {address, city, state, zip, price, handleImageChange, fileInput} = props.form
-    let {handleState, handleSubmit} = props
+    let {address, city, state, zip, price} = props.form
+    let {handleState, handleSubmit, handleImageChange, fileInput} = props
+    console.log(handleImageChange)
     return(
         <div id='searchBar'>
             <label htmlFor="address">Address</label>
@@ -74,6 +75,7 @@ export default function SearchForm(props)
                 onChange={handleImageChange}
                 ref={fileInput}/>
                     <button onClick={handleSubmit}>Change profile picture</button>
+                    {props.error}
         </div>
     )
 }

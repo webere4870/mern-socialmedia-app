@@ -18,11 +18,7 @@ Geocode.enableDebug();
 export default function Listing(props)
 {
     let [mapCenter, setMapCenter] = React.useState({lat: 39.9612, lng: -82.9988})
-    let [city, setCity] = React.useState("Findlay")
-    let [state, setState] = React.useState("OH")
-    let [zip, setZip] = React.useState("45840")
-    let [address, setAddress] = React.useState("890 Deer Trail Court")
-    let [price, setPrice] = React.useState("0")
+
     let [error, setError] = React.useState("")
     let [form, setForm] = React.useState({city: "Findlay", state: "OH", zip: "45840", address: "890 Deer Trail Court", price: "0"})
     const [values, setValues] = React.useState([])
@@ -31,6 +27,7 @@ export default function Listing(props)
         e.preventDefault();
         
         let inFile = e.target.files;
+        console.log(inFile)
         for(let file of inFile)
         {
             let reader = new FileReader();
@@ -85,8 +82,12 @@ export default function Listing(props)
           fd.append("address", form.address)
           fd.append("zip", form.zip)
           fd.append("price", form.price)
-        // response stores the response back from the API
-        let response = await axios.post(`http://localhost:5000/listing`, fd, {
+          Geocode.fromAddress(`${form.address} ${form.city}, ${form.state} ${form.zip}`).then(
+            async (response) => {
+              const { lat, lng } = response.results[0].geometry.location;
+                fd.append("lat", lat)
+                fd.append("lng", lng)
+                let resp = await axios.post(`http://localhost:5000/listing`, fd, {
             headers: {
               'x-access-token': user.jwt, // optional
               'Content-Type': 'multipart/form-data'
@@ -96,6 +97,16 @@ export default function Listing(props)
            alert("Error occurred while uploading picture, try uploading a smaller image size or try again later.")
            return;
      });
+            },
+            (error) => {
+                console.log(error)
+              setError(error)
+            }
+        );
+          
+        // response stores the response back from the API
+
+        
      }
     React.useEffect(()=>
     {
@@ -144,6 +155,6 @@ export default function Listing(props)
     return (<div className='rowFlex'>
         <Nav/>
         <BigMap  mapCenter={mapCenter} setMapCenter={setMapCenter}/>
-        <ListingForm handleState={handleState} form={form} handleImageChange={handleImageChange} fileInput={fileInput} handleSubmit={handleSubmit}/>
+        <ListingForm handleState={handleState} form={form} handleImageChange={handleImageChange} fileInput={fileInput} handleSubmit={handleSubmit} error={error}/>
     </div>)
 }

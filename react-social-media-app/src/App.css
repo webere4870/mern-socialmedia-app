@@ -13,7 +13,7 @@
 
 body, html
 {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .App {
@@ -78,6 +78,7 @@ body, html
 {
 	width: 25vw;
 	height: 100vh;
+	margin-top: 70px;
 	z-index: 4;
 	box-shadow: 0 0 20px gray;
 	display: flex;
@@ -95,6 +96,14 @@ body, html
 	height: 1000px;
 	width: 200px;
 	background: white;
+}
+
+.listing
+{
+	width: 90%;
+	height: 300px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px gray;
 }
 
 .profileBig

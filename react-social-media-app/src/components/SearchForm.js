@@ -65,6 +65,7 @@ export default function SearchForm(props)
             <label htmlFor="price">Price</label>
             <input type="text" name="price" value={price} onChange={handleState}/>
             <button onClick={getListings}>Load Listings</button>
+            {props.listingsArray}
         </div>
     )
 }

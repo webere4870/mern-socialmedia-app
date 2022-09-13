@@ -7,7 +7,9 @@ let schema = new mongoose.Schema({
     ZIP: Number,
     pictures: Array,
     price: Number, 
-    owner: String
+    owner: String,
+    lat: Number,
+    lng: Number
 })
 
 module.exports = mongoose.model("ListingSchema", schema)

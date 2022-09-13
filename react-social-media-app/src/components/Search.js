@@ -6,6 +6,7 @@ import BigMap from './BigMap'
 import SearchForm from './SearchForm'
 import ListingItem from './ListingItem'
 import Fetch from './../utils/fetch'
+import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
 
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
@@ -18,8 +19,12 @@ export default function Search(props)
 {
     let [mapCenter, setMapCenter] = React.useState({lat: 39.9612, lng: -82.9988})
     let [form, setForm] = React.useState({city: "Findlay", state: "OH", price: "0"})
-
+    let [selected, setSelected] = React.useState({})
     let [listings, setListings] = React.useState([])
+    const onSelect = item => {
+      console.log("selected budy", item)
+      setSelected(item);
+    }
 
     function handleState(evt)
     {
@@ -49,6 +54,15 @@ export default function Search(props)
       listingsArray.push(<ListingItem key={temp.address} listing={temp}/>)
     }
 
+    let markersArray = listings.map(item => {
+      return (
+      <MarkerF key={item.name} 
+        position={{lat: item.lat, lng: item.lng}}
+        onClick={() => onSelect(item)}
+      />
+      )
+    })
+
     console.log(listingsArray)
     
     React.useEffect(()=>
@@ -68,11 +82,7 @@ export default function Search(props)
     }, [form])
     return (<div className='rowFlex'>
         <Nav/>
-        <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter}/>
-        <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} />
-        <div id='listingBox'>
-          {listingsArray}
-        </div>
-        
+        <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/>
+        <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray}/>
     </div>)
 }

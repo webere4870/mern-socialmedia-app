@@ -3,11 +3,9 @@ import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/a
 const Map = (props) => {
 
     
-    const [ selected, setSelected ] = React.useState({});
+    let markersArray = props.markersArray
     const [locations, setLocations] = React.useState([])
-  const onSelect = item => {
-    setSelected(item);
-  }
+
   React.useEffect(()=>
     {
         setLocations((prev)=>
@@ -65,14 +63,7 @@ const Map = (props) => {
   const defaultCenter = {
     lat: 41.4055, lng: 2.1915
   }
-  let mappers = locations.map(item => {
-    return (
-    <MarkerF key={item.name} 
-      position={item.location}
-      onClick={() => onSelect(item)}
-    />
-    )
-  })
+ 
   
   return (
      <LoadScript
@@ -82,9 +73,9 @@ const Map = (props) => {
           zoom={13}
           center={props.center}>
          {
-            mappers
+            markersArray
          }
-        {
+        {/* {
             selected.location && 
             (
               <InfoWindow
@@ -95,7 +86,7 @@ const Map = (props) => {
               <p>{selected.name}</p>
             </InfoWindow>
             )
-         }
+         } */}
      </GoogleMap>
      </LoadScript>
   )

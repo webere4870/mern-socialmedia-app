@@ -49,21 +49,23 @@ router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req,
 router.post("/listing", ValidateJWT, upload.any('avatar'), async (req, res)=>
 {
     //const stream = fs.createWriteStream(path.join(__dirname, "\\..\\uploads\\"+req.file.filename));
-    let {address, city, state, zip, price} = req.body
+    let {address, city, state, zip, price, lat, lng} = req.body
     let pictureArray = []
-    console.log("herebuck")
+    console.log(req.files)
     for(let file of req.files)
     {
         const buf = fs.readFileSync(path.join(__dirname, "\\..\\uploads\\"+file.filename));
         buf.toString('utf8'); 
         let newID = UUID.v4()
-        pictureArray.push(newID)
+        console.log(newID)
+        pictureArray[pictureArray.length] = newID
         let client = container.getBlockBlobClient(newID)
         const options = { blobHTTPHeaders: { blobContentType: file.mimetype } };
         await client.uploadData(buf, options)
         fs.unlinkSync(path.join(__dirname, "\\..\\uploads\\"+file.filename))
     }
-    let upsert = new ListingSchema({address: address, city: city, state: state, ZIP: Number(zip), pictures: pictureArray, price: price, owner: req.JWT.email})
+    console.log(pictureArray)
+    let upsert = new ListingSchema({address: address, city: city, state: state, ZIP: Number(zip), pictures: pictureArray, price: price, owner: req.JWT.email, lat: lat, lng: lng})
     await upsert.save()
     res.json({success: true})
 })
