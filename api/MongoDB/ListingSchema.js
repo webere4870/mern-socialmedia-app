@@ -5,7 +5,9 @@ let schema = new mongoose.Schema({
     city: String,
     state: String,
     ZIP: Number,
-    pictures: Array
+    pictures: Array,
+    price: Number, 
+    owner: String
 })
 
 module.exports = mongoose.model("ListingSchema", schema)

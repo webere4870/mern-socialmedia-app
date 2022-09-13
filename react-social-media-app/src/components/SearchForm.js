@@ -2,7 +2,8 @@ import React from 'react'
 
 export default function SearchForm(props)
 {
-    let {city, state, handleState} = props
+    let {city, state, price} = props.form
+    let {handleState, getListings} = props
     return(
         <div id='searchBar'>
             <label htmlFor="city">City</label>
@@ -61,7 +62,9 @@ export default function SearchForm(props)
                 <option value="WI">Wisconsin</option>
                 <option value="WY">Wyoming</option>
             </select>
-            
+            <label htmlFor="price">Price</label>
+            <input type="text" name="price" value={price} onChange={handleState}/>
+            <button onClick={getListings}>Load Listings</button>
         </div>
     )
 }

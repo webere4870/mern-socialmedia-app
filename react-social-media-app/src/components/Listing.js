@@ -22,7 +22,9 @@ export default function Listing(props)
     let [state, setState] = React.useState("OH")
     let [zip, setZip] = React.useState("45840")
     let [address, setAddress] = React.useState("890 Deer Trail Court")
+    let [price, setPrice] = React.useState("0")
     let [error, setError] = React.useState("")
+    let [form, setForm] = React.useState({city: "Findlay", state: "OH", zip: "45840", address: "890 Deer Trail Court", price: "0"})
     const [values, setValues] = React.useState([])
      let fileInput = React.createRef();
      const handleImageChange = e => {
@@ -78,10 +80,11 @@ export default function Listing(props)
           {
             fd.append("avatar", file.picFile, "temp.jpg");
           }
-          fd.append("state", address)
-          fd.append("state", city)
-          fd.append("state", state)
-          fd.append("state", zip)
+          fd.append("city", form.city)
+          fd.append("state", form.state)
+          fd.append("address", form.address)
+          fd.append("zip", form.zip)
+          fd.append("price", form.price)
         // response stores the response back from the API
         let response = await axios.post(`http://localhost:5000/listing`, fd, {
             headers: {
@@ -114,14 +117,18 @@ export default function Listing(props)
 
     function handleState(evt)
     {
+        console.log("Here stater")
         let namer = evt.currentTarget.name
         let val = evt.currentTarget.value
-        namer == "state" ? setState(val) : setCity(val)
+        setForm((prev)=>
+        {
+            return {...prev, [namer]: val}
+        })
     }
     
     React.useEffect(()=>
     {
-        Geocode.fromAddress(`${address} ${city}, ${state} ${zip}`).then(
+        Geocode.fromAddress(`${form.city}, ${form.state}`).then(
             (response) => {
               const { lat, lng } = response.results[0].geometry.location;
               setMapCenter((prev)=>
@@ -133,10 +140,10 @@ export default function Listing(props)
               setError("City does not exist")
             }
         );
-    }, [city, state])
+    }, [form])
     return (<div className='rowFlex'>
         <Nav/>
-        <BigMap city={city} state={state} setCity={setCity} setState={setState} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
-        <ListingForm handleState={handleState} address={address} city={city} state={state} zip={zip} handleImageChange={handleImageChange} fileInput={fileInput} handleSubmit={handleSubmit}/>
+        <BigMap  mapCenter={mapCenter} setMapCenter={setMapCenter}/>
+        <ListingForm handleState={handleState} form={form} handleImageChange={handleImageChange} fileInput={fileInput} handleSubmit={handleSubmit}/>
     </div>)
 }

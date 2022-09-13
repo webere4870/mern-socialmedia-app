@@ -2,13 +2,14 @@ import React from 'react'
 
 export default function SearchForm(props)
 {
-    let {address, city, state, zip, handleState, handleImageChange, fileInput, handleSubmit} = props
+    let {address, city, state, zip, price, handleImageChange, fileInput} = props.form
+    let {handleState, handleSubmit} = props
     return(
         <div id='searchBar'>
             <label htmlFor="address">Address</label>
             <input type="text" value={address} name='address' onChange={handleState}/>
             <label htmlFor="city">City</label>
-            <input type="text" value={city} name='city' onChange={handleState}/>
+            <input type="text" onChange={handleState} value={city} name='city' />
             <label htmlFor="city">State</label>
             <select name='state' value={state} onChange={handleState}>
                 <option value="AL">Alabama</option>
@@ -63,8 +64,10 @@ export default function SearchForm(props)
                 <option value="WI">Wisconsin</option>
                 <option value="WY">Wyoming</option>
             </select>
-            <label htmlFor="city">ZIP</label>
+            <label htmlFor="zip">ZIP</label>
             <input type="text" value={zip} name='zip' onChange={handleState}/>
+            <label htmlFor="price">Price</label>
+            <input type="text" value={price} name='price' onChange={handleState}/>
             <input type="file"
                 accept="image/*"
                 multiple
