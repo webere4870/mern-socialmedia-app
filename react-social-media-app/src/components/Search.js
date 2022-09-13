@@ -80,7 +80,7 @@ export default function Search(props)
             }
         );
     }, [form])
-    return (<div className='rowFlex'>
+    return (<div id='searchPage'>
         <Nav/>
         <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/>
         <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray}/>
