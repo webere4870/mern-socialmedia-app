@@ -25,6 +25,14 @@ router.get("/profile", ValidateJWT, async (req, res)=>
     res.json({success: true, user: user})
 })
 
+router.get("/getUser", async (req, res)=>
+{
+    let id = req.query.user
+    let profile = await UserSchema.findOne({_id: "eliweber2001@gmail.com"})
+    console.log(profile)
+    res.json({success: true, profile: profile})
+})
+
 router.post("/profile", ValidateJWT, async (req,res)=>
 {
     let {bio, city, state} = req.body

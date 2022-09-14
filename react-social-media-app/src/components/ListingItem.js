@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Link} from 'react-router-dom'
 
 export default function ListingItem(props)
 {
@@ -32,7 +32,7 @@ export default function ListingItem(props)
       <div class="user">
         <img src={`https://webere4870.blob.core.windows.net/react-app/${owner}`} alt="" />
         <div class="user-info">
-          <h5>{owner}</h5>
+          <Link to={{pathname: `/user/${owner}`, state: props.listing}}>{owner}</Link>
           <small>2h ago</small>
         </div>
       </div>
