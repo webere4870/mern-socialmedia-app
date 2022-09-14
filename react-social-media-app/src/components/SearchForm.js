@@ -3,9 +3,10 @@ import React from 'react'
 export default function SearchForm(props)
 {
     let {city, state, price} = props.form
-    let {handleState, getListings} = props
+    let {handleState, getListings, sideToggle, setSideToggle} = props
     return(
         <div id='searchBar'>
+            <div>
             <label htmlFor="city">City</label>
             <input type="text" value={city} name='city' onChange={handleState}/>
             <label htmlFor="city">State</label>
@@ -65,6 +66,9 @@ export default function SearchForm(props)
             <label htmlFor="price">Price</label>
             <input type="text" name="price" value={price} onChange={handleState}/>
             <button onClick={getListings}>Load Listings</button>
+           
+            </div>
+            
             {props.listingsArray}
         </div>
     )

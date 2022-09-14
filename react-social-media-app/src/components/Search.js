@@ -7,7 +7,7 @@ import SearchForm from './SearchForm'
 import ListingItem from './ListingItem'
 import Fetch from './../utils/fetch'
 import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
-
+import BigListing from './BigListing'
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
 Geocode.setLanguage("en");
@@ -21,10 +21,21 @@ export default function Search(props)
     let [form, setForm] = React.useState({city: "Findlay", state: "OH", price: "0"})
     let [selected, setSelected] = React.useState({})
     let [listings, setListings] = React.useState([])
+    let [sideToggle, setSideToggle] = React.useState(true)
     const onSelect = item => {
       console.log("selected budy", item)
       setSelected(item);
+      setSideToggle((prev)=>
+      {
+        if(sideToggle)
+        {
+          return !prev
+        }
+        return prev
+      })
+      setMapCenter({lat: selected.lat, lng: selected.lng})
     }
+    console.log(mapCenter)
 
     function handleState(evt)
     {
@@ -51,7 +62,7 @@ export default function Search(props)
 
     for(let temp of listings)
     {
-      listingsArray.push(<ListingItem key={temp.address} listing={temp}/>)
+      listingsArray.push(<ListingItem key={temp.address} setSideToggle={setSideToggle} listing={temp} setSelected={setSelected}/>)
     }
 
     let markersArray = listings.map(item => {
@@ -62,6 +73,8 @@ export default function Search(props)
       />
       )
     })
+
+    console.log(selected)
 
     console.log(listingsArray)
     
@@ -83,6 +96,7 @@ export default function Search(props)
     return (<div id='searchPage'>
         <Nav/>
         <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/>
-        <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray}/>
+        {sideToggle && <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray} sideToggle={sideToggle} setSideToggle={setSideToggle}/>}
+        {!sideToggle && <BigListing selected={selected} setSelected={setSelected} setSideToggle={setSideToggle}/>}
     </div>)
 }

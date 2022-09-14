@@ -69,6 +69,11 @@ body
 
 #searchPage
 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	flex-wrap: wrap;
 	height: 100vh;
 	width: 100vw;
 	overflow: hidden;
@@ -79,7 +84,7 @@ body
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 75vw;
+	width: 50vw;
 	height: 100vh;
 	overflow: hidden;
 }
@@ -89,14 +94,34 @@ body
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 25vw;
+	width: 50vw;
 	min-height: 100vh;
 	margin-top: 70px;
 	z-index: 4;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
+	text-align: center;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 20px;
+}
+
+#bigListing
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 50vw;
+	min-height: 100vh;
+	margin-top: 70px;
+	z-index: 4;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	flex-direction: row;
+	flex-wrap: wrap;
 	padding: 20px;
 }
 
@@ -452,7 +477,7 @@ nav p{
   border-radius: 10px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 90%;
+  width: 250px;
   margin: 10px;
 }
 .card-header img {
