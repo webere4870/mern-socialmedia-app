@@ -1,11 +1,12 @@
 import React from 'react'
+import SlideShow from './SlideShow'
 
 export default function BigListing(props)
 {
+    let pictures = props?.selected?.pictures
     return (
     <div id='bigListing'>
-        <h1>{props.selected.owner}</h1>
-        <img className="mainPicture" src={"https://webere4870.blob.core.windows.net/react-app/"+props.selected.pictures[0]} alt="" />
+        {props.selected && <SlideShow pictures={pictures}/>}
         <button onClick={()=>props.setSideToggle((prev)=>!prev)}>Return</button>
     </div>)
 }

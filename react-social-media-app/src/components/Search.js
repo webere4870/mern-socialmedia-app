@@ -8,6 +8,7 @@ import ListingItem from './ListingItem'
 import Fetch from './../utils/fetch'
 import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
 import BigListing from './BigListing'
+import SlideShow from './SlideShow'
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
 Geocode.setLanguage("en");
@@ -22,6 +23,7 @@ export default function Search(props)
     let [selected, setSelected] = React.useState({})
     let [listings, setListings] = React.useState([])
     let [sideToggle, setSideToggle] = React.useState(true)
+    
     const onSelect = item => {
       console.log("selected budy", item)
       setSelected(item);
@@ -35,7 +37,7 @@ export default function Search(props)
       })
       setMapCenter({lat: selected.lat, lng: selected.lng})
     }
-    console.log(mapCenter)
+    
 
     function handleState(evt)
     {
