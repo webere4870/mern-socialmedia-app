@@ -15,7 +15,7 @@ async function FindOrCreate(username, password, provider, name, picture)
             {
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(password, salt, async function(err, hash) {
-                        let newRecord = await UserSchema.create({_id: username, hash: hash, salt: salt, name: name, picture: picture, provider: "E-Web-Software", active: false, notifications: [], city: "", state: "", bio: ""})
+                        let newRecord = await UserSchema.create({_id: username, hash: hash, salt: salt, name: name, picture: picture, provider: "E-Web-Software", active: false, notifications: [], city: "", state: "", bio: "", reviews: [], overall: 0})
                         await newRecord.save()
                         let client = container.getBlockBlobClient(username)
                         await client.beginCopyFromURL("https://pixabay.com/images/id-1846734/")
@@ -25,7 +25,7 @@ async function FindOrCreate(username, password, provider, name, picture)
             }
             else if(!result)
             {
-                let newRecord = await UserSchema.create({_id: username, hash: "", salt: "", picture: picture, provider: provider, name: name, active: false, notifications: false, city: "", state: "", bio: ""})
+                let newRecord = await UserSchema.create({_id: username, hash: "", salt: "", picture: picture, provider: provider, name: name, active: false, notifications: false, city: "", state: "", bio: "", reviews: [], overall: 0})
                 newRecord.save()
                 let client = container.getBlockBlobClient(username)
                 console.log("picture", picture)

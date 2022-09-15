@@ -11,9 +11,14 @@ export default function Reviews(props)
     let stars = []
 
     async function submitForm(){
-        let response = await fetch("/rating", {method: "post", headers: {"Content-Type": "application/json", "x-access-token" : user.jwt}, body: JSON.stringify({stars: starCount, comment: comment})})
-        console.log(response)
+        let response = await Fetch("rating", {method: "post", headers: {"Content-Type": "application/json", "x-access-token" : user.jwt}, body: JSON.stringify({stars: starCount, comment: comment, user: props.timeline._id})})
+        console.log(response.user)
     }
+
+    let reviewList = props.timeline?.reviews?.map((temp)=>
+    {
+        return <Review edit={false} commentObject={temp}/>
+    })
 
     for(let i = 0; i < 5; i++)
     {
@@ -22,10 +27,12 @@ export default function Reviews(props)
         </svg>))
     }
 
+    let childUser = {username: user.email}
+
     return(
 
         <section>
-            
-            <Review edit={true} stars={stars} setStarCount={setStarCount} comment={comment} setComment={setComment} submitForm={submitForm}/>
+            {reviewList}
+            <Review edit={true} stars={stars} setStarCount={setStarCount} commentObject={childUser} comment={comment} setComment={setComment} submitForm={submitForm}/>
       </section>)
 }

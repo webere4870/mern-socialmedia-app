@@ -43,9 +43,23 @@ router.post("/profile", ValidateJWT, async (req,res)=>
 
 router.post("/rating", ValidateJWT, async(req,res)=>
 {
-    let {stars, comment} = req.body
-    console.log(stars, comment)
-    res.json({success: true})
+    let {stars, comment, user} = req.body
+    comment = comment.comment
+    
+    let newUser = await UserSchema.updateOne({_id: user}, { $push: { reviews: {username: req.JWT.email, stars: stars, comment: comment} } })
+    console.log(newUser)
+    let tempUser = await UserSchema.findOne({_id: user})
+    let starCount = 0
+    let indexCount = 0
+    for(let temp of tempUser.reviews)
+    {
+        starCount += temp.stars
+        indexCount++
+    }
+    let newRating = Math.round(starCount / indexCount)
+    let update = await UserSchema.updateOne({_id: user}, {overall: newRating})
+    let finalUser = await UserSchema.findOne({_id: user})
+    res.json({success: true, user: finalUser})
 })
 
 router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req, res)=>

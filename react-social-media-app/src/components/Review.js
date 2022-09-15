@@ -20,20 +20,18 @@ export default function Review(props)
       
               <div className="d-flex flex-start">
                 <img className="rounded-circle shadow-1-strong me-3"
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(31).webp" alt="avatar" width="65"
+                  src={`https://webere4870.blob.core.windows.net/react-app/${props?.commentObject?.username}`} alt="avatar" width="65"
                   height="65" />
                 <div className="card w-900">
                   <div className="card-body p-4">
                     <div className="">
-                      <h5>Mindy Campbell</h5>
+                      <h5>{props?.commentObject?.username}</h5>
                       {props.stars ? <div style={{margin: "20x 0"}}>{props.stars}</div>  : <p className="small">5 hours ago</p>}
                       {props.edit && 
                       <input type="text" name="comment" value={props.comment.comment} onChange={changeForm} style={{width: "100%"}}/>
                         }
                       {!props.edit && <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus
-                        cumque doloribus dolorum dolor repellat nemo animi at iure autem fuga
-                        cupiditate architecto ut quam provident neque, inventore nisi eos quas?
+                        {props?.commentObject?.comment}
                       </p>}
       
                       {props.edit && <button onClick={props.submitForm}>Submit</button>}
