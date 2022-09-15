@@ -41,6 +41,13 @@ router.post("/profile", ValidateJWT, async (req,res)=>
     res.json({success: true, profile: newProfile})
 })
 
+router.post("/rating", ValidateJWT, async(req,res)=>
+{
+    let {stars, comment} = req.body
+    console.log(stars, comment)
+    res.json({success: true})
+})
+
 router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req, res)=>
 {
     //const stream = fs.createWriteStream(path.join(__dirname, "\\..\\uploads\\"+req.file.filename));

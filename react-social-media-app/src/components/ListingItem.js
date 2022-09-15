@@ -17,11 +17,11 @@ export default function ListingItem(props)
             return props.listing
         })
     }
-    return(<div class="card">
+    return(<div class="myCard">
     <div class="card-header">
       <img src={`https://webere4870.blob.core.windows.net/react-app/${pictures[0]}`} alt="" />
     </div>
-    <div class="card-body">
+    <div class="card-body-me">
       <span class="tag tag-teal">Technology</span>
       <h4>2 bedrooms, 1 bath</h4>
       <p>

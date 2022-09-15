@@ -3,6 +3,7 @@ import Nav from './Nav'
 import Fetch from './../utils/fetch'
 import Map from './Map'
 import Geocode from 'react-geocode'
+import Reviews from './Reviews'
 
 export default function User(props)
 {
@@ -38,8 +39,10 @@ export default function User(props)
         </div>}
         
             {user?.name && <h1>{user.name}</h1>}
+            <div><button>Send Message</button><button>Leave Review</button></div>
             <div id='profileMap'>
                 {user?.lat && <Map center={{lat: user.lat, lng: user.lng}}/>}
             </div>
+            <Reviews/>
     </div>)
 }

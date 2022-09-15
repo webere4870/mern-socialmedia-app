@@ -126,6 +126,15 @@ body
 	padding: 0 20px;
 }
 
+
+#starBar{
+	margin: 10px 0;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+
 #listingBox
 {
 	position: absolute;
@@ -358,6 +367,11 @@ button {
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
 	z-index: 110;
+	margin: 10px;
+}
+
+button:hover{
+	cursor: pointer;
 }
 
 button:active {
@@ -392,7 +406,7 @@ input {
 	width: 100%;
 }
 
-.container {
+.containerMe {
 	background-color: #fff;
 	border-radius: 10px;
   	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
@@ -574,14 +588,40 @@ nav p{
   box-sizing: border-box;
 }
 
-.container {
+.containerMe {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   width: 940px;
   margin: auto;
 }
-.card {
+
+.container
+{
+	max-height: 500px;
+	overflow-y: scroll;
+}
+
+.rounded-circle{
+	box-shadow: 0 0 15px gray;
+}
+
+.card{
+	box-shadow: 0 0 15px gray;
+	text-align: left;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+	width: 900px;
+	
+}
+
+.card-body{
+	width: 100%;
+}
+
+.myCard {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
@@ -594,7 +634,7 @@ nav p{
   height: 200px;
   object-fit: cover;
 }
-.card-body {
+.card-body-me{
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -619,10 +659,10 @@ nav p{
 .tag-pink {
   background-color: #c62bcd;
 }
-.card-body h4 {
+.card-body-me h4 {
   margin: 10px 0;
 }
-.card-body p {
+.card-body-me p {
   font-size: 14px;
   margin: 0 0 40px 0;
   font-weight: 500;
