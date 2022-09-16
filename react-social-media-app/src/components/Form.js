@@ -32,7 +32,7 @@ export default function Form(props)
             console.log(json)
             setUser((prev)=>
             {
-                return {jwt: json.profile.jwt, name: json.profile.name, email: json.profile.email, picture: json.profile.picture}
+                return {jwt: json.jwt, name: json.profile.name, email: json.profile.email, picture: json.profile.picture}
             })
             
             navigate("/", { replace: true });

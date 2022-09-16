@@ -4,10 +4,12 @@ import Fetch from './../utils/fetch'
 import Map from './Map'
 import Geocode from 'react-geocode'
 import Reviews from './Reviews'
+import ChatBox from './ChatBox'
 
 export default function User(props)
 {
     let [user, setUser] = React.useState()
+    let [chatBoxOpen, setChatBoxOpen] = React.useState(false)
     let username = window.location.pathname.split("/")[2]
     console.log(user)
     React.useEffect(()=>
@@ -44,6 +46,7 @@ export default function User(props)
     return(
     <div className='colFlex App'>
         <Nav/>
+        {chatBoxOpen && <ChatBox profile={user}/>}
         {user && 
         <div>
             <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${user?._id}`} alt="" />
@@ -53,7 +56,7 @@ export default function User(props)
             <div className='rowFlex'>
                 {userStars}
             </div>
-            <div><button>Send Message</button><button>Leave Review</button></div>
+            <div><button onClick={(evt)=>setChatBoxOpen((prev)=>!prev)}>Send Message</button><button>Leave Review</button></div>
             <div id='profileMap'>
                 {user?.lat && <Map center={{lat: user.lat, lng: user.lng}}/>}
             </div>

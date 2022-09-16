@@ -61,14 +61,14 @@ export default function Profile(props)
         })
     }
 
-
+console.log(user)
     const handleSubmit = async() => {
         let config = {
             headers: {
               "x-access-token": user.jwt,
             }
           }
-          console.log(profile)
+          
           var fd = new FormData();
           fd.append("avatar", values.picFile, "temp.jpg");
         // response stores the response back from the API
@@ -101,7 +101,7 @@ export default function Profile(props)
         })()
     }, [])
     return (
-        <div className='colFlex'>
+        <div className='colFlex' id="profilePage">
             <Nav/>
             {isBioShown && <Bio bioStyle={bioStyle} bioForm={profile} inputChange={inputChange} submitProfile={submitProfile} setIsBioShown={setIsBioShown}/>}
             <div className='rowFlex'>
