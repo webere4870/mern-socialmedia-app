@@ -1,3 +1,6 @@
+let mongoose = require('mongoose')
+let ChatSchema = require('./../MongoDB/ChatSchema')
+
 module.exports = (app, io)=>
 {
     io.on("connection", (socket)=>
@@ -16,6 +19,10 @@ module.exports = (app, io)=>
         {
             console.log(emailRoom + " has joined " + emailRoom)
             socket.join(emailRoom)
+        })
+        socket.on("roomMessge", (messageObject)=>
+        {
+            socket.to(messageObject.room).emit("roomMessage", messageObject)
         })
         socket.on("disconnect", ()=>
         {

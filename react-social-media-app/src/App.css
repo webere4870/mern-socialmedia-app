@@ -48,6 +48,25 @@ body
 	flex-direction: column;
 }
 
+#messageBubble
+{
+	background: orange;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	height: 60px;
+	width: 60px;
+	border-radius: 50%;
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+}
+
+#messageBubble:hover{
+	cursor: pointer;
+}
+
 #bioSlide
 {
 	transition-duration: .3s;
