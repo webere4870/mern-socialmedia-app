@@ -11,12 +11,40 @@ import {Routes, Route, Link, BrowserRouter as Router} from 'react-router-dom'
 import { CookiesProvider } from 'react-cookie';
 import {LoadScript} from '@react-google-maps/api'
 import UserContext from './components/Context';
-
+import SocketContext from './components/SocketContext';
+import io from 'socket.io-client'
 
 function App() {
   let [user, setUser] = React.useState()
+  let [socket, setSocket] = React.useState()
+
+  React.useEffect(()=>
+    {
+        let newSocket = null
+        newSocket = io("http://localhost:5000", {
+            withCredentials: true,
+            extraHeaders: {
+            "my-custom-header": "abcd"
+            }
+        })
+        newSocket.on("connection", ()=>
+        {
+            console.log("Connected!")
+        })
+        setSocket((prev)=>
+        {
+          return newSocket
+        })
+        return () => {
+            newSocket.off('connect');
+            newSocket.off('disconnect');
+            newSocket.off('pong');
+          };
+    }, [])
+
   return (
-    <LoadScript
+    <SocketContext.Provider value={[socket, setSocket]}>
+      <LoadScript
        googleMapsApiKey='AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE'>
       <UserContext.Provider value={[user, setUser]}>
         <CookiesProvider>
@@ -36,6 +64,7 @@ function App() {
         </CookiesProvider>
       </UserContext.Provider>
     </LoadScript>
+    </SocketContext.Provider>
   );
 }
 

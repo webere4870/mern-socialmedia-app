@@ -4,7 +4,7 @@ import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google'
 import { useCookies } from 'react-cookie';
 import {} from 'react-facebook-login'
 import UserContext from './Context';
-
+import SocketContext from './SocketContext';
 
 
 
@@ -13,6 +13,7 @@ export default function Form(props)
 {
     let [user, setUser]= React.useContext(UserContext)
     let [form, setForm] = React.useState({email: "", password: "", name: ""})
+    let [socket, setSocket] = React.useContext(SocketContext)
     let [error, setError] = React.useState("")
     let [dummyData, setDummyData] = React.useState("")
     let navigate = useNavigate()
@@ -32,6 +33,7 @@ export default function Form(props)
             console.log(json)
             setUser((prev)=>
             {
+                socket.emit("joinRoom", json.profile.email)
                 return {jwt: json.jwt, name: json.profile.name, email: json.profile.email, picture: json.profile.picture}
             })
             
@@ -81,7 +83,7 @@ export default function Form(props)
             let json = await data.json()
             if(json.success==true)
             {
-                console.log(json)
+                socket.emit("joinRoom", json.profile.email)
                 setUser((prev)=>
                 {
                     return {jwt: json.profile.jwt, name: json.profile.name, email: json.profile.email, picture: json.profile.picture}
