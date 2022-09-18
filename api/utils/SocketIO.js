@@ -20,8 +20,10 @@ module.exports = (app, io)=>
             console.log(emailRoom + " has joined " + emailRoom)
             socket.join(emailRoom)
         })
-        socket.on("roomMessge", (messageObject)=>
+        socket.on("roomMessage", async (messageObject)=>
         {
+            let newItem = await ChatSchema.create(messageObject)
+            await newItem.save()
             socket.to(messageObject.room).emit("roomMessage", messageObject)
         })
         socket.on("disconnect", ()=>

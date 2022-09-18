@@ -7,6 +7,7 @@ const fs = require('fs')
 const {randomUUID} = require('crypto')
 const UUID = require('uuid')
 const ListingSchema = require('./../MongoDB/ListingSchema')
+let ChatSchema = require('./../MongoDB/ChatSchema')
 
 
 const upload = multer({ dest: 'uploads/' })
@@ -29,7 +30,7 @@ router.get("/getUser", async (req, res)=>
 {
     let id = req.query.user
     let profile = await UserSchema.findOne({_id: "eliweber2001@gmail.com"})
-    console.log(profile)
+
     res.json({success: true, profile: profile})
 })
 
@@ -47,7 +48,6 @@ router.post("/rating", ValidateJWT, async(req,res)=>
     comment = comment.comment
     
     let newUser = await UserSchema.updateOne({_id: user}, { $push: { reviews: {username: req.JWT.email, stars: stars, comment: comment} } })
-    console.log(newUser)
     let tempUser = await UserSchema.findOne({_id: user})
     let starCount = 0
     let indexCount = 0
@@ -80,23 +80,35 @@ router.post("/listing", ValidateJWT, upload.any('avatar'), async (req, res)=>
     //const stream = fs.createWriteStream(path.join(__dirname, "\\..\\uploads\\"+req.file.filename));
     let {address, city, state, zip, price, lat, lng} = req.body
     let pictureArray = []
-    console.log(req.files)
     for(let file of req.files)
     {
         const buf = fs.readFileSync(path.join(__dirname, "\\..\\uploads\\"+file.filename));
         buf.toString('utf8'); 
         let newID = UUID.v4()
-        console.log(newID)
         pictureArray[pictureArray.length] = newID
         let client = container.getBlockBlobClient(newID)
         const options = { blobHTTPHeaders: { blobContentType: file.mimetype } };
         await client.uploadData(buf, options)
         fs.unlinkSync(path.join(__dirname, "\\..\\uploads\\"+file.filename))
     }
-    console.log(pictureArray)
     let upsert = new ListingSchema({address: address, city: city, state: state, ZIP: Number(zip), pictures: pictureArray, price: price, owner: req.JWT.email, lat: lat, lng: lng})
     await upsert.save()
     res.json({success: true})
+})
+
+router.get("/messages/:room", ValidateJWT, async (req, res)=>
+{
+    let email = req.JWT.email
+    let {room} = req.params
+    let messages = await ChatSchema.find({room: room})
+    console.log(messages)
+    
+    res.json({success: true, messages: messages})
+})
+
+router.post("/message", ValidateJWT, async (req, res)=>
+{
+    let {message} = req.body
 })
 
 
@@ -104,7 +116,6 @@ router.post("/listings", async (req, res)=>
 {
     let {city, state, price} = req.body
     let listings
-    console.log(city, state, price)
     if(price)
     {
         listings = await ListingSchema.find({city: city, state: state})
@@ -113,7 +124,6 @@ router.post("/listings", async (req, res)=>
     {
         listings = await ListingSchema.find({$and: [{state: state}]})
     }
-    console.log(listings)
     res.json({success: true, listings: listings})
 })
 

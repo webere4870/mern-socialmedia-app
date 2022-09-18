@@ -86,7 +86,7 @@ export default function Form(props)
                 socket.emit("joinRoom", json.profile.email)
                 setUser((prev)=>
                 {
-                    return {jwt: json.profile.jwt, name: json.profile.name, email: json.profile.email, picture: json.profile.picture}
+                    return {jwt: json.jwt, name: json.profile.name, email: json.profile.email, picture: json.profile.picture}
                 })
                 navigate("/", { replace: true });
             }

@@ -3,8 +3,8 @@ let ChatSchema = new mongoose.Schema({
     room: String,
     to: String,
     from: String,
-    datetime: Date,
+    date: String,
     message: String
 })
 
-module.exports = mongoose.model("ChatSchema", ChatSchema)
+module.exports = mongoose.model("ReactChat", ChatSchema)
