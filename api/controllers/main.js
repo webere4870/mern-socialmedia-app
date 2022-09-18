@@ -26,10 +26,11 @@ router.get("/profile", ValidateJWT, async (req, res)=>
     res.json({success: true, user: user})
 })
 
-router.get("/getUser", async (req, res)=>
+router.get("/getUser/:id", async (req, res)=>
 {
-    let id = req.query.user
-    let profile = await UserSchema.findOne({_id: "eliweber2001@gmail.com"})
+    let id = req.params.id
+
+    let profile = await UserSchema.findOne({_id: id})
 
     res.json({success: true, profile: profile})
 })
@@ -101,14 +102,31 @@ router.get("/messages/:room", ValidateJWT, async (req, res)=>
     let email = req.JWT.email
     let {room} = req.params
     let messages = await ChatSchema.find({room: room})
-    console.log(messages)
-    
     res.json({success: true, messages: messages})
 })
 
-router.post("/message", ValidateJWT, async (req, res)=>
+
+router.get("/messageThreads", ValidateJWT, async (req, res)=>
 {
-    let {message} = req.body
+    let roomList = await ChatSchema.find({$or: [{to: req.JWT.email}, {from: req.JWT.email}]}).distinct("room")
+
+    let threadList = []
+    for(let temp of roomList)
+    {
+        let msg = await ChatSchema.find({room: temp}).sort({_id: -1}).limit(1)
+        let messageBlock = {to: msg[0].to, from: msg[0].from, room: msg[0].room, date: msg[0].date, message: msg[0].message}
+        if(messageBlock.to == req.JWT.email)
+        {
+            messageBlock.email = messageBlock.from
+        }
+        else
+        {
+            messageBlock.email = messageBlock.to
+        }
+        threadList.push(messageBlock)
+    }
+    console.log(threadList)
+    res.json({success: true, threads: threadList})
 })
 
 

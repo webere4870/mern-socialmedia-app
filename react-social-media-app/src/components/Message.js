@@ -7,10 +7,10 @@ export default function Message(props)
     let message = props.message
     return(
     <div>
-        {message.from == user.email && 
+        {message.to == user.email && 
         <div class="chat__conversation-board__message-container">
         <div class="chat__conversation-board__message__person">
-            <div class="chat__conversation-board__message__person__avatar"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas Rogh" /></div><span class="chat__conversation-board__message__person__nickname">{message.from}</span>
+            <div class="chat__conversation-board__message__person__avatar"><img src={`https://webere4870.blob.core.windows.net/react-app/${message.from}`} alt="Thomas Rogh" /></div><span class="chat__conversation-board__message__person__nickname">{message.from}</span>
         </div>
         <div class="chat__conversation-board__message__context">
             <div class="chat__conversation-board__message__bubble"> <span>{message.message}</span></div>
@@ -27,10 +27,10 @@ export default function Message(props)
                 </svg></button></div>
     </div>
     }
-    {message.from != user.email && 
+    {message.to != user.email && 
     <div class="chat__conversation-board__message-container reversed">
     <div class="chat__conversation-board__message__person">
-        <div class="chat__conversation-board__message__person__avatar"><img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Dennis Mikle" /></div><span class="chat__conversation-board__message__person__nickname">{message.from}</span>
+        <div class="chat__conversation-board__message__person__avatar"><img src={`https://webere4870.blob.core.windows.net/react-app/${message.from}`} alt="Dennis Mikle" /></div><span class="chat__conversation-board__message__person__nickname">{message.from}</span>
     </div>
     <div class="chat__conversation-board__message__context">
         <div class="chat__conversation-board__message__bubble"> <span>{message.message}</span></div>

@@ -23,6 +23,7 @@ module.exports = (app, io)=>
         socket.on("roomMessage", async (messageObject)=>
         {
             let newItem = await ChatSchema.create(messageObject)
+            messageObject.id = newItem._id
             await newItem.save()
             socket.to(messageObject.room).emit("roomMessage", messageObject)
         })

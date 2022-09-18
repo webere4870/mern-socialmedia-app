@@ -15,9 +15,60 @@
   left: 0px;
   z-index: 100;
 }
+#inboxButton
+{
+  position: absolute;
+  top: 0px;
+  left: 15px;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 20px;
+}
+
+#inboxButton:hover
+{
+  cursor: pointer;
+}
+
+#inboxButton p{
+  color: white;
+  margin-top: 5px;
+}
+
+#threadBlocks
+{
+  height: 100%;
+  width: 100%;
+}
+.thread{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  padding: 20px 0;
+}
+
+.thread:hover
+{
+  cursor: pointer;
+  background: black;
+}
+
+
+.thread img{
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
 #chat {
   background: var(--chat-background);
-  max-width: 600px;
+  width: 500px;
   margin: 25px auto;
   box-sizing: border-box;
   padding: 1em;

@@ -11,25 +11,32 @@ export default function User(props)
     let [user, setUser] = React.useState()
     let [chatBoxOpen, setChatBoxOpen] = React.useState(false)
     let username = window.location.pathname.split("/")[2]
-    console.log(user)
     React.useEffect(()=>
     {
-        Fetch('getUser', {method: "GET"}).then((response)=>
+        console.log("useref", username)
+        Fetch('getUser/'+username, {method: "GET"}).then((response)=>
         {
-            console.log(response.profile.city, response.profile.state)
-            Geocode.fromAddress(`${response.profile.city}, ${response.profile.state}`).then(
-                (res)=>
-                {
-                    const { lat, lng } = res.results[0].geometry.location;
-                    setUser((prev)=>
+            if(response.profile.city)
+            {
+                Geocode.fromAddress(`${response.profile.city}, ${response.profile.state}`).then(
+                    (res)=>
                     {
-                        let obj = response.profile
-                        obj.lat = lat
-                        obj.lng = lng
-                        return obj
-                    })
-                }
-            );
+                        console.log(response)
+                        const { lat, lng } = res.results[0].geometry.location;
+                        setUser((prev)=>
+                        {
+                            let obj = response.profile
+                            obj.lat = lat
+                            obj.lng = lng
+                            return obj
+                        })
+                    }
+                );
+            }
+            else
+            {
+                setUser(response.profile)
+            }
         })
     }, [])
 
