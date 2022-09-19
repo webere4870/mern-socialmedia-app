@@ -6,13 +6,15 @@ export default function MessageList(props)
 {
     let [user, setUser] = React.useContext(UserContext)
     let [threadList, setThreadList] = React.useState([])
-
+    let {socket} = props
     function changeRooms(evt, newEmail)
     {
+        
         props.setCurrentRoom((prev)=>
         {
             return [newEmail, user?.email].sort()[0] + [newEmail, user.email].sort()[1]
         })
+        
         props.toggleChatList((prev)=>!prev)
         props.setCurrentMessageUser((prev)=>newEmail)
     }
