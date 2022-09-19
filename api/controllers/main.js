@@ -125,7 +125,6 @@ router.get("/messageThreads", ValidateJWT, async (req, res)=>
         }
         threadList.push(messageBlock)
     }
-    console.log(threadList)
     res.json({success: true, threads: threadList})
 })
 

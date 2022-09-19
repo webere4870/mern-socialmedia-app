@@ -12,10 +12,9 @@ import MessageList from './MessageList';
 export default function ChatBox(props)
 {
     let [user, setUser] = React.useContext(UserContext)
-    const [isConnected, setIsConnected] = React.useState(false);
+    let [currentMessageUser, setCurrentMessageUser] = React.useState(props.profile._id)
     const [inputState, setInputState] = React.useState({message: ""});
     let [socket, setSocket] = React.useContext(SocketContext)
-    const [rooms, setRooms] = React.useState([])
     const [currentRoom, setCurrentRoom] = React.useState([props?.profile?._id, user?.email].sort()[0] + [props?.profile?._id, user.email].sort()[1])
     console.log(inputState)
     let [toggleChatList, setToggleChatList] = React.useState(false)
@@ -26,39 +25,7 @@ export default function ChatBox(props)
       return <Message key={temp.id} message={temp} setCurrentRoom={setCurrentRoom}/>
     })
 
-    console.log(user)
-
-    React.useEffect(()=>
-    {
-      socket.emit("joinRoom", currentRoom)
-      socket.on("roomMessage", (messageObject)=>
-      {
-        setMessageList((prev)=>
-        {
-          return [...prev, messageObject]
-        })
-      })
-      console.log("howdy", user)
-      Fetch("messages/"+currentRoom, {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
-      {
-        console.log("Messages: ", response)
-        setMessageList(response.messages)
-      })
-    }, [currentRoom])
-
-    function submitForm(evt)
-    {
-        let obj = {to: props.profile._id, from: user.email, message: inputState.message, date: new Date().toLocaleString(), room: currentRoom}
-        socket.emit("roomMessage", obj)
-    }   
-    function changeForm(evt)
-    {
-        let dummy = evt?.currentTarget?.value
-        setInputState((prev)=>
-        {
-            return {...prev, "message": dummy}
-        })
-    }
+    console.log("CMU",currentMessageUser)
     React.useEffect(()=>
     {
         socket = io("http://localhost:5000", {
@@ -75,8 +42,58 @@ export default function ChatBox(props)
             socket.off('connect');
             socket.off('disconnect');
             socket.off('pong');
+            socket.removeAllListeners("roomMessage")
           };
     }, [])
+    React.useEffect(()=>
+    {
+      socket.emit("joinRoom", currentRoom)
+      console.log("howdy", user)
+      Fetch("messages/"+currentRoom, {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+      {
+        console.log("Messages: ", response)
+        setMessageList(response.messages)
+      })
+      return () => {
+        socket.off('connect');
+        socket.off('disconnect');
+        socket.off('pong');
+        socket.removeAllListeners("roomMessage")
+      };
+    }, [currentRoom])
+
+    React.useEffect(()=>
+    {
+      socket.on("roomMessage", (messageObject)=>
+      {
+        setMessageList((prev)=>
+        {
+          return [...prev, messageObject]
+        })
+      })
+      return () => {
+        socket.off('connect');
+        socket.off("roomMessage")
+        socket.off('disconnect');
+        socket.off('pong');
+        socket.removeAllListeners("roomMessage")
+      };
+  }, [currentRoom])
+
+    function submitForm(evt)
+    {
+      console.log("CR", currentRoom)
+        let obj = {to: currentMessageUser, from: user.email, message: inputState.message, date: new Date().toLocaleString(), room: currentRoom}
+        socket.emit("roomMessage", obj)
+    }   
+    function changeForm(evt)
+    {
+        let dummy = evt?.currentTarget?.value
+        setInputState((prev)=>
+        {
+            return {...prev, "message": dummy}
+        })
+    }
 
     return(<div id='fullChat'>
           
@@ -93,7 +110,7 @@ export default function ChatBox(props)
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
     </svg>
     <div class="chat__conversation-board">
-      {!toggleChatList && <MessageList setCurrentRoom={setCurrentRoom} toggleChatList={setToggleChatList}/>}
+      {!toggleChatList && <MessageList setCurrentRoom={setCurrentRoom} toggleChatList={setToggleChatList} setCurrentMessageUser={setCurrentMessageUser}/>}
       {toggleChatList && messageArray}
     </div>
     {toggleChatList &&<div class="chat__conversation-panel">

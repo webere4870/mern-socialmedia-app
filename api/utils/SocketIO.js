@@ -5,7 +5,6 @@ module.exports = (app, io)=>
 {
     io.on("connection", (socket)=>
     {
-        console.log(socket.id)
         socket.emit("connection")
         socket.on("message", (msg)=>
         {
@@ -22,10 +21,11 @@ module.exports = (app, io)=>
         })
         socket.on("roomMessage", async (messageObject)=>
         {
+            console.log(messageObject)
             let newItem = await ChatSchema.create(messageObject)
             messageObject.id = newItem._id
             await newItem.save()
-            socket.to(messageObject.room).emit("roomMessage", messageObject)
+            io.to(messageObject.room).emit("roomMessage", messageObject)
         })
         socket.on("disconnect", ()=>
         {

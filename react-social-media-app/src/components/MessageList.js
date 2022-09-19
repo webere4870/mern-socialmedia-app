@@ -14,6 +14,7 @@ export default function MessageList(props)
             return [newEmail, user?.email].sort()[0] + [newEmail, user.email].sort()[1]
         })
         props.toggleChatList((prev)=>!prev)
+        props.setCurrentMessageUser((prev)=>newEmail)
     }
 
     React.useEffect(()=>
