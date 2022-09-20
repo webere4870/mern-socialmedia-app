@@ -144,5 +144,16 @@ router.post("/listings", async (req, res)=>
     res.json({success: true, listings: listings})
 })
 
+router.get('/notifications', ValidateJWT, async (req, res)=>
+{
+    let {notifications} = await UserSchema.findOne({_id: req.JWT.email}, {notifications: 1}, {sort: {notifications: -1}})
+    let sorted = notifications.reverse()
+    res.json({success: true, notifications: sorted})
+})
+
+router.post('/notifications', ValidateJWT, async (req, res)=>
+{
+    res.json({success: true})
+})
 
 module.exports = router

@@ -1,5 +1,7 @@
 let mongoose = require('mongoose')
 let ChatSchema = require('./../MongoDB/ChatSchema')
+let UserSchema = require('./../MongoDB/Schema')
+let NotificationBuilder = require('./../utils/CreateNotification')
 
 module.exports = (app, io)=>
 {
@@ -57,7 +59,7 @@ module.exports = (app, io)=>
             console.log(roomsCounter)
             if(roomsCounter[messageObject.room] < 2)
             {
-                
+                let temp = await UserSchema.updateOne({_id: messageObject.to}, {$push: {notifications: NotificationBuilder(messageObject.from, "sent a message", messageObject.date)}})
                 io.to(messageObject.to).emit("toastMessage", messageObject)
                 io.to(messageObject.room).emit("roomMessage", messageObject)
             }
