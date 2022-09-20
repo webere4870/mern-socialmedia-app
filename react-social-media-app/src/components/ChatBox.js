@@ -85,6 +85,7 @@ export default function ChatBox(props)
         socket.off("roomMessage")
         socket.off('disconnect');
         socket.off('pong');
+        socket.emit("leaveRoom", {room: currentRoom})
         socket.removeAllListeners("roomMessage")
       };
   }, [currentRoom])

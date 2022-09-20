@@ -61,6 +61,7 @@ body
 	position: fixed;
 	bottom: 30px;
 	right: 30px;
+	z-index: 1501;
 }
 
 
@@ -192,10 +193,74 @@ body
 	width: 100%;
 }
 
+.toaster
+{
+	margin: 10px;
+	height: 100px;
+	width: 300px;
+	background: white;
+	box-shadow: 0 0 12px gray;
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	gap: 10px;
+}
+
+.toastBlock
+{
+	
+}
+
+.toaster p {
+	margin: 0;
+	padding: 0;
+}
+
+.toaster:before{
+	position: absolute;
+	left: -15px;
+	background: #61dafb;
+	width: 2px;
+	height: 100%;
+	border-radius: 5px;
+	content: '';
+}
+
+.toastIcon
+{
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+}
+
+#toastBar
+{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-direction: column;
+	position: fixed;
+	top: 0px;
+	right: 20px;
+	height: fit-content;
+	padding: 20px 0;
+	z-index: 1500;
+}
 
   .mySlides{
 	height: 100%;
 	width: 100%;
+  }
+
+  #rooter
+  {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	min-height: 100vh;
   }
 
   svg:hover{

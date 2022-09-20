@@ -6,6 +6,7 @@ module.exports = (app, io)=>
     let roomsCounter = {}
     io.on("connection", (socket)=>
     {
+        socket.prevRoom = ""
         socket.emit("connection")
         socket.on("message", (msg)=>
         {
@@ -17,7 +18,18 @@ module.exports = (app, io)=>
         })
         socket.on("joinRoom", (emailRoom)=>
         {
-            if(socket?.prevRoom)
+            let atCount =0
+            console.log("socker", socket.prevRoom)
+            for(let temp of socket.prevRoom)
+            {
+                console.log(temp)
+                if(temp == "@")
+                {
+                    atCount++
+                }
+            }
+            console.log(atCount)
+            if(atCount ==2)
             {
                 console.log("leaving", socket.prevRoom)
                 socket.leave(socket.prevRoom)
@@ -34,6 +46,7 @@ module.exports = (app, io)=>
             {
                 roomsCounter[emailRoom] = 1
             }
+            console.log(roomsCounter)
         })
         socket.on("roomMessage", async (messageObject)=>
         {
@@ -41,7 +54,18 @@ module.exports = (app, io)=>
             let newItem = await ChatSchema.create(messageObject)
             messageObject.id = newItem._id
             await newItem.save()
-            io.to(messageObject.room).emit("roomMessage", messageObject)
+            console.log(roomsCounter)
+            if(roomsCounter[messageObject.room] < 2)
+            {
+                
+                io.to(messageObject.to).emit("toastMessage", messageObject)
+                io.to(messageObject.room).emit("roomMessage", messageObject)
+            }
+            else
+            {
+                io.to(messageObject.room).emit("roomMessage", messageObject)
+            }
+            
         })
         socket.on("leaveRoom", (messageObject)=>
         {

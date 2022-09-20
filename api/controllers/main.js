@@ -72,7 +72,7 @@ router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req,
     
     const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
     await client.uploadData(buf, options)
-    fs.rm(path.join(__dirname, "\\..\\uploads\\"+req.file.filename))
+    fs.unlinkSync(path.join(__dirname, "\\..\\uploads\\"+req.file.filename))
     res.json({success: true})
 })
 

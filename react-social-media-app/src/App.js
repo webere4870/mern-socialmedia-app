@@ -13,10 +13,13 @@ import {LoadScript} from '@react-google-maps/api'
 import UserContext from './components/Context';
 import SocketContext from './components/SocketContext';
 import io from 'socket.io-client'
+import Toast from './components/Toast'
+import {v4} from 'uuid'
 
 function App() {
   let [user, setUser] = React.useState()
   let [socket, setSocket] = React.useState()
+  let [toastList, setToastList] = React.useState([])
 
   React.useEffect(()=>
     {
@@ -30,11 +33,19 @@ function App() {
         newSocket.on("connection", ()=>
         {
             console.log("Connected!")
+            newSocket.on("toastMessage", (messageObject)=>
+            {
+              setToastList((prev)=>
+              {
+                return [...prev, messageObject]
+              })
+            })
         })
         setSocket((prev)=>
         {
           return newSocket
         })
+
         return () => {
             newSocket.off('connect');
             newSocket.off('disconnect');
@@ -42,7 +53,18 @@ function App() {
           };
     }, [])
 
+  let toasts = toastList.map((temp)=>
+  {
+    let keyer = v4()
+    return <Toast key={keyer} myKey={keyer} messageObject={temp} setToastList={setToastList}/>
+  })
+
   return (
+    <div id='rooter'>
+      {toasts &&
+      <div id="toastBar">
+      {toasts}
+    </div>}
     <SocketContext.Provider value={[socket, setSocket]}>
       <LoadScript
        googleMapsApiKey='AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE'>
@@ -65,6 +87,7 @@ function App() {
       </UserContext.Provider>
     </LoadScript>
     </SocketContext.Provider>
+    </div>
   );
 }
 
