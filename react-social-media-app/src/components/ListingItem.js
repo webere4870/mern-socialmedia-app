@@ -7,11 +7,15 @@ export default function ListingItem(props)
     let {setSideToggle, setSelected} = props
     function toggleSideScreen(evt)
     {
-        setSideToggle((prev)=>
+        if(setSideToggle)
         {
-            return !prev
-        })
-
+          setSideToggle((prev)=>
+          {
+              return !prev
+          })
+        }
+        
+        
         setSelected((prev)=>
         {
             return props.listing

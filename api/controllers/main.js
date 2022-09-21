@@ -22,7 +22,7 @@ let path = require('path')
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
     let jwt = req.jwt || req.JWT
-    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1})
+    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1})
     res.json({success: true, user: user})
 })
 
@@ -141,6 +141,13 @@ router.post("/listings", async (req, res)=>
     {
         listings = await ListingSchema.find({$and: [{state: state}]})
     }
+    res.json({success: true, listings: listings})
+})
+
+router.get('/userListings/:owner', async (req, res)=>
+{
+    let listings = await ListingSchema.find({owner: req.params.owner})
+    console.log(listings)
     res.json({success: true, listings: listings})
 })
 

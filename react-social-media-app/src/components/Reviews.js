@@ -2,6 +2,7 @@ import React from 'react'
 import Review from './Review'
 import Fetch from './../utils/fetch'
 import UserContext from './Context'
+import {v4} from 'uuid'
 
 export default function Reviews(props)
 {
@@ -15,9 +16,11 @@ export default function Reviews(props)
         console.log(response.user)
     }
 
+    console.log(props.timeline?.reviews)
+
     let reviewList = props.timeline?.reviews?.map((temp)=>
     {
-        return <Review edit={false} commentObject={temp}/>
+        return <Review key={v4()} edit={false} commentObject={temp}/>
     })
 
     for(let i = 0; i < 5; i++)
@@ -27,12 +30,12 @@ export default function Reviews(props)
         </svg>))
     }
 
-    let childUser = {username: user.email}
+    let childUser = {username: user?.email}
 
     return(
 
         <section>
             {reviewList}
-            <Review edit={true} stars={stars} setStarCount={setStarCount} commentObject={childUser} comment={comment} setComment={setComment} submitForm={submitForm}/>
+            {user?.email && <Review edit={true} stars={stars} setStarCount={setStarCount} commentObject={childUser} comment={comment} setComment={setComment} submitForm={submitForm}/>}
       </section>)
 }

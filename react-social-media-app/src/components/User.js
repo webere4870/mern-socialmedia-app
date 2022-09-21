@@ -5,11 +5,15 @@ import Map from './Map'
 import Geocode from 'react-geocode'
 import Reviews from './Reviews'
 import ChatBox from './ChatBox'
+import ListingItem from './ListingItem'
 
 export default function User(props)
 {
     let [user, setUser] = React.useState()
     let [chatBoxOpen, setChatBoxOpen] = React.useState(false)
+    let [viewToggle, setViewToggle] = React.useState(true)
+    let [listingsArray, setListingsArray] = React.useState([])
+    let [selected, setSelected] = React.useState({})
     let username = window.location.pathname.split("/")[2]
     React.useEffect(()=>
     {
@@ -38,9 +42,22 @@ export default function User(props)
                 setUser(response.profile)
             }
         })
+        Fetch("userListings/"+username, {method: "GET"}).then((response)=>
+        {
+            setListingsArray((prev)=>
+            {
+                return response.listings
+            })
+        })
     }, [])
 
     let userStars = []
+    let listingsArr = listingsArray.map((temp)=>
+    {
+        return <ListingItem setSelected={setSelected} listing={temp}/>
+    })
+
+    console.log(listingsArray)
 
     for(let i = 1; i < 6; i++)
     {
@@ -69,9 +86,11 @@ export default function User(props)
                 {userStars}
             </div>
             <div><button onClick={(evt)=>setChatBoxOpen((prev)=>!prev)}>Send Message</button><button>Leave Review</button></div>
-            <div id='profileMap'>
+            {/* <div id='profileMap'>
                 {user?.lat && <Map center={{lat: user.lat, lng: user.lng}}/>}
-            </div>
-            <Reviews timeline={user}/>
+            </div> */}
+            <div id='viewToggler'><h3 onClick={()=>setViewToggle((prev)=> prev==true? prev: !prev)}>Listings</h3><h3 onClick={()=>setViewToggle((prev)=> prev==false? prev: !prev)}>Reviews</h3></div>
+            {viewToggle && <div id='gridFlex'>{listingsArr}</div>}
+            {!viewToggle && <Reviews timeline={user}/>}
     </div>)
 }

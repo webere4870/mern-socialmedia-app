@@ -6,6 +6,8 @@ import axios from 'axios'
 import Bio from './Bio'
 import Map from './Map'
 import Fetch from './../utils/fetch'
+import ListingItem from './ListingItem'
+import Reviews from './Reviews'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 
@@ -39,7 +41,10 @@ export default function Profile(props)
 
     let [user, setUser] = React.useContext(UserContext)
     let [profile, setProfile] = React.useState({})
-    let [bioState, setBioState] = React.useState({})
+    let [viewToggle, setViewToggle] = React.useState(true)
+    let [listingsArray, setListingsArray] = React.useState([])
+    let [selected, setSelected] = React.useState({})
+
     let navigate = useNavigate()
 
     const inputChange = async (evt) =>
@@ -99,32 +104,59 @@ console.log(user)
                 return json.user
             })
         })()
+        Fetch("userListings/"+user.email, {method: "GET"}).then((response)=>
+        {
+            setListingsArray((prev)=>
+            {
+                return response.listings
+            })
+        })
     }, [])
+
+    let userStars = []
+
+    for(let i = 1; i < 6; i++)
+    {
+        userStars.push((<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill={`${i <= profile?.overall ? "yellow" : "gray"}`} class="bi bi-star-fill" viewBox="0 0 16 16">
+        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+        </svg>))
+    }
+
+    let listingsArr = listingsArray.map((temp)=>
+    {
+        return <ListingItem setSelected={setSelected} listing={temp}/>
+    })
+
     return (
         <div className='colFlex' id="profilePage">
             <Nav/>
+            <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
             {isBioShown && <Bio bioStyle={bioStyle} bioForm={profile} inputChange={inputChange} submitProfile={submitProfile} setIsBioShown={setIsBioShown}/>}
             <div className='rowFlex'>
-                <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
+                
                 <div className='colFlex'>
                 <h1>{profile.name}</h1>
+                <div className='rowFlex'>
+                    {userStars}
+                </div>
+                <div className='rowFlex'><p>Bio: {profile.bio}</p>
+                <p>Location: {profile.city}, {profile.state}</p></div>
                 <input type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 ref={fileInput}/>
+                    <div>
                     <button onClick={handleSubmit}>Change profile picture</button>
+                    <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
+                    </div>
                 </div>
             </div>
-            
-            
-            <p>Bio: {profile.bio}</p>
-            <p>Location: {profile.city}, {profile.state}</p>
-            <p>Tenant or Landlord {profile.status}</p>
-            <div id='profileMap'>
+            <div id='viewToggler'><h3 onClick={()=>setViewToggle((prev)=> prev==true? prev: !prev)}>Listings</h3><h3 onClick={()=>setViewToggle((prev)=> prev==false? prev: !prev)}>Reviews</h3></div>
+            {viewToggle && <div id='gridFlex'>{listingsArr}</div>}
+            {!viewToggle && <Reviews timeline={profile}/>}
+            {/* <div id='profileMap'>
                 <Map/>
-            </div>
-            
-            <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
+            </div> */}
         </div>
     )
 }

@@ -40,6 +40,26 @@ body
 	align-items: center;
 }
 
+#gridFlex
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 80px;
+}
+
+#viewToggler
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#viewToggler h3:hover{
+	cursor: pointer;
+}
+
 .colFlex
 {
 	display: flex;
@@ -491,12 +511,8 @@ h2 {
 	text-align: center;
 }
 
-p {
-	font-size: 14px;
-	font-weight: 100;
-	line-height: 20px;
-	letter-spacing: 0.5px;
-	margin: 20px 0 30px;
+p{
+	margin: 10px;
 }
 
 span {
