@@ -6,14 +6,17 @@ import Geocode from 'react-geocode'
 import Reviews from './Reviews'
 import ChatBox from './ChatBox'
 import ListingItem from './ListingItem'
+import UserContext from './Context'
 
 export default function User(props)
 {
     let [user, setUser] = React.useState()
+    let [myProfile, setProfile] = React.useContext(UserContext)
     let [chatBoxOpen, setChatBoxOpen] = React.useState(false)
     let [viewToggle, setViewToggle] = React.useState(true)
     let [listingsArray, setListingsArray] = React.useState([])
     let [selected, setSelected] = React.useState({})
+    let [saved, setSaved] = React.useState([])
     let username = window.location.pathname.split("/")[2]
     React.useEffect(()=>
     {
@@ -49,12 +52,22 @@ export default function User(props)
                 return response.listings
             })
         })
+        if(user.email)
+        {
+            Fetch("savedList", {method: "GET", "x-access-token": user.jwt}).then((response)=>
+            {
+                setSaved((prev)=>
+                {
+                    return response.saved
+                })
+            })
+        }
     }, [])
 
     let userStars = []
     let listingsArr = listingsArray.map((temp)=>
     {
-        return <ListingItem setSelected={setSelected} listing={temp}/>
+        return <ListingItem setSelected={setSelected} saved={listingsArray.saved} listing={temp}/>
     })
 
     console.log(listingsArray)

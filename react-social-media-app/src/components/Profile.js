@@ -44,6 +44,7 @@ export default function Profile(props)
     let [viewToggle, setViewToggle] = React.useState(true)
     let [listingsArray, setListingsArray] = React.useState([])
     let [selected, setSelected] = React.useState({})
+    let [saved, setSaved] = React.useState([])
 
     let navigate = useNavigate()
 
@@ -111,6 +112,16 @@ console.log(user)
                 return response.listings
             })
         })
+        if(user)
+        {
+            Fetch("/savedList", {method: "GET", "x-access-token": user.jwt}).then((response)=>
+            {
+                setSaved((prev)=>
+                {
+                    return response.saved
+                })
+            })
+        }
     }, [])
 
     let userStars = []
@@ -124,7 +135,7 @@ console.log(user)
 
     let listingsArr = listingsArray.map((temp)=>
     {
-        return <ListingItem setSelected={setSelected} listing={temp}/>
+        return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
     })
 
     return (

@@ -69,7 +69,6 @@ export default function SearchForm(props)
            
             </div>
             
-            {props.listingsArray}
         </div>
     )
 }

@@ -163,4 +163,12 @@ router.post('/notifications', ValidateJWT, async (req, res)=>
     res.json({success: true})
 })
 
+router.get("/savedList", ValidateJWT, async (req,res)=>
+{
+    console.log("savedlis")
+    let response = await UserSchema.findOne({_id: req.JWT.email})
+    console.log("HERE",response.saved)
+    res.json({success: true, saved: response.saved})
+})
+
 module.exports = router

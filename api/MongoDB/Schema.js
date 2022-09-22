@@ -13,7 +13,8 @@ let UserSchema = new mongoose.Schema({
     city: String,
     state: String,
     reviews: Array,
-    overall: Number
+    overall: Number,
+    saved: Array
 })
 
 module.exports = mongoose.model("ChatUserSchema", UserSchema)
