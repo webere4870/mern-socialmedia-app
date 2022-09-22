@@ -8,7 +8,7 @@ const {randomUUID} = require('crypto')
 const UUID = require('uuid')
 const ListingSchema = require('./../MongoDB/ListingSchema')
 let ChatSchema = require('./../MongoDB/ChatSchema')
-
+let {ObjectId} = require('mongodb')
 
 const upload = multer({ dest: 'uploads/' })
 const {BlobServiceClient} = require('@azure/storage-blob')
@@ -147,7 +147,6 @@ router.post("/listings", async (req, res)=>
 router.get('/userListings/:owner', async (req, res)=>
 {
     let listings = await ListingSchema.find({owner: req.params.owner})
-    console.log(listings)
     res.json({success: true, listings: listings})
 })
 
@@ -165,10 +164,25 @@ router.post('/notifications', ValidateJWT, async (req, res)=>
 
 router.get("/savedList", ValidateJWT, async (req,res)=>
 {
-    console.log("savedlis")
+
     let response = await UserSchema.findOne({_id: req.JWT.email})
-    console.log("HERE",response.saved)
     res.json({success: true, saved: response.saved})
+})
+
+
+router.post("/bookmarks", ValidateJWT, async (req, res)=>
+{
+    let {bookmark, _id} = req.body 
+    console.log("Body",_id, bookmark)
+    if(bookmark)
+    {
+        let response = await UserSchema.updateOne({_id: req.JWT.email}, {$push:{saved: _id}})
+    }
+    else
+    {
+        let response = await UserSchema.updateOne({_id: req.JWT.email}, {$pull:{saved: _id}})
+    }
+    res.json({success: true})
 })
 
 module.exports = router

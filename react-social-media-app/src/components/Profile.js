@@ -114,7 +114,7 @@ console.log(user)
         })
         if(user)
         {
-            Fetch("/savedList", {method: "GET", "x-access-token": user.jwt}).then((response)=>
+            Fetch("/savedList", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
             {
                 setSaved((prev)=>
                 {

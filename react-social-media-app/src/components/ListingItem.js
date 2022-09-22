@@ -8,6 +8,23 @@ export default function ListingItem(props)
     let {address, city, state, ZIP, price, owner, pictures} = props.listing
     let [user, setUser] = React.useContext(UserContext)
     let {setSideToggle, setSelected} = props
+    let saved = props?.saved?.find((temp)=>temp==props?.listing?._id)
+    let [isFound, setIsFound] = React.useState(saved ? true: false)
+
+    function bookmark(evt)
+    {
+      let str = JSON.stringify({bookmark: true, _id: props?.listing?._id})
+      Fetch("bookmarks", {method: "POST", headers: {"x-access-token": user.jwt, "Content-Type": "application/json"}, body: str })
+      setIsFound((prev)=>!prev)
+    }
+
+    function unbookmark(evt)
+    {
+      let str = JSON.stringify({bookmark: false, _id: props?.listing?._id})
+      Fetch("bookmarks", {method: "POST", headers: {"x-access-token": user.jwt, "Content-Type": "application/json"}, body: str })
+      setIsFound((prev)=>!prev)
+    }
+    
     function toggleSideScreen(evt)
     {
         if(setSideToggle)
@@ -27,9 +44,12 @@ export default function ListingItem(props)
 
     return(<div class="myCard">
     <div class="card-header">
-    {(!user || props.saved) && <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
+    {(user && !isFound)  && <svg onClick={bookmark} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
     <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
   </svg>}
+  {(user && isFound) && <svg onClick={unbookmark} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+</svg>}
       <img src={`https://webere4870.blob.core.windows.net/react-app/${pictures[0]}`} alt="" />
     </div>
     <div class="card-body-me">

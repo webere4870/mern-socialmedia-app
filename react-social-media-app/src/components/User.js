@@ -52,10 +52,12 @@ export default function User(props)
                 return response.listings
             })
         })
-        if(user.email)
+        if(myProfile)
         {
-            Fetch("savedList", {method: "GET", "x-access-token": user.jwt}).then((response)=>
+            console.log(myProfile.jwt)
+            Fetch("savedList", {method: "GET", headers: {"x-access-token": myProfile.jwt}}).then((response)=>
             {
+                console.log("USer", response.saved)
                 setSaved((prev)=>
                 {
                     return response.saved
@@ -67,10 +69,8 @@ export default function User(props)
     let userStars = []
     let listingsArr = listingsArray.map((temp)=>
     {
-        return <ListingItem setSelected={setSelected} saved={listingsArray.saved} listing={temp}/>
+        return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
     })
-
-    console.log(listingsArray)
 
     for(let i = 1; i < 6; i++)
     {

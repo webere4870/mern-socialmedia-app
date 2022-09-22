@@ -4,6 +4,7 @@ require('dotenv').config()
 function ValidateJWT(req, res, next)
 {
     const token = req.headers['x-access-token']
+    console.log(token, "bro")
     if(token)
     {
             try{
