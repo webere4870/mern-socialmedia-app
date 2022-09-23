@@ -41,8 +41,9 @@ export default function Profile(props)
 
     let [user, setUser] = React.useContext(UserContext)
     let [profile, setProfile] = React.useState({})
-    let [viewToggle, setViewToggle] = React.useState(true)
+    let [viewToggle, setViewToggle] = React.useState("myListings")
     let [listingsArray, setListingsArray] = React.useState([])
+    let [bookmarksArray, setBookmarksArray] = React.useState([])
     let [selected, setSelected] = React.useState({})
     let [saved, setSaved] = React.useState([])
 
@@ -114,8 +115,9 @@ console.log(user)
         })
         if(user)
         {
-            Fetch("/savedList", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+            Fetch("savedList", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
             {
+                console.log("Saved: ",response.saved)
                 setSaved((prev)=>
                 {
                     return response.saved
@@ -163,8 +165,9 @@ console.log(user)
                 </div>
             </div>
             <div id='viewToggler'><h3 onClick={()=>setViewToggle((prev)=> prev==true? prev: !prev)}>Listings</h3><h3 onClick={()=>setViewToggle((prev)=> prev==false? prev: !prev)}>Reviews</h3></div>
-            {viewToggle && <div id='gridFlex'>{listingsArr}</div>}
-            {!viewToggle && <Reviews timeline={profile}/>}
+            {viewToggle == "myListings" && <div id='gridFlex'>{listingsArr}</div>}
+            {viewToggle == "reviews" && <Reviews timeline={profile}/>}
+            {viewToggle == "bookmarks" && <div id='gridFlex'></div>}
             {/* <div id='profileMap'>
                 <Map/>
             </div> */}

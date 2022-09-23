@@ -8,8 +8,17 @@ export default function ListingItem(props)
     let {address, city, state, ZIP, price, owner, pictures} = props.listing
     let [user, setUser] = React.useContext(UserContext)
     let {setSideToggle, setSelected} = props
-    let saved = props?.saved?.find((temp)=>temp==props?.listing?._id)
-    let [isFound, setIsFound] = React.useState(saved ? true: false)
+    console.log(props?.listing?._id, props.saved[0], props?.listing?._id===props.saved[0])
+    let saved = false
+    for(let temp of props.saved)
+    {
+      if(temp == props?.listing?._id)
+      {
+        saved = true
+      }
+    }
+
+    let [isFound, setIsFound] = React.useState(saved)
 
     function bookmark(evt)
     {
