@@ -47,6 +47,7 @@ export default function Profile(props)
     let [selected, setSelected] = React.useState({})
     let [saved, setSaved] = React.useState([])
 
+
     let navigate = useNavigate()
 
     const inputChange = async (evt) =>
@@ -124,6 +125,14 @@ console.log(user)
                 })
             })
         }
+        Fetch("bookmarks", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+        {
+            console.log("Bookmarks", response.bookmarks)
+            setBookmarksArray((prev)=>
+            {
+                return response.bookmarks
+            })
+        })
     }, [])
 
     let userStars = []
@@ -135,7 +144,12 @@ console.log(user)
         </svg>))
     }
 
+    
     let listingsArr = listingsArray.map((temp)=>
+    {
+        return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
+    })
+    let bookmarksArr = bookmarksArray.map((temp)=>
     {
         return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
     })
@@ -164,13 +178,10 @@ console.log(user)
                     </div>
                 </div>
             </div>
-            <div id='viewToggler'><h3 onClick={()=>setViewToggle((prev)=> prev==true? prev: !prev)}>Listings</h3><h3 onClick={()=>setViewToggle((prev)=> prev==false? prev: !prev)}>Reviews</h3></div>
+            <div id='viewToggler'><h3 onClick={()=>setViewToggle("myListings")}>Listings</h3><h3 onClick={()=>setViewToggle("reviews")}>Reviews</h3><h3 onClick={()=>setViewToggle("bookmarks")}>Reviews</h3></div>
             {viewToggle == "myListings" && <div id='gridFlex'>{listingsArr}</div>}
             {viewToggle == "reviews" && <Reviews timeline={profile}/>}
-            {viewToggle == "bookmarks" && <div id='gridFlex'></div>}
-            {/* <div id='profileMap'>
-                <Map/>
-            </div> */}
+            {viewToggle == "bookmarks" && <div id='gridFlex'>{bookmarksArr}</div>}
         </div>
     )
 }

@@ -173,7 +173,6 @@ router.get("/savedList", ValidateJWT, async (req,res)=>
 router.post("/bookmarks", ValidateJWT, async (req, res)=>
 {
     let {bookmark, _id} = req.body 
-    console.log("Body",_id, bookmark)
     if(bookmark)
     {
         let response = await UserSchema.updateOne({_id: req.JWT.email}, {$push:{saved: _id}})
@@ -183,6 +182,14 @@ router.post("/bookmarks", ValidateJWT, async (req, res)=>
         let response = await UserSchema.updateOne({_id: req.JWT.email}, {$pull:{saved: _id}})
     }
     res.json({success: true})
+})
+
+router.get('/bookmarks', ValidateJWT, async (req, res)=>
+{
+    let {saved} = await UserSchema.findOne({_id: req.JWT.email})
+    let savedMap = saved.map((temp)=>ObjectId(temp))
+    let bookmarks = await ListingSchema.find({_id: {$in: savedMap}})
+    res.json({success: true, bookmarks: bookmarks})
 })
 
 module.exports = router
