@@ -15,6 +15,7 @@ import SocketContext from './components/SocketContext';
 import ChatBox from './components/ChatBox';
 import io from 'socket.io-client'
 import Toast from './components/Toast'
+import ListingPage from './components/ListingPage'
 import {v4} from 'uuid'
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
               {user && <Route path="profile" element={<Profile/>}/>}
               <Route path="search" element={<Search/>}/>
               <Route path="user/:user" element={<User/>}/>
+              <Route path="listing/:listing" element={<ListingPage />}/>
               <Route path="*" element={<Login />} />
               {user && <Route path="listing" element={<Listing/>}/>}
             </Routes>

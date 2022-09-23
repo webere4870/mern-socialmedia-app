@@ -5,7 +5,7 @@ import Fetch from './../utils/fetch'
 
 export default function ListingItem(props)
 {
-    let {address, city, state, ZIP, price, owner, pictures} = props.listing
+    let {_id, address, city, state, ZIP, price, owner, pictures} = props.listing
     let [user, setUser] = React.useContext(UserContext)
     let {setSideToggle, setSelected} = props
     let [saved, setSaved] = React.useState(props?.listing?._id===props.saved[0])
@@ -38,19 +38,19 @@ export default function ListingItem(props)
     
     function toggleSideScreen(evt)
     {
-        if(setSideToggle)
-        {
-          setSideToggle((prev)=>
-          {
-              return !prev
-          })
-        }
+        // if(setSideToggle)
+        // {
+        //   setSideToggle((prev)=>
+        //   {
+        //       return !prev
+        //   })
+        // }
         
         
-        setSelected((prev)=>
-        {
-            return props.listing
-        })
+        // setSelected((prev)=>
+        // {
+        //     return props.listing
+        // })
     }
 
     return(<div class="myCard">
@@ -69,7 +69,7 @@ export default function ListingItem(props)
         {address},
         {`${city}, ${state} ${ZIP}`}
       </p>
-      <button onClick={toggleSideScreen}>See More</button>
+      <Link to={{pathname: `/listing/${_id}`}}><button>See More</button></Link>
       <div class="user">
         <img src={`https://webere4870.blob.core.windows.net/react-app/${owner}`} alt="" />
         <div class="user-info">

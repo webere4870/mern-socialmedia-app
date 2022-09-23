@@ -16,9 +16,21 @@ body
   overflow-x: hidden;
 }
 
+h6{
+	margin: 0 10px;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
   margin-top: 70px;
+  min-height: calc(100vh -70px);
+  width: 100vw;
+  padding: 30px;
+
 }
 
 .App-logo {
@@ -317,7 +329,11 @@ body
 	top: 0;
 	left: 0;
 	width: 100vw;
-	min-height: 100vh;
+	min-height: calc(100vh -70px);
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-direction: column;
   }
 
   svg:hover{
@@ -417,13 +433,14 @@ body
 	box-shadow: 0 0 5px gray;
   }
 
-  #profileIcon
+  .profileIcon
   {
 	height: 40px;
 	width: 40px;
 	border-radius: 50%;
 	box-shadow: 0 0 8px gray;
 	padding: 0;
+	margin: 0 10px;
   }
 
   #btnRow{
@@ -521,9 +538,7 @@ body {
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Montserrat', sans-serif;
-	min-height: 100vh;
 
-	width: 100vw;
 }
 
 h1 {
@@ -898,8 +913,34 @@ button{
   }
 }
 
+#slideshow
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+#ssRow
+{
+	width: 400px;
+	display: flex;
+	justify-content: flex-start;
+	margin-top: 15px;
+	gap: 20px;
+}
+
+.subImage
+{
+	width: 80px;
+	height: 60px;
+	background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 #slideshow-container {
-	width: 100%;
+	width: 400px;
 	height: 300px;
 	position: relative;
 	background-position: center;

@@ -97,6 +97,14 @@ router.post("/listing", ValidateJWT, upload.any('avatar'), async (req, res)=>
     res.json({success: true})
 })
 
+router.get("/listing/:id", async (req, res)=>
+{
+
+    let {id} = req.params
+    let listing = await ListingSchema.findOne({_id: ObjectId(String(id))})
+    res.json({success: true, listing: listing})
+})
+
 router.get("/messages/:room", ValidateJWT, async (req, res)=>
 {
     let email = req.JWT.email
