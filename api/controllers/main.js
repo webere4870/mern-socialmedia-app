@@ -17,6 +17,8 @@ var blobService = BlobServiceClient.fromConnectionString(process.env.AZURE_CONNE
 var container = blobService.getContainerClient("react-app")
 let path = require('path')
 
+let stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
+
 
 
 router.get("/profile", ValidateJWT, async (req, res)=>
@@ -198,6 +200,25 @@ router.get('/bookmarks', ValidateJWT, async (req, res)=>
     let savedMap = saved.map((temp)=>ObjectId(temp))
     let bookmarks = await ListingSchema.find({_id: {$in: savedMap}})
     res.json({success: true, bookmarks: bookmarks})
+})
+
+router.get("/stripe/key", ValidateJWT, async (req, res)=>
+{
+    res.json({success: true, key: process.env.STRIPE_PUBLIC_KEY})
+})
+
+router.post("/stripe/account", ValidateJWT, async (req, res)=>
+{
+    const {id} = await stripe.accounts.create({type: 'express'});
+
+    const accountLink = await stripe.accountLinks.create({
+        account: id,
+        refresh_url: 'http://localhost:3000',
+        return_url: 'http://localhost:3000/search',
+        type: 'account_onboarding',
+    });
+    console.log(accountLink)
+    res.json({success: true})
 })
 
 module.exports = router

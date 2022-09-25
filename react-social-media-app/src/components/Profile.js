@@ -56,7 +56,14 @@ export default function Profile(props)
         {
             return {...prev, [evt.currentTarget.name]: [evt.currentTarget.value]}
         })
-        
+    }
+
+    function createStripe(evt)
+    {
+        Fetch("stripe/account", {method: "POST", headers: {"Content-Type": "application/json", "x-access-token": user.jwt}, body: JSON.stringify({success: true})}).then((response)=>
+        {
+            console.log("Account", response)
+        })
     }
 
     const submitProfile = async(evt)=>
@@ -173,6 +180,7 @@ console.log(user)
                 onChange={handleImageChange}
                 ref={fileInput}/>
                     <div>
+                    <button onClick={(evt)=>createStripe(evt)}>Create Stripe Account</button>
                     <button onClick={handleSubmit}>Change profile picture</button>
                     <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
                     </div>
