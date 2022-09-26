@@ -63,6 +63,7 @@ function App() {
   })
 
   return (
+  <UserContext.Provider value={[user, setUser]}>
     <div id='rooter'>
       {toasts &&
       <div id="toastBar">
@@ -71,7 +72,7 @@ function App() {
     <SocketContext.Provider value={[socket, setSocket]}>
       <LoadScript
        googleMapsApiKey='AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE'>
-      <UserContext.Provider value={[user, setUser]}>
+      
         <div id='innerRooter'>
         {user && chatBoxOpen && <ChatBox profile={user} setChatBoxOpen={setChatBoxOpen}/>}
       {user && <div id='messageBubble' onClick={()=>setChatBoxOpen((prev)=>!prev)}>
@@ -96,10 +97,12 @@ function App() {
             </Routes>
           </Router>
         </CookiesProvider>
-      </UserContext.Provider>
+      
     </LoadScript>
     </SocketContext.Provider>
     </div>
+    </UserContext.Provider>
+    
   );
 }
 

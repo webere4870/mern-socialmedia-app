@@ -112,7 +112,7 @@ export default function Search(props)
         <Nav/>
         
         <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/>
-        {sideToggle && <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray} sideToggle={sideToggle} setSideToggle={setSideToggle}/>}
+        {/* {sideToggle && <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray} sideToggle={sideToggle} setSideToggle={setSideToggle}/>} */}
         {!sideToggle && <BigListing selected={selected} setSelected={setSelected} listingsArray={listingsArray} setSideToggle={setSideToggle}/>}
         <div id="sideToggle">
           {listingsArray}
