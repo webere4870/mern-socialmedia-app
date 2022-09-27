@@ -33,6 +33,15 @@ h6{
 
 }
 
+#userList
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 50px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

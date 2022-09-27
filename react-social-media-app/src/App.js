@@ -16,6 +16,8 @@ import ChatBox from './components/ChatBox';
 import io from 'socket.io-client'
 import Toast from './components/Toast'
 import ListingPage from './components/ListingPage'
+import UserListings from './components/UserListings';
+import SearchContext from './components/SearchContext';
 import {v4} from 'uuid'
 
 function App() {
@@ -23,6 +25,7 @@ function App() {
   let [socket, setSocket] = React.useState()
   let [toastList, setToastList] = React.useState([])
   let [chatBoxOpen, setChatBoxOpen] = React.useState(false)
+  let [searchValue, setSearchValue] = React.useState()
 
   React.useEffect(()=>
     {
@@ -64,6 +67,7 @@ function App() {
 
   return (
   <UserContext.Provider value={[user, setUser]}>
+    <SearchContext.Provider value={[searchValue, setSearchValue]}>
     <div id='rooter'>
       {toasts &&
       <div id="toastBar">
@@ -92,6 +96,7 @@ function App() {
               <Route path="search" element={<Search/>}/>
               <Route path="user/:user" element={<User/>}/>
               <Route path="listing/:listing" element={<ListingPage />}/>
+              <Route path="userSearch" element={<UserListings/>}/>
               <Route path="*" element={<Login />} />
               {user && <Route path="listing" element={<Listing/>}/>}
             </Routes>
@@ -101,6 +106,7 @@ function App() {
     </LoadScript>
     </SocketContext.Provider>
     </div>
+    </SearchContext.Provider>
     </UserContext.Provider>
     
   );

@@ -10,6 +10,7 @@ import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/a
 import BigListing from './BigListing'
 import SlideShow from './SlideShow'
 import UserContext from './Context'
+import QueryString from 'query-string'
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
 Geocode.setLanguage("en");
@@ -19,7 +20,8 @@ Geocode.enableDebug();
 
 export default function Search(props)
 {
-    let [mapCenter, setMapCenter] = React.useState({lat: 39.9612, lng: -82.9988})
+    let {city, state, lat, lng} = QueryString.parse(window.location.search)
+    let [mapCenter, setMapCenter] = React.useState({lat: lat, lng: lng})
     let [form, setForm] = React.useState({city: "Findlay", state: "OH", price: "0"})
     let [user, setUser] = React.useContext(UserContext)
     let [selected, setSelected] = React.useState({})

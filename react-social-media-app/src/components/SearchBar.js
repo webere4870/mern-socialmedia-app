@@ -2,7 +2,7 @@ import React from 'react'
 import "./../SearchBar.css"
 import Geocode from 'react-geocode'
 import {Link} from "react-router-dom"
-
+import SearchContext from './SearchContext'
 
 
 export default function SearchBar(props)
@@ -13,6 +13,7 @@ export default function SearchBar(props)
     let [lng, setLng] = React.useState(0)
     let [city, setCity] = React.useState("")
     let [state, setState] = React.useState("")
+    let [searchValue, setSearchValue] = React.useContext(SearchContext)
 
     const queryParams = new URLSearchParams(window.location.search)
     console.log(window.location.search)
@@ -66,11 +67,11 @@ export default function SearchBar(props)
     {
         if(isValidAddress)
         {
-            return (<Link to={`/search?city=${city}+state=${state}+lat=${lat}+lng=${lng}`}><i class="fa fa-search"></i></Link>)
+            return (<Link to={`/search?city=${city}&state=${state}&lat=${lat}&lng=${lng}`}><i class="fa fa-search"></i></Link>)
         }
         else if(inputData)
         {
-                return (<Link to={"/user/eliweber2001@gmail.com"}><i class="fa fa-search"></i></Link>)
+                return (<Link to={`/userSearch?user=${inputData}`}><i class="fa fa-search" onClick={()=>setSearchValue(inputData)}></i></Link>)
         }
         else
         {

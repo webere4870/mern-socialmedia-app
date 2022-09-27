@@ -18,6 +18,7 @@ var container = blobService.getContainerClient("react-app")
 let path = require('path')
 
 let stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
+let url = require('url')
 
 
 
@@ -219,6 +220,14 @@ router.post("/stripe/account", ValidateJWT, async (req, res)=>
     });
     console.log(accountLink)
     res.json({success: true})
+})
+
+router.get("/searchUsers", async (req, res)=>
+{
+    let {user} = req.query
+    console.log(user)
+    let userList = await UserSchema.find({$or: [{_id: {'$regex': String(user)}}, {name: {'$regex': String(user)}}]})
+    res.json({success: true, users: userList})
 })
 
 module.exports = router
