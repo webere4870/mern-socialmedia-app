@@ -3,6 +3,7 @@ import "./../SearchBar.css"
 import Geocode from 'react-geocode'
 import {Link} from "react-router-dom"
 import SearchContext from './SearchContext'
+import './../Chat.css'
 
 
 export default function SearchBar(props)
@@ -67,15 +68,21 @@ export default function SearchBar(props)
     {
         if(isValidAddress)
         {
-            return (<Link to={`/search?city=${city}&state=${state}&lat=${lat}&lng=${lng}`}><i class="fa fa-search"></i></Link>)
+            return (<Link to={`/search?city=${city}&state=${state}&lat=${lat}&lng=${lng}`}><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" className="bi bi-search corner" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg></Link>)
         }
         else if(inputData)
         {
-                return (<Link to={`/userSearch?user=${inputData}`}><i class="fa fa-search" onClick={()=>setSearchValue(inputData)}></i></Link>)
+                return (<Link to={`/userSearch?user=${inputData}`}><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" onClick={()=>setSearchValue(inputData)} className="bi bi-search corner" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg></Link>)
         }
         else
         {
-            return <i class="fa fa-search"></i>
+            return <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" className="bi bi-search corner" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
         }
     }
 
@@ -83,8 +90,13 @@ export default function SearchBar(props)
     <div className='colFlex'>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossOrigin="anonymous"/>
         <form action="" id='former'>
-        <input type="search"  onChange={(evt)=> setData(evt)} value={inputData} placeholder='Address, Name, Username' required/>
-        <Navigator/>
+        <div id='searcher'>
+        <div className="search">
+        <input type="search" className="round"  onChange={(evt)=> setData(evt)} value={inputData} placeholder='Address, Name, Username' required/><Navigator/>
+        </div>
+        </div>
+        
+        
         
 
         </form>

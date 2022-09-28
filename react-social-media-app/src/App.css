@@ -26,10 +26,10 @@ h6{
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  margin-top: 70px;
+
   min-height: calc(100vh -70px);
   width: 100vw;
-  padding: 30px;
+
 
 }
 
@@ -335,16 +335,14 @@ h6{
   #rooter
   {
 	position: relative;
-	top: 0;
-	left: 0;
 	width: 100vw;
-	min-height: 100vh;
-	min-height: calc(100vh -70px);
+	height: 100vh;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
   }
+
 
   svg:hover{
 	cursor: pointer;
@@ -354,6 +352,12 @@ h6{
   {
 	position: absolute;
 	top: calc(150px - 12px);
+  }
+
+  .relative{
+	position: relative;
+	height: 100vh;
+	width: 100vw;
   }
 
   #slideshow-container svg:nth-of-type(2)
@@ -484,7 +488,7 @@ nav
   padding: 0 30px;
 }
 
-nav *
+nav > p, nav svg
 {
 	padding: 8px;
 }
@@ -783,6 +787,14 @@ footer i {
     color: red;
 }
 
+#searcher
+{
+	width: 400px;
+	margin-left: -40px;
+}
+
+
+
 footer a {
     color: #3c97bf;
     text-decoration: none;
@@ -966,3 +978,8 @@ button{
     background-size: cover;
     background-repeat: no-repeat;
   }
+
+div{
+	padding: 0;
+	margin: 0;
+}

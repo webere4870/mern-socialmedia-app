@@ -106,50 +106,18 @@ export default function ChatBox(props)
     }
 
     return(<div id='fullChat'>
-          
-    <div class="--dark-theme" id="chat">
-      <div id='inboxButton' onClick={()=>setToggleChatList((prev)=>!prev)}>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-chevron-left" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+      <h3>Inbox</h3>
+      <div className="rowFlex">
+        <div className="search">
+      <input type="text" name="search" className="round" />
+      <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" className="bi bi-search corner" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
 </svg>
-<p>Inbox</p>
+    </div>
       </div>
-    <svg id="xBtn" onClick={()=>props.setChatBoxOpen((prev)=>!prev)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-    </svg>
-    <div class="chat__conversation-board">
       {!toggleChatList && <MessageList setCurrentRoom={setCurrentRoom} socket={socket} toggleChatList={setToggleChatList} setCurrentMessageUser={setCurrentMessageUser} currentRoom={currentRoom} previousRoom={previousRoom}/>}
       {toggleChatList && messageArray}
-    </div>
-    {toggleChatList &&<div class="chat__conversation-panel">
-         <div class="chat__conversation-panel__container"><button class="chat__conversation-panel__button panel-item btn-icon add-file-button"><svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg></button><button class="chat__conversation-panel__button panel-item btn-icon emoji-button"><svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                </svg></button><input class="chat__conversation-panel__input panel-item" value={inputState.message} type="text" placeholder="Type a message..." onChange={changeForm}  /><button  onClick={submitForm} class="chat__conversation-panel__button panel-item btn-icon send-message-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg></button></div>
-    </div>}
-</div>
-          {/* {!toggleChatList && <div id='wrapper'><div id="topBar">
-            <div className='rowFlex' onMouseOver={{cursor: "pointer"}} onClick={()=>setToggleChatList((prev)=>!prev)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-          </svg>
-            <h5>Inbox</h5>
-            </div>
-          </div>
-          <div id="chatSection">
+     
 
-          </div>
-          <textarea id='input' value={inputState.message} type="text" placeholder="Type a message..." onChange={changeForm} ></textarea>
-          <button id='button' type="submit" onClick={submitForm}>Send</button></div>} */}
     </div>)
 }

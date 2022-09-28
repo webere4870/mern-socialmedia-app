@@ -30,12 +30,25 @@ export default function MessageList(props)
         })
     }, [])
 
+
+
     let threads = threadList.map((temp)=>
     {
+        let newStr = ""
+        for(let counter =0; counter < 10; counter++)
+        {
+            if(counter == temp.message.length)
+            {
+                break
+            }
+            newStr += temp.message[counter]
+        }
         return <div key={temp.email} className='thread' onClick={(evt)=>changeRooms(evt, temp.email)}>
             <img src={`https://webere4870.blob.core.windows.net/react-app/${temp.email}`} alt="" />
-            <p>{temp.lastMessage}</p>
-            <p>{temp.date}</p>
+            <div className='innerThread'>
+            <p>{temp.from}</p>
+            <p style={{color: "lightgrey"}}>{newStr}</p>
+            </div>
         </div>
     })
 
