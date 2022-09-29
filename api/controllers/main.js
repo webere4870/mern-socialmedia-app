@@ -230,4 +230,16 @@ router.get("/searchUsers", async (req, res)=>
     res.json({success: true, users: userList})
 })
 
+router.get("/unread", ValidateJWT, async (req, res)=>
+{
+    let user = await UserSchema.findOne({_id: req.JWT.email})
+    res.json({success: true, unread: user.unread})
+})
+
+router.post("/deleteUnread", ValidateJWT, async (req, res)=>
+{
+    await UserSchema.updateOne({_id: req.JWT.email}, {$pull: {unread: req.body.delete}})
+    res.json({success: true})
+})
+
 module.exports = router

@@ -48,6 +48,35 @@ h6{
   pointer-events: none;
 }
 
+#inboxSpan
+{
+	position: relative;
+}
+
+
+
+#inboxBubble
+{
+	background: var(--secondaryColor);
+	height: 8px;
+	width: 8px;
+	border-radius: 50%;
+	position: absolute;
+	top: -10px;
+	left: calc(50% - 4px);
+	z-index: 10;
+}
+
+.threadBubble
+{
+	height: 8px;
+	width: 8px;
+	border-radius: 50%;
+	background: var(--secondaryColor);
+	position: absolute;
+	left: 5px;
+}
+
 .formError
 {
   color: red;

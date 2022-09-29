@@ -59,8 +59,10 @@ module.exports = (app, io)=>
             console.log(roomsCounter)
             if(roomsCounter[messageObject.room] < 2)
             {
-                let temp = await UserSchema.updateOne({_id: messageObject.to}, {$push: {notifications: NotificationBuilder(messageObject.from, "sent a message", messageObject.date)}})
+                let temp = await UserSchema.updateOne({_id: messageObject.to}, {$push: {notifications: NotificationBuilder(messageObject.from, "sent a message", messageObject.date)}}, {$push: {unread: messageObject.from}, $push: {unread: messageObject.from} })
+                await UserSchema.updateOne({_id: messageObject.to}, {$push: {unread: messageObject.from}})
                 io.to(messageObject.to).emit("toastMessage", messageObject)
+                io.to(messageObject.to).emit("newUnread", "dummy")
                 io.to(messageObject.room).emit("roomMessage", messageObject)
             }
             else

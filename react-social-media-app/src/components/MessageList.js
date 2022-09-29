@@ -5,9 +5,15 @@ import UserContext from './Context'
 export default function MessageList(props)
 {
     let [user, setUser] = React.useContext(UserContext)
+    let [unreadThreads, setUnreadThreads] = React.useState([])
     let {socket, threadList} = props
     function changeRooms(evt, newEmail)
     {
+
+        Fetch("deleteUnread", {method: "POST", headers: {"x-access-token": user.jwt, "Content-Type": "application/json"}, body: JSON.stringify({delete: newEmail})}).then((response)=>
+        {
+            console.log(response)
+        })
         
         props.setCurrentRoom((prev)=>
         {
@@ -18,8 +24,13 @@ export default function MessageList(props)
         props.setCurrentMessageUser((prev)=>newEmail)
     }
 
-    console.log(threadList)
-
+    React.useEffect(()=>
+    {
+        Fetch("unread", {method: "GET", headers: {"x-access-token": user?.jwt}}).then((response)=>
+        {
+            setUnreadThreads([...response?.unread])
+        })
+    },[])
 
 
     let threads = threadList.map((temp)=>
@@ -33,7 +44,10 @@ export default function MessageList(props)
             }
             newStr += temp.message[counter]
         }
+        let isUnread = unreadThreads?.find((temper)=>temper == temp?.email)
+        console.log(isUnread)
         return <div key={temp.email} className='thread' onClick={(evt)=>changeRooms(evt, temp.email)}>
+            {isUnread && <div className='threadBubble'></div>}
             <img src={`https://webere4870.blob.core.windows.net/react-app/${temp.email}`} alt="" />
             <div className='innerThread'>
             <p>{temp.from}</p>
