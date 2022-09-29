@@ -20,6 +20,7 @@ export default function ChatBox(props)
     let [toggleChatList, setToggleChatList] = React.useState(false)
     let [messageList, setMessageList] = React.useState([])
     let [bufferList, setBufferList] = React.useState([])
+    let [threadList, setThreadList] = React.useState([])
     let [previousRoom, setPreviousRoom] = React.useState("")
     let [searchState, setSearchState] = React.useState("")
     console.log(props.profile)
@@ -37,28 +38,48 @@ export default function ChatBox(props)
       })
     }
 
+
     function newSearchState(evt)
     {
       let newVal = evt.currentTarget.value
-      if(!newVal && searchState)
+      console.log(newVal)
+      if(newVal!="")
       {
-        
+        setThreadList((prev)=>
+        {
+          let newArr = prev?.filter((temp)=>temp?.email?.includes(newVal))
+          console.log(newArr)
+          return newArr
+        })
       }
-      if(newVal && !searchState)
+      if(newVal=="")
       {
-        setBufferList((prev)=>
+        console.log("here")
+        setThreadList((prev)=>
         {
-          return messageList
+          return [...bufferList]
         })
-        setMessageList((prev)=>
-        {
-          
-        })
+        
       }
       setSearchState(newVal)
     }
 
-    console.log("CMU",currentMessageUser)
+    console.log("Buffer", bufferList, "Main", threadList)
+    React.useEffect(()=>
+    {
+        Fetch("messageThreads", {method: "GET", headers:{"x-access-token": user.jwt}}).then((response)=>
+        {
+            setThreadList((prev)=>
+            {
+                return response.threads
+            })
+            setBufferList((prev)=>
+            {
+                return response.threads
+            })
+        })
+    }, [])
+
     React.useEffect(()=>
     {
         socket = io("http://localhost:5000", {
@@ -153,7 +174,7 @@ export default function ChatBox(props)
 </svg>
     </div>
       </div>}
-      {!toggleChatList && <MessageList setCurrentRoom={setCurrentRoom} socket={socket} toggleChatList={setToggleChatList} setCurrentMessageUser={setCurrentMessageUser} currentRoom={currentRoom} previousRoom={previousRoom}/>}
+      {!toggleChatList && <MessageList setCurrentRoom={setCurrentRoom} socket={socket} toggleChatList={setToggleChatList} setCurrentMessageUser={setCurrentMessageUser} threadList={threadList} currentRoom={currentRoom} previousRoom={previousRoom}/>}
       {toggleChatList && 
       <div id="messageBlock">
         {messageArray}

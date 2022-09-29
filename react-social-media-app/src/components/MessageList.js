@@ -5,8 +5,7 @@ import UserContext from './Context'
 export default function MessageList(props)
 {
     let [user, setUser] = React.useContext(UserContext)
-    let [threadList, setThreadList] = React.useState([])
-    let {socket} = props
+    let {socket, threadList} = props
     function changeRooms(evt, newEmail)
     {
         
@@ -19,16 +18,7 @@ export default function MessageList(props)
         props.setCurrentMessageUser((prev)=>newEmail)
     }
 
-    React.useEffect(()=>
-    {
-        Fetch("messageThreads", {method: "GET", headers:{"x-access-token": user.jwt}}).then((response)=>
-        {
-            setThreadList((prev)=>
-            {
-                return response.threads
-            })
-        })
-    }, [])
+    console.log(threadList)
 
 
 
