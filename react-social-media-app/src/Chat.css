@@ -1,14 +1,21 @@
+:root
+{
+  --mainColor: #FF4B2B;
+  --secondaryColor: #FF416C;
+  --offWhite: #ecf0f4;
+}
+
 #fullChat
 {
   position: absolute;
   top: 70px;
   right: 15px;
-  height: 400px;
+  min-height: 400px;
   width: 300px;
   background: white;
   box-shadow: 0 0 15px gray;
   border-radius: 10px;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 .thread img
@@ -109,6 +116,60 @@
   color: rgb(235, 235, 235);
 }
 
+#messageTextArea
+{
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#innerMessageText
+{
+  height: 80%;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  position: relative;
+}
+
+#trueText
+{
+  background: #ecf0f4;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  position: absolute;
+  top: -10px;
+  left: 0;
+}
+
+#topG
+{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(var(--mainColor), var(--secondaryColor));
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inbox
+{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+
 .round {
   width: 100%;
   border-radius: 15px;
@@ -139,4 +200,10 @@
 
 #fullChat h3{
   margin: 10px 25px 0 25px;
+}
+
+#inbox h3
+{
+  margin: 10px;
+  padding: 0;
 }
