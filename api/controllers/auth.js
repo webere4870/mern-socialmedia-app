@@ -6,6 +6,7 @@ const CreateToken = require('./../utils/CreateToken')
 const ValidateJWT = require('./../utils/ValidateJWT')
 const FindOrCreate = require('./../MongoDB/FindOrCreate')
 const VerifyUser = require('./../MongoDB/VerifyUser')
+const {sendEmail, verifyEmailToken} = require('./../utils/EmailVerification')
 const UserSchema = require('./../MongoDB/Schema')
 const { OAuth2Client } = require('google-auth-library')
 require('dotenv').config()
@@ -39,7 +40,7 @@ router.post("/login", async (req,res)=>
     if(user)
     {
         let isValid = await VerifyUser(email, password)
-        if(isValid)
+        if(isValid && user.active)
         {
             let [token, profile] = CreateToken({email: email, password: password, picture: null})
             res.json({success: true, jwt: token, profile: profile})
@@ -62,19 +63,37 @@ router.post("/register", async (req,res)=>
     let response = await FindOrCreate(email, password, null, name, "")
     if(response.accepted == true)
     {
+        sendEmail(email)
         res.json({success: true})
     }
     else
     {
         res.json({success: false})
     }
-    
 })
 
 router.get("/test", ValidateJWT, (req, res)=>
 {
     console.log(req.JWT)
     res.json({jwt: req.JWT, success: true, bag: "Secured"})
+})
+
+router.post("/verifyAccount", async (req, res)=>
+{
+    let {email, token} = req.body
+    let validate = verifyEmailToken(token)
+    if(validate.success)
+    {
+        await UserSchema.updateOne({_id: email}, {active: true})
+        res.json({success: true})
+    }
+    else
+    {
+        console.log("er")
+        await UserSchema.remove({_id: email})
+        res.json({success: false})
+    }
+    
 })
 
 module.exports = router

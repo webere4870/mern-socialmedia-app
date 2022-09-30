@@ -30,8 +30,28 @@ h6{
 
   min-height: calc(100vh -70px);
   width: 100vw;
+	margin-top: 70px;
 
+}
 
+#registeredPage
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100%;
+	width: 100%;
+	text-align: center;
+	margin: 0;
+	padding: 20px;
+}
+
+#registeredBox
+{
+	width: 400px;
+	padding: 20px;
+	box-shadow: 0 0 10px gray;
+	border-radius: 10px;
 }
 
 #userList
@@ -651,7 +671,7 @@ a {
 button {
 	border-radius: 20px;
 	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
+	background: linear-gradient(var(--mainColor), var(--secondaryColor));
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;

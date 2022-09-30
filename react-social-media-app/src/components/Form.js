@@ -105,7 +105,7 @@ export default function Form(props)
             let json = await data.json()
             if(json.success==true)
             {
-                navigate("/login", { replace: true });
+                navigate("/registered", { replace: true });
             }
             else
             {

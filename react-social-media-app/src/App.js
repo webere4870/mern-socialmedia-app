@@ -12,13 +12,13 @@ import { CookiesProvider } from 'react-cookie';
 import {LoadScript} from '@react-google-maps/api'
 import UserContext from './components/Context';
 import SocketContext from './components/SocketContext';
-import ChatBox from './components/ChatBox';
 import io from 'socket.io-client'
 import Toast from './components/Toast'
 import ListingPage from './components/ListingPage'
 import UserListings from './components/UserListings';
 import SearchContext from './components/SearchContext';
-import ChatBox2 from './components/ChatBox2';
+import Registered from './components/Registered';
+import Verify from './components/Verify';
 import {v4} from 'uuid'
 
 function App() {
@@ -91,6 +91,8 @@ function App() {
               <Route path="user/:user" element={<User/>}/>
               <Route path="listing/:listing" element={<ListingPage />}/>
               <Route path="userSearch" element={<UserListings/>}/>
+              <Route path="registered" element={<Registered/>}/>
+              <Route path="verify" element={<Verify/>}/> 
               <Route path="*" element={<Login />} />
               {user && <Route path="listing" element={<Listing/>}/>}
             </Routes>
