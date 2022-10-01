@@ -227,18 +227,20 @@ router.post("/stripe/account", ValidateJWT, async (req, res)=>
 
 router.post("/stripe/payment", ValidateJWT, async (req, res)=>
 {
-    
+    let {amount, user} = req.body 
+    console.log(amount, user)
+    let userData = await UserSchema.findOne({_id: user})
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: 1099,
+        amount: Number(amount),
         currency: 'usd',
-        automatic_payment_methods: {
-          enabled: true,
-        },
-        application_fee_amount: 123,
+        payment_method_types: ['card'],
+        application_fee_amount: 1,
         transfer_data: {
-          destination: '{{CONNECTED_ACCOUNT_ID}}',
+          destination: userData.stripe,
         },
       });
+      console.log(paymentIntent)
+      res.json({clientSecret: paymentIntent.client_secret, key: process.env.STRIPE_PUBLIC_KEY})
 })
 
 router.get("/searchUsers", async (req, res)=>
