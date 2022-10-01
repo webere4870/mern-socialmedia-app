@@ -15,7 +15,9 @@ let UserSchema = new mongoose.Schema({
     reviews: Array,
     overall: Number,
     saved: Array,
-    unread: Array
+    unread: Array,
+    active: Boolean,
+    stripe: String
 })
 
 module.exports = mongoose.model("ChatUserSchema", UserSchema)

@@ -20,7 +20,7 @@ export default function Nav()
     {
         Fetch("unread", {method: "GET", headers: {"x-access-token": user?.jwt}}).then((response)=>
         {
-            if(response.unread.length > 0)
+            if(response?.unread?.length > 0)
             {
                 setInboxNotification(true)
             }

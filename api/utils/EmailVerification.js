@@ -29,7 +29,6 @@ function sendEmail(email)
       
         // Subject of Email
         subject: 'Email Verification',
-          
         // This would be the text of email body
         text: `Hi! There, You have recently visited 
                our website and entered your email.

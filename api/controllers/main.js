@@ -211,15 +211,34 @@ router.get("/stripe/key", ValidateJWT, async (req, res)=>
 router.post("/stripe/account", ValidateJWT, async (req, res)=>
 {
     const {id} = await stripe.accounts.create({type: 'express'});
-
+    
     const accountLink = await stripe.accountLinks.create({
         account: id,
         refresh_url: 'http://localhost:3000',
         return_url: 'http://localhost:3000/search',
         type: 'account_onboarding',
     });
+    console.log(req.JWT.email)
+    let response = await UserSchema.updateOne({_id: req.JWT.email}, {$set: {stripe: id}})
+    console.log(response)
     console.log(accountLink)
-    res.json({success: true})
+    res.json({success: true, link: accountLink.url})
+})
+
+router.post("/stripe/payment", ValidateJWT, async (req, res)=>
+{
+    
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: 1099,
+        currency: 'usd',
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        application_fee_amount: 123,
+        transfer_data: {
+          destination: '{{CONNECTED_ACCOUNT_ID}}',
+        },
+      });
 })
 
 router.get("/searchUsers", async (req, res)=>

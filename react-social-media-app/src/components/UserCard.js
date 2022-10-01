@@ -1,5 +1,6 @@
 import React from 'react'
 import './../UserCard.css'
+import {Link} from 'react-router-dom'
 
 export default function UserCard(props)
 {
@@ -19,7 +20,7 @@ export default function UserCard(props)
                 </svg>
                 <p>{overall}</p>
               </div>
-              <span class="front__text-hover">Hover to Find Me</span>
+              <Link to={`/user/${_id}`}><span class="front__text-hover">Go To</span></Link>
             </div>
           </div>
           <div class="back">

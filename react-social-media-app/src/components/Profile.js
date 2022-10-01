@@ -62,7 +62,7 @@ export default function Profile(props)
     {
         Fetch("stripe/account", {method: "POST", headers: {"Content-Type": "application/json", "x-access-token": user.jwt}, body: JSON.stringify({success: true})}).then((response)=>
         {
-            console.log("Account", response)
+            window.open(response.link, "_blank")
         })
     }
 
@@ -180,7 +180,8 @@ console.log(user)
                 onChange={handleImageChange}
                 ref={fileInput}/>
                     <div>
-                    <button onClick={(evt)=>createStripe(evt)}>Create Stripe Account</button>
+                    {!profile.stripe &&  <button onClick={(evt)=>createStripe(evt)}>Create Stripe Account</button>}
+                    {profile.stripe &&  <button onClick={(evt)=>createStripe(evt)}>Make Payment</button>}
                     <button onClick={handleSubmit}>Change profile picture</button>
                     <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
                     </div>
