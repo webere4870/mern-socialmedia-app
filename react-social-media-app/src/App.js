@@ -19,6 +19,7 @@ import UserListings from './components/UserListings';
 import SearchContext from './components/SearchContext';
 import Registered from './components/Registered';
 import Verify from './components/Verify';
+import CustomPayment from './components/CustomPayment';
 import Success from './components/Success';
 import {v4} from 'uuid'
 
@@ -94,6 +95,7 @@ function App() {
               <Route path="userSearch" element={<UserListings/>}/>
               <Route path="registered" element={<Registered/>}/>
               <Route path="verify" element={<Verify/>}/> 
+              <Route path="payment" element={<CustomPayment/>}/>
               <Route path="success" element={<Success/>}/>
               <Route path="*" element={<Login />} />
               {user && <Route path="listing" element={<Listing/>}/>}

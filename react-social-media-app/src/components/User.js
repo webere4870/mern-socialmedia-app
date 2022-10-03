@@ -8,6 +8,8 @@ import ChatBox from './ChatBox'
 import ListingItem from './ListingItem'
 import UserContext from './Context'
 import CustomPayment from './CustomPayment'
+import {Link} from 'react-router-dom'
+import Portal from './Portal'
 
 export default function User(props)
 {
@@ -19,6 +21,7 @@ export default function User(props)
     let [selected, setSelected] = React.useState({})
     let [saved, setSaved] = React.useState([])
     let [paymentState, setPaymentState] = React.useState(false)
+    let [portal, setPortal] = React.useState(false)
     let username = window.location.pathname.split("/")[2]
     React.useEffect(()=>
     {
@@ -81,11 +84,18 @@ export default function User(props)
         </svg>))
     }
 
+    console.log(portal)
 
     return(
     <div className='colFlex App'>
         <Nav/>
-        {paymentState && <CustomPayment paymentToProfile={user}/>}
+        {portal && 
+        <Portal open={portal} setIsOpen={setPortal}>
+        {portal && <CustomPayment profile={user} setPortal={setPortal}/>}
+    </Portal>}
+        
+        
+        
         <div id='messageBubble' onClick={()=>setChatBoxOpen((prev)=>!prev)}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
         <path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
@@ -101,7 +111,7 @@ export default function User(props)
             <div className='rowFlex'>
                 {userStars}
             </div>
-            <div>{myProfile?.jwt && <button onClick={()=>setPaymentState((prev)=>!prev)}>Initiate Payment</button>}<button onClick={(evt)=>setChatBoxOpen((prev)=>!prev)}>Send Message</button><button>Leave Review</button></div>
+            <div>{myProfile?.jwt && <button onClick={()=>setPortal((prev)=>!prev)}>Initiate Payment</button>}<button onClick={(evt)=>setChatBoxOpen((prev)=>!prev)}>Send Message</button><button>Leave Review</button></div>
             {/* <div id='profileMap'>
                 {user?.lat && <Map center={{lat: user.lat, lng: user.lng}}/>}
             </div> */}

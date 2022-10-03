@@ -21,6 +21,7 @@ h6{
 	margin: 0 10px;
 }
 
+
 .App {
   text-align: center;
   display: flex;
@@ -308,13 +309,13 @@ h6{
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 100000;
-
+	z-index: 1000000;
+	border-radius: 10px;
 }
 
 #customPaymentBlock
 {
-	
+
 }
 
 .mainPicture
@@ -695,6 +696,13 @@ button {
 	transition: transform 80ms ease-in;
 	z-index: 110;
 	margin: 10px;
+}
+
+#closeModal
+{
+	position: absolute;
+	top: -30px;
+	right: -30px;
 }
 
 button:hover{
