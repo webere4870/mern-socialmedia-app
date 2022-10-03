@@ -8,6 +8,7 @@ import Map from './Map'
 import Fetch from './../utils/fetch'
 import ListingItem from './ListingItem'
 import Reviews from './Reviews'
+import $ from 'jquery'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 
@@ -37,6 +38,25 @@ export default function Profile(props)
   reader.readAsDataURL(inFile);
      };
   // Call the API Backend, will describe this later
+
+
+  const [background, setBackground] = React.useState({
+    imagePreviewUrl: "", 
+    picFile: null
+ })
+ let backgroundInput = React.createRef();
+ const handleBackgroundChange = e => {
+    e.preventDefault();
+    let reader = new FileReader();
+    let inFile = e.target.files[0];
+    reader.onloadend = () => {
+       setBackground({...background, 
+          picFile: inFile, 
+          imagePreviewUrl: reader.result
+       })
+    };
+reader.readAsDataURL(inFile);
+ };
      
 
     let [user, setUser] = React.useContext(UserContext)
@@ -57,6 +77,7 @@ export default function Profile(props)
             return {...prev, [evt.currentTarget.name]: [evt.currentTarget.value]}
         })
     }
+
 
     function createStripe(evt)
     {
@@ -97,7 +118,30 @@ console.log(user)
            alert("Error occurred while uploading picture, try uploading a smaller image size or try again later.")
            return;
      });
-     }
+    }
+    async function submitBackground()
+    {
+        let config = {
+            headers: {
+              "x-access-token": user.jwt,
+            }
+          }
+          
+          var fd = new FormData();
+          
+          fd.append("avatar", background.picFile, "temp.jpg");
+        // response stores the response back from the API
+        let response = await axios.post(`http://localhost:5000/backgroundPicture`, fd, {
+            headers: {
+              'x-access-token': user.jwt, // optional
+              'Content-Type': 'multipart/form-data'
+            },
+          })
+        .catch(error => {
+           alert("Error occurred while uploading picture, try uploading a smaller image size or try again later.")
+           return;
+     });
+    }
     React.useEffect(()=>
     {
         if(!user)
@@ -142,14 +186,21 @@ console.log(user)
         })
     }, [])
 
-    let userStars = []
-
-    for(let i = 1; i < 6; i++)
+    React.useEffect(()=>
     {
-        userStars.push((<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill={`${i <= profile?.overall ? "yellow" : "gray"}`} class="bi bi-star-fill" viewBox="0 0 16 16">
-        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-        </svg>))
-    }
+        if(background.picFile)
+        {
+            submitBackground()
+        }
+    }, [background])
+
+    React.useEffect(()=>
+    {
+        if(values.picFile)
+        {
+            handleSubmit()
+        }
+    }, [values])
 
     
     let listingsArr = listingsArray.map((temp)=>
@@ -161,28 +212,46 @@ console.log(user)
         return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
     })
 
+    
+
     return (
         <div className='colFlex' id="profilePage">
             <Nav/>
+            <div id="backgroundPic" style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/bg${profile._id})`}}>
+                <input type="file" ref={backgroundInput} id="bgDialogue" style={{display: "none"}} onChange={handleBackgroundChange}/>
+                <div className="userBubbles" id='camera' onClick={()=>$("#bgDialogue").trigger("click")}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                </svg>
+                </div>
+            </div>
+            <div className='coverBubble'>
             <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${profile._id}`} alt=""/>
+            <div id="svgProfile" onClick={()=>$("#profileSelect").trigger("click")}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" class="bi bi-plus" viewBox="0 0 16 16">
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+</svg>
+            </div>
+            </div>
+            
             {isBioShown && <Bio bioStyle={bioStyle} bioForm={profile} inputChange={inputChange} submitProfile={submitProfile} setIsBioShown={setIsBioShown}/>}
             <div className='rowFlex'>
                 
                 <div className='colFlex'>
                 <h1>{profile.name}</h1>
-                <div className='rowFlex'>
-                    {userStars}
-                </div>
-                <div className='rowFlex'><p>Bio: {profile.bio}</p>
-                <p>Location: {profile.city}, {profile.state}</p></div>
+                
+                
                 <input type="file"
                 accept="image/*"
                 onChange={handleImageChange}
+                style={{display: "none"}}
+                id="profileSelect"
                 ref={fileInput}/>
                     <div>
                     {!profile.stripe &&  <button onClick={(evt)=>createStripe(evt)}>Create Stripe Account</button>}
-                    {profile.stripe &&  <button onClick={(evt)=>createStripe(evt)}>Make Payment</button>}
-                    <button onClick={handleSubmit}>Change profile picture</button>
+
+                    
                     <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
                     </div>
                 </div>

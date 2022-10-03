@@ -25,7 +25,7 @@ let url = require('url')
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
     let jwt = req.jwt || req.JWT
-    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1})
+    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1})
     res.json({success: true, user: user})
 })
 
@@ -76,6 +76,21 @@ router.post("/profilePicture", ValidateJWT, upload.single('avatar'), async (req,
     const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
     await client.uploadData(buf, options)
     fs.unlinkSync(path.join(__dirname, "\\..\\uploads\\"+req.file.filename))
+    res.json({success: true})
+})
+
+
+router.post("/backgroundPicture", ValidateJWT, upload.single('avatar'), async (req, res)=>
+{
+    //const stream = fs.createWriteStream(path.join(__dirname, "\\..\\uploads\\"+req.file.filename));
+    const buf = fs.readFileSync(path.join(__dirname, "\\..\\uploads\\"+req.file.filename));
+    buf.toString('utf8'); 
+    let client = container.getBlockBlobClient("bg"+req.JWT.email)
+    
+    const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+    await client.uploadData(buf, options)
+    fs.unlinkSync(path.join(__dirname, "\\..\\uploads\\"+req.file.filename))
+
     res.json({success: true})
 })
 

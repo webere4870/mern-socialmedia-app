@@ -301,7 +301,37 @@ h6{
 	height: 150px;
 	width: 150px;
 	border-radius: 50%;
-	box-shadow: 0 0 20px gray;
+	padding: 0;
+	box-shadow: 0 0 10px gray;
+}
+
+.coverBubble
+{
+	height: 175px;
+	width: 175px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--offWhite);
+	margin-top: -75px;
+	z-index: 5;
+	position: relative;
+}
+
+#svgProfile
+{
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	background: linear-gradient(var(--mainColor), var(--secondaryColor));
+	height: 28px;
+	width: 28px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 }
 
 #stripeForm
@@ -1134,6 +1164,23 @@ button{
 	background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+#backgroundPic
+{
+	width: 100vw;
+	height: 200px;
+	background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+	position: relative;
+}
+
+#camera
+{
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
 }
 
 #slideshow-container {

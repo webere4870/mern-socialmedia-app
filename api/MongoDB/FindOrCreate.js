@@ -22,12 +22,21 @@ async function FindOrCreate(username, password, provider, name, picture)
                         await newRecord.save()
                         let client = container.getBlockBlobClient(username)
                         // await client.beginCopyFromURL("https://pixabay.com/images/id-1846734/")
+                        let background = container.getBlockBlobClient("bg"+username)
                         fs.rename("default.png", username, async (response)=>
                         {
                             await client.uploadFile(username, {blobHTTPHeaders: {blobContentType: "image/png"}})
                             fs.rename(username, "default.png", (response)=>
                             {
-                                resolve({accepted: true})
+                                fs.rename("defaultbg.jpg", "bg"+username, async (response)=>
+                                {
+                                    await background.uploadFile("bg"+username, {blobHTTPHeaders: {blobContentType: "image/jpeg"}})
+                                    fs.rename("bg"+username, "defaultbg.jpg", (response)=>
+                                    {
+                                        console.log(response)
+                                        resolve({accepted: true})
+                                    })
+                                })
                             })
                         })
                     });
@@ -38,14 +47,23 @@ async function FindOrCreate(username, password, provider, name, picture)
                 let newRecord = await UserSchema.create({_id: username, hash: "", salt: "", picture: picture, provider: provider, name: name, active: false, notifications: false, city: "", state: "", bio: "", reviews: [], overall: 0, saved: [], unread: [], active: true, stripe: "", subscribers: [], subscriptions: []})
                 newRecord.save()
                 let client = container.getBlockBlobClient(username)
+                let background = container.getBlockBlobClient("bg"+username)
                 fs.rename("default.png", username, async (response)=>
                 {
                     await client.uploadFile(username, {blobHTTPHeaders: {blobContentType: "image/png"}})
                     fs.rename(username, "default.png", (response)=>
                     {
-                        resolve({accepted: true})
+                        fs.rename("defaultbg.jpg", "bg"+username, async (response)=>
+                        {
+                            await background.uploadFile("bg"+username, {blobHTTPHeaders: {blobContentType: "image/jpeg"}})
+                            fs.rename("bg"+username, "defaultbg.jpg", (response)=>
+                            {
+                                resolve({accepted: true})
+                            })
+                        })
                     })
                 })
+                
                 
             }
             else if(!provider)
