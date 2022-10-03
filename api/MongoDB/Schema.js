@@ -17,7 +17,9 @@ let UserSchema = new mongoose.Schema({
     saved: Array,
     unread: Array,
     active: Boolean,
-    stripe: String
+    stripe: String,
+    subscribers: Array,
+    subscriptions: Array
 })
 
 module.exports = mongoose.model("ChatUserSchema", UserSchema)

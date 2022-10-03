@@ -501,6 +501,34 @@ h6{
 	background-color: #717171;
   }
 
+  .btnRow
+  {
+	margin: 20px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+  }
+
+  .userBubbles
+  {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(var(--mainColor), var(--secondaryColor));
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+	padding: 5px;
+	box-shadow: 0 0 8px gray;
+  }
+
+  .subbed{
+	background: white;
+  }
+
+  
+
   .btn
   {
 	background: var(--mainColor);

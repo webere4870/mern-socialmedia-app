@@ -263,4 +263,23 @@ router.post("/deleteUnread", ValidateJWT, async (req, res)=>
     res.json({success: true})
 })
 
+router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
+{
+    console.log("here")
+    let {other, subscribe} = req.body
+    let user = req.JWT.email
+
+    if(subscribe)
+    {
+        await UserSchema.updateOne({_id: user}, {$push: {subscriptions: other}})
+        await UserSchema.updateOne({_id: other}, {$push: {subscribers: user}})
+    }
+    else
+    {
+        await UserSchema.updateOne({_id: user}, {$pull: {subscriptions: other}})
+        await UserSchema.updateOne({_id: other}, {$pull: {subscribers: user}})
+    }
+    res.json({success: true})
+})
+
 module.exports = router
