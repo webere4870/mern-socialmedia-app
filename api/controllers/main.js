@@ -25,7 +25,7 @@ let url = require('url')
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
     let jwt = req.jwt || req.JWT
-    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1})
+    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1})
     res.json({success: true, user: user})
 })
 
@@ -295,6 +295,13 @@ router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
         await UserSchema.updateOne({_id: other}, {$pull: {subscribers: user}})
     }
     res.json({success: true})
+})
+
+router.post("/profileList", async (req, res)=>
+{
+    let userList = await UserSchema.find({_id: {$in: req.body.list}})
+    console.log(userList)
+    res.json({success: true, userList: userList})
 })
 
 module.exports = router

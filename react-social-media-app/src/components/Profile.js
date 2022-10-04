@@ -8,6 +8,7 @@ import Map from './Map'
 import Fetch from './../utils/fetch'
 import ListingItem from './ListingItem'
 import Reviews from './Reviews'
+import Subscribe from './Subscribe'
 import $ from 'jquery'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
@@ -212,11 +213,12 @@ console.log(user)
         return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
     })
 
-    
+    console.log(profile)
 
     return (
         <div className='colFlex' id="profilePage">
             <Nav/>
+            <div id="topDiv">
             <div id="backgroundPic" style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/bg${profile._id})`}}>
                 <input type="file" ref={backgroundInput} id="bgDialogue" style={{display: "none"}} onChange={handleBackgroundChange}/>
                 <div className="userBubbles" id='camera' onClick={()=>$("#bgDialogue").trigger("click")}>
@@ -256,10 +258,20 @@ console.log(user)
                     </div>
                 </div>
             </div>
-            <div id='viewToggler'><h3 onClick={()=>setViewToggle("myListings")}>Listings</h3><h3 onClick={()=>setViewToggle("reviews")}>Reviews</h3><h3 onClick={()=>setViewToggle("bookmarks")}>Reviews</h3></div>
-            {viewToggle == "myListings" && <div id='gridFlex'>{listingsArr}</div>}
-            {viewToggle == "reviews" && <Reviews timeline={profile}/>}
-            {viewToggle == "bookmarks" && <div id='gridFlex'>{bookmarksArr}</div>}
+            <div id='viewToggler'><p id="myListingsP" className={viewToggle == "myListings" ? "underlinedP" : ""} onClick={()=>setViewToggle("myListings")}>Listings</p><p className={viewToggle == "reviews" ? "underlinedP" : ""} id="reviewsP" onClick={()=>setViewToggle("reviews")}>Reviews</p><p className={viewToggle == "bookmarks" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("bookmarks")}>Saved Listings</p>
+            <p className={viewToggle == "subscribers" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("subscribers")}>Subscribers</p>
+            <p className={viewToggle == "subscriptions" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("subscriptions")}>Subscriptions</p>
+            </div>
+            </div>
+            <div id="bottomDiv">
+                <div id="scrollDiv">
+                    {viewToggle == "myListings" && <div id='gridFlex'>{listingsArr}</div>}
+                    {viewToggle == "reviews" && <Reviews timeline={profile}/>}
+                    {viewToggle == "bookmarks" && <div id='gridFlex'>{bookmarksArr}</div>}
+                    {viewToggle == "subscribers" && <Subscribe userList={profile?.subscribers}/>}
+                    {viewToggle == "subscriptions" && <Subscribe userList={profile?.subscriptions}/>}
+                </div>
+            </div>
         </div>
     )
 }

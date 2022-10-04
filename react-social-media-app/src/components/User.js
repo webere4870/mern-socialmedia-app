@@ -10,6 +10,7 @@ import UserContext from './Context'
 import CustomPayment from './CustomPayment'
 import {Link} from 'react-router-dom'
 import Portal from './Portal'
+import $ from 'jquery'
 
 export default function User(props)
 {
@@ -105,9 +106,10 @@ export default function User(props)
     console.log(subscribed)
 
     return(
-    <div className='colFlex App'>
+    <div id='profilePage'>
         <Nav/>
-        {portal && 
+            <div id='topDiv'>
+            {portal && 
         <Portal open={portal} setIsOpen={setPortal}>
         {portal && <CustomPayment profile={user} setPortal={setPortal}/>}
     </Portal>}
@@ -120,10 +122,14 @@ export default function User(props)
         </svg>
             </div>
         {chatBoxOpen && <ChatBox profile={user} setChatBoxOpen={setChatBoxOpen}/>}
-        {user && 
-        <div>
-            <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${user?._id}`} alt="" />
-        </div>}
+        <div id="backgroundPic" style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/bg${user?._id})`}}>
+                
+                
+            </div>
+            <div className='coverBubble'>
+            <img className='profileBig' src={`https://webere4870.blob.core.windows.net/react-app/${user?._id}`} alt=""/>
+            
+            </div>
         
             {user?.name && <h1>{user.name}</h1>}
             
@@ -142,8 +148,15 @@ export default function User(props)
             {/* <div id='profileMap'>
                 {user?.lat && <Map center={{lat: user.lat, lng: user.lng}}/>}
             </div> */}
-            <div id='viewToggler'><h3 onClick={()=>setViewToggle((prev)=> prev==true? prev: !prev)}>Listings</h3><h3 onClick={()=>setViewToggle((prev)=> prev==false? prev: !prev)}>Reviews</h3></div>
-            {viewToggle && <div id='gridFlex'>{listingsArr}</div>}
-            {!viewToggle && <Reviews timeline={user}/>}
+            <div id='viewToggler'><p id="myListingsP" className={viewToggle == "myListings" ? "underlinedP" : ""} onClick={()=>setViewToggle("myListings")}>Listings</p><p className={viewToggle == "reviews" ? "underlinedP" : ""} id="reviewsP" onClick={()=>setViewToggle("reviews")}>Reviews</p><p className={viewToggle == "bookmarks" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("bookmarks")}>Reviews</p></div>
+            </div>
+            
+            <div id="bottomDiv">
+                <div id="scrollDiv">
+                    {viewToggle && <div id='gridFlex'>{listingsArr}</div>}
+                    {!viewToggle && <Reviews timeline={user}/>}
+                </div>
+            </div>
+            
     </div>)
 }
