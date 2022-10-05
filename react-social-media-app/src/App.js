@@ -21,6 +21,7 @@ import Registered from './components/Registered';
 import Verify from './components/Verify';
 import CustomPayment from './components/CustomPayment';
 import Success from './components/Success';
+import Auth0 from './auth/Auth0';
 import {v4} from 'uuid'
 
 function App() {
@@ -69,6 +70,8 @@ function App() {
   })
 
   return (
+  <Router>
+  <Auth0>
   <UserContext.Provider value={[user, setUser]}>
     <SearchContext.Provider value={[searchValue, setSearchValue]}>
     <div id='rooter'>
@@ -82,7 +85,7 @@ function App() {
       
 
         <CookiesProvider>
-          <Router>
+          
             <Routes>
               <Route index element={<Home />} />
               {user && <Route path="home" element={<Home />}/>}
@@ -100,7 +103,7 @@ function App() {
               <Route path="*" element={<Login />} />
               {user && <Route path="listing" element={<Listing/>}/>}
             </Routes>
-          </Router>
+          
         </CookiesProvider>
       
     </LoadScript>
@@ -108,7 +111,8 @@ function App() {
     </div>
     </SearchContext.Provider>
     </UserContext.Provider>
-    
+    </Auth0>
+    </Router>
   );
 }
 
