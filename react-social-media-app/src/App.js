@@ -22,6 +22,7 @@ import Verify from './components/Verify';
 import CustomPayment from './components/CustomPayment';
 import Success from './components/Success';
 import Auth0 from './auth/Auth0';
+import TokenWrapper from './auth/TokenWrapper'
 import {v4} from 'uuid'
 
 function App() {

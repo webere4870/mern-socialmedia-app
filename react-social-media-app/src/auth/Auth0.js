@@ -17,7 +17,8 @@ export default function Auth0({children})
             domain={domain}
             clientId={clientId}
             redirectUri={window.location.origin}
-            onRedirectCallback={onRedirectCallback}>
+            onRedirectCallback={onRedirectCallback}
+            audience={process.env.REACT_APP_AUTH0_AUDIENCE}>
             {children}
         </Auth0Provider>
     )
