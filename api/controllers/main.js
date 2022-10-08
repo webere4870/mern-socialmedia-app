@@ -6,6 +6,7 @@ const multer  = require('multer')
 const fs = require('fs')
 const {randomUUID} = require('crypto')
 const UUID = require('uuid')
+const https = require('https')
 const ListingSchema = require('./../MongoDB/ListingSchema')
 let ChatSchema = require('./../MongoDB/ChatSchema')
 let {ObjectId} = require('mongodb')
@@ -14,9 +15,9 @@ let fetch = require('node-fetch')
 var ManagementClient = require('auth0').ManagementClient;
 var auth0 = new ManagementClient({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
-  clientId: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  clientSecret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
-  scope: 'profile openid email',
+  clientId: "oAlaT7QjkOKtGiWB8ymPfuZlJTXhMhtx",
+  clientSecret: "b1IDEMweuOeaJiuQ9F2fotUTX9TP5pZ8-hvqkkwnJBnr5HYyfBsZdeeUOBAgrko_",
+  scope: "read:users"
 });
 
 const upload = multer({ dest: 'uploads/' })
@@ -28,12 +29,25 @@ let path = require('path')
 
 let stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 let url = require('url')
+const Auth0FindOrCreate = require('../utils/Auth0FindOrCreate')
 
 router.post("/findOrCreate", ValidateToken, async (req, res)=>
 {
-    console.log(req.auth)
-    let response = await auth0.getUser({id: "webere1@findlay.edu"})
-    console.log(response)
+    let {email} = req.auth
+    let response = await auth0.getAccessToken()
+    let data = ''
+    let method = https.get(`https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users-by-email?email=${email}`, {headers:{ "Authorization": "Bearer "+response}, method: "GET"}, (response, err)=>
+    {
+        response.on("data", (chunk)=>
+        {
+            data += chunk
+        })
+        response.on('end', ()=>
+        {
+            let obj = JSON.parse(data)
+            Auth0FindOrCreate(obj[0])
+        })
+    })
     res.json({success: true})
 })
 
