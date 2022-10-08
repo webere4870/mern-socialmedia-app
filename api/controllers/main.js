@@ -9,6 +9,15 @@ const UUID = require('uuid')
 const ListingSchema = require('./../MongoDB/ListingSchema')
 let ChatSchema = require('./../MongoDB/ChatSchema')
 let {ObjectId} = require('mongodb')
+const ValidateToken = require('./../utils/ValidateToken')
+let fetch = require('node-fetch')
+var ManagementClient = require('auth0').ManagementClient;
+var auth0 = new ManagementClient({
+  domain: process.env.REACT_APP_AUTH0_DOMAIN,
+  clientId: process.env.REACT_APP_AUTH0_CLIENT_ID,
+  clientSecret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+  scope: 'profile openid email',
+});
 
 const upload = multer({ dest: 'uploads/' })
 const {BlobServiceClient} = require('@azure/storage-blob')
@@ -20,7 +29,13 @@ let path = require('path')
 let stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 let url = require('url')
 
-
+router.post("/findOrCreate", ValidateToken, async (req, res)=>
+{
+    console.log(req.auth)
+    let response = await auth0.getUser({id: "webere1@findlay.edu"})
+    console.log(response)
+    res.json({success: true})
+})
 
 router.get("/profile", ValidateJWT, async (req, res)=>
 {

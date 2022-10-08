@@ -11,26 +11,8 @@ const UserSchema = require('./../MongoDB/Schema')
 const { OAuth2Client } = require('google-auth-library')
 require('dotenv').config()
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID) 
-var jwtFirst = require('express-jwt');
-var jwks = require('jwks-rsa');
 
-var jwtCheck = jwtFirst.expressjwt({
-    secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: 'https://dev-3vss267m.us.auth0.com/.well-known/jwks.json'
-  }),
-  audience: 'http://localhost:5000',
-  issuer: 'https://dev-3vss267m.us.auth0.com/',
-  algorithms: ['RS256']
-});
 
-router.get("/testAuth0", jwtCheck, async (req, res)=>
-{
-    console.log("Success")
-    res.json({success: true})
-})
 
 
 router.get("/auth/google", passport.authenticate('google', {scope: ['profile', 'email']}))

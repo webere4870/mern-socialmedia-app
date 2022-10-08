@@ -18,7 +18,8 @@ export default function Auth0({children})
             clientId={clientId}
             redirectUri={window.location.origin}
             onRedirectCallback={onRedirectCallback}
-            audience={process.env.REACT_APP_AUTH0_AUDIENCE}>
+            audience={process.env.REACT_APP_AUTH0_AUDIENCE}
+            scope={"read:current_user openid"}>
             {children}
         </Auth0Provider>
     )

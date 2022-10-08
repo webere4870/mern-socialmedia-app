@@ -8,7 +8,7 @@ class Database
     }
     connect()
     {
-        mongoose.connect(process.env.MONGO_URI)
+        mongoose.connect(process.env.MONGO_URI, {dbName: "SocialApp"})
     }
 };
 

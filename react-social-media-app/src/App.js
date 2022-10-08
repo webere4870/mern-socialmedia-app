@@ -24,6 +24,8 @@ import Success from './components/Success';
 import Auth0 from './auth/Auth0';
 import TokenWrapper from './auth/TokenWrapper'
 import {v4} from 'uuid'
+import { useAuth0 } from '@auth0/auth0-react';
+import { get } from 'jquery';
 
 function App() {
   let [user, setUser] = React.useState()
@@ -70,9 +72,14 @@ function App() {
     return <Toast key={keyer} myKey={keyer} messageObject={temp} setToastList={setToastList}/>
   })
 
+  
+
+  
+
   return (
   <Router>
   <Auth0>
+  <TokenWrapper>
   <UserContext.Provider value={[user, setUser]}>
     <SearchContext.Provider value={[searchValue, setSearchValue]}>
     <div id='rooter'>
@@ -112,6 +119,7 @@ function App() {
     </div>
     </SearchContext.Provider>
     </UserContext.Provider>
+    </TokenWrapper>
     </Auth0>
     </Router>
   );

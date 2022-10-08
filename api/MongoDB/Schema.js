@@ -22,4 +22,4 @@ let UserSchema = new mongoose.Schema({
     subscriptions: Array
 })
 
-module.exports = mongoose.model("ChatUserSchema", UserSchema)
+module.exports = mongoose.model("UserSchema", UserSchema)
