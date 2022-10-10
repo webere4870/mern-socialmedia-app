@@ -9,7 +9,6 @@ export default function TokenWrapper({children})
     {
         getAccessTokenSilently({scope: "read:current_user openid profile email", audience: process.env.REACT_APP_AUTH0_AUDIENCE}).then((token)=>
         {
-            console.log(token)
             if(isAuthenticated)
             {
                 const localFetch = Fetch

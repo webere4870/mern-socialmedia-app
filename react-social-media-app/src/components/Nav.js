@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link, Navigate} from 'react-router-dom'
 import UserContext from './Context'
 import Notifications from './Notifications'
 import SearchBar from './SearchBar'
@@ -74,7 +74,7 @@ export default function Nav()
       onClick={() => loginWithRedirect()}
     >
       Log In
-    </button><button className='btn'><Link to={"/login"}>Login</Link></button><button onClick={()=>logout({returnTo: window.location.origin})}>Logout</button><button className='btn'><Link to={"/register"}>Sign Up</Link></button></div>
+    </button><button className='btn'><Link to={"/login"}>Login</Link></button>{isAuthenticated && <Link to={"/login"}><button onClick={()=>{logout();}}>Logout</button></Link>}<button className='btn'><Link to={"/register"}>Sign Up</Link></button></div>
     }
 
     {isAuthenticated && <p>{user?.email}</p>}

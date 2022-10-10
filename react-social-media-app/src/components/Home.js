@@ -8,13 +8,7 @@ export default function Home()
     let [user, setUser] = React.useContext(UserContext)
     console.log(user)
     let navigate = useNavigate()
-    React.useEffect(()=>
-    {
-        if(!user)
-        {   
-            navigate("/login")
-        }
-    }, [])
+
     return(
     <div className='main'>
         <Nav/>

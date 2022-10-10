@@ -1,31 +1,29 @@
-let jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-function ValidateJWT(req, res, next)
-{
-    const token = req.headers['x-access-token']
-    if(token)
-    {
-            try{
-               let valid = jwt.verify(token, process.env.JWT_KEY)
-               if(valid)
-               {
-                req.JWT = valid
-                next()
-               } 
-               else{
-                res.json({success: false})
-               }
+var jwtFirst = require('express-jwt');
+var jwks = require('jwks-rsa');
+
+const ValidateJWT = jwtFirst.expressjwt({
+    secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        getToken: function fromHeaderOrQuerystring(req) {
+            if (
+              req.headers.authorization &&
+              req.headers.authorization.split(" ")[0] === "Bearer"
+            ) {
+              return req.headers.authorization.split(" ")[1];
+            } else if (req.query && req.query.token) {
+              return req.query.token;
             }
-            catch(err)
-            {
-                res.clearCookie("jwt")
-                res.json({success: false})
-            }
-    }
-    else{
-        res.json({success: false})
-    }
-}
+            return null;
+          },
+        jwksUri: 'https://dev-3vss267m.us.auth0.com/.well-known/jwks.json'
+  }),
+  audience: 'http://localhost:5000',
+  issuer: 'https://dev-3vss267m.us.auth0.com/',
+  algorithms: ['RS256'],
+});
 
 module.exports = ValidateJWT

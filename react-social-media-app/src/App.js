@@ -23,6 +23,7 @@ import CustomPayment from './components/CustomPayment';
 import Success from './components/Success';
 import Auth0 from './auth/Auth0';
 import TokenWrapper from './auth/TokenWrapper'
+import ProtectedRoute from './auth/ProtectedRoute';
 import {v4} from 'uuid'
 import { useAuth0 } from '@auth0/auth0-react';
 import { get } from 'jquery';
@@ -95,11 +96,17 @@ function App() {
         <CookiesProvider>
           
             <Routes>
-              <Route index element={<Home />} />
-              {user && <Route path="home" element={<Home />}/>}
+              <Route index element={<Login/>} />
+              <Route path={"home"} element={
+                <ProtectedRoute>
+                  <Home/>
+                </ProtectedRoute>}/>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register/>}/>
-              {user && <Route path="profile" element={<Profile/>}/>}
+              <Route path={"profile"} element={
+                <ProtectedRoute>
+                  <Profile/>
+                </ProtectedRoute>}/>
               <Route path="search" element={<Search/>}/>
               <Route path="user/:user" element={<User/>}/>
               <Route path="listing/:listing" element={<ListingPage />}/>
@@ -109,7 +116,10 @@ function App() {
               <Route path="payment" element={<CustomPayment/>}/>
               <Route path="success" element={<Success/>}/>
               <Route path="*" element={<Login />} />
-              {user && <Route path="listing" element={<Listing/>}/>}
+              <Route path={"listing"} element={
+                <ProtectedRoute>
+                  <Listing/>
+                </ProtectedRoute>}/>
             </Routes>
           
         </CookiesProvider>

@@ -6,6 +6,7 @@ import axios from 'axios'
 import Bio from './Bio'
 import Map from './Map'
 import Fetch from './../utils/fetch'
+import AuthFetch from '../utils/authFetch'
 import ListingItem from './ListingItem'
 import Reviews from './Reviews'
 import Subscribe from './Subscribe'
@@ -82,7 +83,7 @@ reader.readAsDataURL(inFile);
 
     function createStripe(evt)
     {
-        Fetch("stripe/account", {method: "POST", headers: {"Content-Type": "application/json", "x-access-token": user.jwt}, body: JSON.stringify({success: true})}).then((response)=>
+        Fetch("stripe/account", {method: "POST", headers: {"Content-Type": "application/json", "x-access-token": user?.jwt}, body: JSON.stringify({success: true})}).then((response)=>
         {
             window.open(response.link, "_blank")
         })
@@ -90,7 +91,7 @@ reader.readAsDataURL(inFile);
 
     const submitProfile = async(evt)=>
     {
-        let response = await Fetch("profile", {method: "POST", headers:{"x-access-token": user.jwt, "Content-Type": "application/json"}, body: JSON.stringify(profile)})
+        let response = await Fetch("profile", {method: "POST", headers:{"x-access-token": user?.jwt, "Content-Type": "application/json"}, body: JSON.stringify(profile)})
         
         setProfile((prev)=>
         {
@@ -102,7 +103,7 @@ console.log(user)
     const handleSubmit = async() => {
         let config = {
             headers: {
-              "x-access-token": user.jwt,
+              "x-access-token": user?.jwt,
             }
           }
           
@@ -111,7 +112,7 @@ console.log(user)
         // response stores the response back from the API
         let response = await axios.post(`http://localhost:5000/profilePicture`, fd, {
             headers: {
-              'x-access-token': user.jwt, // optional
+              'x-access-token': user?.jwt, // optional
               'Content-Type': 'multipart/form-data'
             },
           })
@@ -124,7 +125,7 @@ console.log(user)
     {
         let config = {
             headers: {
-              "x-access-token": user.jwt,
+              "x-access-token": user?.jwt,
             }
           }
           
@@ -134,7 +135,7 @@ console.log(user)
         // response stores the response back from the API
         let response = await axios.post(`http://localhost:5000/backgroundPicture`, fd, {
             headers: {
-              'x-access-token': user.jwt, // optional
+              'x-access-token': user?.jwt, // optional
               'Content-Type': 'multipart/form-data'
             },
           })
@@ -145,13 +146,10 @@ console.log(user)
     }
     React.useEffect(()=>
     {
-        if(!user)
-        {   
-            navigate("/login")
-        }
+
         (async function()
         {
-            let userProfile = await fetch("http://localhost:5000/profile",{headers: {'x-access-token': user.jwt}})
+            let userProfile = await fetch("http://localhost:5000/profile",{headers: {'x-access-token': user?.jwt}})
             let json = await userProfile.json()
             console.log(json)
             setProfile((prev)=>
@@ -168,7 +166,7 @@ console.log(user)
         })
         if(user)
         {
-            Fetch("savedList", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+            Fetch("savedList", {method: "GET", headers: {"x-access-token": user?.jwt}}).then((response)=>
             {
                 console.log("Saved: ",response.saved)
                 setSaved((prev)=>
@@ -177,7 +175,7 @@ console.log(user)
                 })
             })
         }
-        Fetch("bookmarks", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+        Fetch("bookmarks", {method: "GET", headers: {"x-access-token": user?.jwt}}).then((response)=>
         {
             console.log("Bookmarks", response.bookmarks)
             setBookmarksArray((prev)=>
