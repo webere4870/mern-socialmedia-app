@@ -53,6 +53,7 @@ router.post("/findOrCreate", ValidateToken, async (req, res)=>
 
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
+    console.log("Profile succeed")
     let jwt = req.auth || req.auth
     let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1})
     res.json({success: true, user: user})
@@ -219,8 +220,9 @@ router.post('/notifications', ValidateJWT, async (req, res)=>
 
 router.get("/savedList", ValidateJWT, async (req,res)=>
 {
-
+    console.log("Saved list success")
     let response = await UserSchema.findOne({_id: req.auth.email})
+    console.log(response.saved)
     res.json({success: true, saved: response.saved})
 })
 

@@ -666,10 +666,9 @@ h3{
   .btnRow
   {
 	margin: 20px 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+
 	gap: 15px;
+	margin-left: auto;
   }
 
   .userBubbles
