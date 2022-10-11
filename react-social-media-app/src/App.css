@@ -671,6 +671,14 @@ h3{
 	margin-left: auto;
   }
 
+  #profilePage .btnRow
+  {
+	margin-left: unset;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+
   .userBubbles
   {
 	display: flex;

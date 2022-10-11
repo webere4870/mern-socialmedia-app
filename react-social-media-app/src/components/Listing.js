@@ -110,10 +110,6 @@ export default function Listing(props)
      }
     React.useEffect(()=>
     {
-        if(!user)
-        {   
-            navigate("/login")
-        }
         (async function()
         {
             let userProfile = await fetch("http://localhost:5000/profile",{headers: {'x-access-token': user.jwt}})

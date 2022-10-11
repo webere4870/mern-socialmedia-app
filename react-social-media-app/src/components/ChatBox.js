@@ -3,31 +3,32 @@ import './../Chat.css'
 import io from 'socket.io-client'
 import UserContext from './Context';
 import SocketContext from './SocketContext'
-import ChatList from './ChatList'
 import Fetch from './../utils/fetch'
 import Message from './Message'
 import MessageList from './MessageList';
-
+import {useAuth0} from '@auth0/auth0-react'
+import AuthFetch from '../utils/authFetch';
 
 export default function ChatBox(props)
 {
-    let [user, setUser] = React.useContext(UserContext)
-    let [currentMessageUser, setCurrentMessageUser] = React.useState(props.profile._id)
+    let profile = props?.profile
+    let [currentMessageUser, setCurrentMessageUser] = React.useState(profile? profile: null)
+    const {user, getAccessTokenSilently} = useAuth0()
     const [inputState, setInputState] = React.useState({message: ""});
     let [socket, setSocket] = React.useContext(SocketContext)
-    const [currentRoom, setCurrentRoom] = React.useState([props?.profile?._id, user?.email].sort()[0] + [props?.profile?._id, user.email].sort()[1])
-    console.log(inputState)
-    let [toggleChatList, setToggleChatList] = React.useState(false)
+    const [currentRoom, setCurrentRoom] = React.useState(profile ? [user.email, profile._id].sort()[0] + [user.email, profile._id].sort()[1] : user.email)
+    let [toggleChatList, setToggleChatList] = React.useState(currentRoom != user.email)
     let [messageList, setMessageList] = React.useState([])
     let [bufferList, setBufferList] = React.useState([])
     let [threadList, setThreadList] = React.useState([])
     let [previousRoom, setPreviousRoom] = React.useState("")
     let [searchState, setSearchState] = React.useState("")
-    console.log(props.profile)
-    let messageArray = messageList.map((temp)=>
+    let messageArray = messageList?.map((temp)=>
     {
       return <Message key={temp.id} message={temp} setCurrentRoom={setCurrentRoom}/>
     })
+
+    console.log(currentRoom)
 
     function changeInput(evt)
     {
@@ -38,6 +39,7 @@ export default function ChatBox(props)
       })
     }
 
+    console.log(currentRoom)
 
     function newSearchState(evt)
     {
@@ -47,7 +49,7 @@ export default function ChatBox(props)
       {
         setThreadList((prev)=>
         {
-          let newArr = prev?.filter((temp)=>temp?.email?.includes(newVal))
+          let newArr = prev?.filter((temp)=>temp?._id?.includes(newVal))
           console.log(newArr)
           return newArr
         })
@@ -67,7 +69,7 @@ export default function ChatBox(props)
     console.log("Buffer", bufferList, "Main", threadList)
     React.useEffect(()=>
     {
-        Fetch("messageThreads", {method: "GET", headers:{"x-access-token": user.jwt}}).then((response)=>
+        AuthFetch("messageThreads", {method: "GET", headers:{"x-access-token": user.jwt}}, getAccessTokenSilently).then((response)=>
         {
             setThreadList((prev)=>
             {
@@ -78,7 +80,7 @@ export default function ChatBox(props)
                 return response.threads
             })
         })
-    }, [])
+    }, [currentRoom])
 
     React.useEffect(()=>
     {
@@ -110,8 +112,7 @@ export default function ChatBox(props)
         socket.emit("joinRoom", currentRoom)
       }
       
-      console.log("howdy", user)
-      Fetch("messages/"+currentRoom, {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+      AuthFetch("messages/"+currentRoom, {method: "GET", headers: {"x-access-token": user.jwt}}, getAccessTokenSilently).then((response)=>
       {
         console.log("Messages: ", response)
         setMessageList(response.messages)

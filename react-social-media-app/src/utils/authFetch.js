@@ -6,7 +6,7 @@ export default async function AuthFetch(endpoint, options, getToken)
 {
     
     let token = await getToken({scope: "read:current_user openid profile email", audience: process.env.REACT_APP_AUTH0_AUDIENCE})
-
-    return token
-    
+    options.headers["Authorization"] = "Bearer " + token
+    let response = await Fetch(endpoint, options)
+    return response
 }
