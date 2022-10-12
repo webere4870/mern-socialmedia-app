@@ -5,10 +5,12 @@ import UserContext from './Context'
 import Stripe from './Stripe'
 import queryString from 'query-string'
 import {Link} from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
+import AuthFetch from '../utils/authFetch'
 
 export default function CustomPayment(props)
 {
-    let [user, setUser] = React.useContext(UserContext)
+    let {user, getAccessTokenSilently} = useAuth0()
     let [formState, setFormState] = React.useState({amount: 0})
     let [stripePK, setStripePK] = React.useState("")
     let [clientSecret, setClientSecret] = React.useState("")
@@ -27,7 +29,7 @@ export default function CustomPayment(props)
 
     function submitForm(evt)
     {
-        Fetch("stripe/payment", {method: "POST", headers: {"Content-Type": "application/json", "x-access-token": user?.jwt}, body: JSON.stringify({amount: formState.amount, user: profile?._id})}).then((response)=>
+        AuthFetch("stripe/payment", {method: "POST", headers: {"Content-Type": "application/json", "x-access-token": user?.jwt}, body: JSON.stringify({amount: formState.amount, user: profile?._id})}, getAccessTokenSilently).then((response)=>
         {
             console.log("here")
             setClientSecret(response.clientSecret)

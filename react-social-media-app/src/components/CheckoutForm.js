@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {useStripe, useElements, PaymentElement} from '@stripe/react-stripe-js';
 import UserContext from './Context';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  let [user, setUser] = React.useContext(UserContext)
+  const {user, getAccessTokenSilently} = useAuth0()
 
   const [errorMessage, setErrorMessage] = useState(null);
 

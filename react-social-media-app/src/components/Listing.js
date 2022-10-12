@@ -4,10 +4,13 @@ import SearchMap from './SearchMap'
 import Geocode from 'react-geocode'
 import BigMap from './BigMap'
 import ListingForm from './ListingForm'
+import ListingItem from './ListingItem'
 import UserContext from './Context'
 import axios from 'axios'
 import Fetch from './../utils/fetch'
 import {useNavigate} from 'react-router-dom'
+import {useAuth0} from '@auth0/auth0-react'
+import AuthFetch from './../utils/authFetch'
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
 Geocode.setLanguage("en");
@@ -17,8 +20,8 @@ Geocode.enableDebug();
 
 export default function Listing(props)
 {
+    const {user, getAccessTokenSilently} = useAuth0()
     let [mapCenter, setMapCenter] = React.useState({lat: 39.9612, lng: -82.9988})
-
     let [error, setError] = React.useState("")
     let [form, setForm] = React.useState({city: "Findlay", state: "OH", zip: "45840", address: "890 Deer Trail Court", price: "0"})
     const [values, setValues] = React.useState([])
@@ -45,7 +48,6 @@ export default function Listing(props)
   // Call the API Backend, will describe this later
      
 
-    let [user, setUser] = React.useContext(UserContext)
     let [profile, setProfile] = React.useState({})
     let [bioState, setBioState] = React.useState({})
     let navigate = useNavigate()
@@ -61,7 +63,7 @@ export default function Listing(props)
 
     const submitProfile = async(evt)=>
     {
-        let response = await Fetch("profile", {method: "POST", headers:{"x-access-token": user.jwt, "Content-Type": "application/json"}, body: JSON.stringify(profile)})
+        let response = await AuthFetch("profile", {method: "POST", headers:{"x-access-token": user?.jwt, "Content-Type": "application/json"}, body: JSON.stringify(profile)}, getAccessTokenSilently)
         
         setProfile((prev)=>
         {
@@ -89,8 +91,9 @@ export default function Listing(props)
                 fd.append("lng", lng)
                 let resp = await axios.post(`http://localhost:5000/listing`, fd, {
             headers: {
-              'x-access-token': user.jwt, // optional
-              'Content-Type': 'multipart/form-data'
+              'x-access-token': user?.jwt, // optional
+              'Content-Type': 'multipart/form-data',
+              "Authorization": "Bearer " + await getAccessTokenSilently()
             },
           })
         .catch(error => {
@@ -112,7 +115,7 @@ export default function Listing(props)
     {
         (async function()
         {
-            let userProfile = await fetch("http://localhost:5000/profile",{headers: {'x-access-token': user.jwt}})
+            let userProfile = await AuthFetch("http://localhost:5000/profile",{headers: {'x-access-token': user?.jwt}}, getAccessTokenSilently)
             let json = await userProfile.json()
             console.log(json)
             setProfile((prev)=>
@@ -120,6 +123,7 @@ export default function Listing(props)
                 return json.user
             })
         })()
+        
     }, [])
 
     function handleState(evt)
@@ -148,6 +152,8 @@ export default function Listing(props)
             }
         );
     }, [form])
+
+    
     return (<div className='rowFlex'>
         <Nav/>
         <BigMap  mapCenter={mapCenter} setMapCenter={setMapCenter}/>

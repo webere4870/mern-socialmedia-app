@@ -57,7 +57,7 @@ export default function Search(props)
     async function getListings()
     {
       console.log(form)
-      let response = await Fetch("listings", {method: "post", headers:{'Content-Type': 'application/json'}, body: JSON.stringify(form)})
+      let response = await Fetch("listings", {method: "POST", headers:{'Content-Type': 'application/json'}, body: JSON.stringify(form)})
       console.log(response)
       setListings((prev)=>
       {
@@ -66,7 +66,7 @@ export default function Search(props)
     }
 
     let listingsArray = []
-
+    console.log(listings)
     for(let temp of listings)
     {
       listingsArray.push(<ListingItem key={temp.address} setSideToggle={setSideToggle} listing={temp} saved={saved} setSelected={setSelected}/>)
@@ -110,6 +110,17 @@ export default function Search(props)
           })
         }
     }, [form])
+
+    React.useEffect(()=>
+    {
+      getListings().then(()=>
+      {
+        console.log("Suc")
+      })
+    },[])
+
+    
+
     return (<div id='searchPage'>
         <Nav/>
         

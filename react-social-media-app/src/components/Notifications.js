@@ -1,15 +1,17 @@
 import React from 'react'
 import Fetch from './../utils/fetch'
 import UserContext from './Context'
+import { useAuth0 } from '@auth0/auth0-react'
+import AuthFetch from '../utils/authFetch'
 
 export default function Notifications(props)
 {
     let [notifications, setNotifications] = React.useState([])
-    let [user, setUser] = React.useContext(UserContext)
+    const {user, getAccessTokenSilently} = useAuth0()
 
     React.useEffect(()=>
     {
-        Fetch("notifications", {method: "GET", headers: {"x-access-token": user.jwt}}).then((response)=>
+        AuthFetch("notifications", {method: "GET", headers: {"x-access-token": user.jwt}}, getAccessTokenSilently).then((response)=>
         {
             console.log("Notify", response)
             setNotifications((prev)=>

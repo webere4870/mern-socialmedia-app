@@ -20,7 +20,8 @@ export default function Profile(props)
     
      
      let [isBioShown, setIsBioShown] = React.useState(false) 
-     let {user} = useAuth0()
+     const {user} = useAuth0()
+     let [fullUserData, setFullUserData] = React.useState()
      const isAuth = useAuth0().isAuthenticated
     const getAccessToken = useAuth0().getAccessTokenSilently
      let bioStyle = {right: isBioShown ? 0 : "-40vw"}
@@ -147,6 +148,16 @@ console.log(user)
            return;
      });
     }
+
+    React.useEffect(()=>
+    {
+        AuthFetch("profile", {method: "GET",headers: {"x-access-token": user?.jwt}}, getAccessToken).then((response)=>
+        {
+            console.log(response)
+            setProfile(response.user)
+        })
+    }, [])
+
     React.useEffect(()=>
     {
         
@@ -156,16 +167,7 @@ console.log(user)
             {
                 console.log(response)
             })
-            (async function()
-            {
-                let userProfile = await AuthFetch("http://localhost:5000/profile",{headers: {'x-access-token': user?.jwt}}, getAccessToken)
-                let json = await userProfile.json()
-                console.log(json)
-                setProfile((prev)=>
-                {
-                    return json.user
-                })
-            })()
+            
         }
         catch(e)
         {
