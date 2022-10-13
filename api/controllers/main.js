@@ -205,6 +205,7 @@ router.post("/listings", async (req, res)=>
 router.get('/userListings/:owner', async (req, res)=>
 {
     let listings = await ListingSchema.find({owner: req.params.owner})
+    console.log(listings, "Listings")
     res.json({success: true, listings: listings})
 })
 

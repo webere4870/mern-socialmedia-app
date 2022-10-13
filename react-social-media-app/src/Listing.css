@@ -9,13 +9,100 @@
 
 .topListing
 {
-  width: 100%;
+  width: 300px;
   height: 300px;
   box-shadow: 0 0 10px gray;
   border-radius: 10px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  position: relative;
+  overflow: hidden;
+}
+
+.pictureSlide
+{
+  height: 300px;
+  width: 300px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.topListingRow
+{
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0px;
+  transition: all .3s linear;
+}
+
+.carousel-item
+{
+  width: 400px;
+  height: 400px;
+}
+
+.topListing:hover .svgSwipe
+{
+  opacity: 1;
+}
+
+.topListing:hover .topListingRow
+{
+  background-color: black;
+}
+
+.topListing:hover .hiddenData
+{
+  bottom: 10px;
+}
+
+
+.hiddenData
+{
+  transition: all .1s linear;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: -50px;
+  z-index: 10;
+}
+
+.svgSwipe
+{
+	background: #ffffffeb;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	height: 30px;
+	width: 30px;
+	position: absolute;
+	top: 135px;
+  display: flex;
+  opacity: 0;
+  transition: all .3s linear;
+}
+
+.leftSwipe
+{
+  left: 8px;
+}
+
+.rightSwipe
+{
+  right: 10px;
+}
+
+.topListing svg:nth-of-type(1)
+{
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 
 .bottomListing
