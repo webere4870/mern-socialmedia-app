@@ -12,6 +12,7 @@ import Reviews from './Reviews'
 import Subscribe from './Subscribe'
 import $ from 'jquery'
 import { useAuth0 } from '@auth0/auth0-react'
+import { Link } from 'react-router-dom'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 
@@ -155,6 +156,7 @@ console.log(user)
         {
             console.log(response)
             setProfile(response.user)
+            setSaved(response.user.saved)
         })
     }, [])
 
@@ -257,7 +259,7 @@ console.log(user)
                     <div>
                     {!profile.stripe &&  <button onClick={(evt)=>createStripe(evt)}>Create Stripe Account</button>}
 
-                    
+                    <Link to={"https://billing.stripe.com/p/login/6oEg1DfVlfsD7scdQQ"}><button>Setup Customer Account</button></Link>
                     <button onClick={()=>setIsBioShown((prev)=> !prev)}>Edit Bio</button>
                     </div>
                 </div>

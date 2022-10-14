@@ -141,10 +141,97 @@ router.post("/listing", ValidateJWT, upload.any('avatar'), async (req, res)=>
         await client.uploadData(buf, options)
         fs.unlinkSync(path.join(__dirname, "\\..\\uploads\\"+file.filename))
     }
-    let upsert = new ListingSchema({address: address, city: city, state: state, ZIP: Number(zip), pictures: pictureArray, price: price, owner: req.auth.email, lat: lat, lng: lng})
+    const product = await stripe.products.create({
+        name: `${address} ${city}, ${state} ${zip}`,
+    });
+    const stripePrice = await stripe.prices.create({
+        unit_amount: price,
+        currency: 'usd',
+        recurring: {interval: 'month'},
+        product: product.id,
+      });
+    let upsert = new ListingSchema({address: address, city: city, state: state, ZIP: Number(zip), pictures: pictureArray, price: price, owner: req.auth.email, lat: lat, lng: lng, stripeProductID: product.id, stripePriceID: stripePrice.id})
     await upsert.save()
     res.json({success: true})
 })
+
+
+router.post("/listingSubscription", ValidateJWT, async (req, res)=>
+{
+    let listing = await ListingSchema.findOne({_id: req.body.id})
+    const session = await stripe.checkout.sessions.create({
+        mode: 'subscription',
+        line_items: [
+          {
+            price: listing.stripePriceID,
+            // For metered billing, do not pass quantity
+            quantity: 1,
+          },
+        ],
+        // {CHECKOUT_SESSION_ID} is a string literal; do not change it!
+        // the actual Session ID is returned in the query parameter when your customer
+        // is redirected to the success page.
+        success_url: 'http://localhost:3000/successMessage?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: 'http://localhost:3000/login',
+      });
+      console.log(session)
+      res.json({success: true, url: session.url})
+})
+
+router.post("/webhook", async (req, res) => {
+    let data;
+    let eventType;
+    console.log('haer')
+    // Check if webhook signing is configured.
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY
+    if (webhookSecret) {
+      // Retrieve the event by verifying the signature using the raw body and secret.
+      let event;
+      let signature = req.headers["stripe-signature"];
+  
+      try {
+        event = stripe.webhooks.constructEvent(
+          req.body,
+          signature,
+          webhookSecret
+        );
+      } catch (err) {
+        console.log(`  Webhook signature verification failed.`);
+        return res.sendStatus(400);
+      }
+      // Extract the object from the event.
+      data = event.data;
+      eventType = event.type;
+    } else {
+      // Webhook signing is recommended, but if the secret is not configured in `config.js`,
+      // retrieve the event data directly from the request body.
+      data = req.body.data;
+      eventType = req.body.type;
+    }
+
+    console.log(data, eventType)
+  
+    switch (eventType) {
+        case 'checkout.session.completed':
+          // Payment is successful and the subscription is created.
+          // You should provision the subscription and save the customer ID to your database.
+          break;
+        case 'invoice.paid':
+          // Continue to provision the subscription as payments continue to be made.
+          // Store the status in your database and check when a user accesses your service.
+          // This approach helps you avoid hitting rate limits.
+          break;
+        case 'invoice.payment_failed':
+          // The payment failed or the customer does not have a valid payment method.
+          // The subscription becomes past_due. Notify your customer and send them to the
+          // customer portal to update their payment information.
+          break;
+        default:
+        // Unhandled event type
+      }
+  
+    res.sendStatus(200);
+  });
 
 router.get("/listing/:id", async (req, res)=>
 {
@@ -233,6 +320,7 @@ router.get("/savedList", ValidateJWT, async (req,res)=>
 router.post("/bookmarks", ValidateJWT, async (req, res)=>
 {
     let {bookmark, _id} = req.body 
+    console.log(req.body)
     if(bookmark)
     {
         let response = await UserSchema.updateOne({_id: req.auth.email}, {$push:{saved: _id}})

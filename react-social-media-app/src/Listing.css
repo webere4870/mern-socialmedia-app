@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 300px;
+  margin: 30px;
 }
 
 .topListing
@@ -108,4 +109,13 @@
 .bottomListing
 {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.bottomListing p{
+  margin: 5px;
+  padding: 0px;
 }

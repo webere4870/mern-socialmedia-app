@@ -306,10 +306,10 @@ h3{
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 50vw;
+	width: 100vw;
 	min-height: 100vh;
 	margin-top: 70px;
-	z-index: 4;
+	z-index: 5;
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
@@ -317,6 +317,7 @@ h3{
 	flex-direction: row;
 	flex-wrap: wrap;
 	padding: 20px;
+	background: var(--offWhite);
 }
 
 #profilePage{
@@ -349,7 +350,6 @@ h3{
 	height: 300px;
 	border-radius: 10px;
 	box-shadow: 0 0 10px gray;
-	
 }
 
 .profileBig

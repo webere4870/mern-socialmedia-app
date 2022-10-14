@@ -27,6 +27,7 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import {v4} from 'uuid'
 import { useAuth0 } from '@auth0/auth0-react';
 import { get } from 'jquery';
+import GeneralSuccess from './components/GeneralSuccess';
 
 function App() {
   let [user, setUser] = React.useState()
@@ -115,6 +116,7 @@ function App() {
               <Route path="verify" element={<Verify/>}/> 
               <Route path="payment" element={<CustomPayment/>}/>
               <Route path="success" element={<Success/>}/>
+              <Route path="successMessage" element={<GeneralSuccess/>}/>
               <Route path="*" element={<Login />} />
               <Route path={"listing"} element={
                 <ProtectedRoute>
