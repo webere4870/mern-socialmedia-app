@@ -13,6 +13,9 @@ import Subscribe from './Subscribe'
 import $ from 'jquery'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
+import ReviewPortal from './ReviewPortal'
+
+import Portal from './Portal'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 
@@ -23,6 +26,8 @@ export default function Profile(props)
      let [isBioShown, setIsBioShown] = React.useState(false) 
      const {user} = useAuth0()
      let [fullUserData, setFullUserData] = React.useState()
+     let [reviewProfile, setReviewProfile] = React.useState()
+     let [togglePortal, setTogglePortal] = React.useState(false)
      const isAuth = useAuth0().isAuthenticated
     const getAccessToken = useAuth0().getAccessTokenSilently
      let bioStyle = {right: isBioShown ? 0 : "-40vw"}
@@ -209,6 +214,25 @@ console.log(user)
         }
     }, [values])
 
+    React.useEffect(()=>
+    {
+        if(reviewProfile)
+        {
+            setTogglePortal(true)
+        }
+        else{
+            setTogglePortal(false)
+        }
+    }, [reviewProfile])
+
+    React.useEffect(()=>
+    {
+        if(!togglePortal)
+        {
+            setReviewProfile(null)
+        }
+    }, [togglePortal])
+    console.log(togglePortal)
     
     let listingsArr = listingsArray?.map((temp)=>
     {
@@ -223,6 +247,11 @@ console.log(user)
 
     return (
         <div className='colFlex' id="profilePage">
+           
+            {togglePortal &&
+            <Portal open={togglePortal} setIsOpen={setTogglePortal}>
+            <ReviewPortal reviewProfile={reviewProfile}/>
+            </Portal>}
             <Nav/>
             <div id="topDiv">
             <div id="backgroundPic" style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/bg${profile._id})`}}>
@@ -272,10 +301,14 @@ console.log(user)
             <div id="bottomDiv">
                 <div id="scrollDiv">
                     {viewToggle == "myListings" && <div id='gridFlex'>{listingsArr}</div>}
-                    {viewToggle == "reviews" && <Reviews timeline={profile}/>}
+                    {viewToggle == "reviews" && <Subscribe userList={profile?.availableReviews} setReviewProfile={setReviewProfile} tab={"reviews"}/>}
                     {viewToggle == "bookmarks" && <div id='gridFlex'>{bookmarksArr}</div>}
-                    {viewToggle == "subscribers" && <Subscribe userList={profile?.subscribers}/>}
-                    {viewToggle == "subscriptions" && <Subscribe userList={profile?.subscriptions}/>}
+                    {viewToggle == "subscribers" && <Subscribe userList={profile?.subscribers}>
+                        <p>howdy</p>
+                        </Subscribe>}
+                    {viewToggle == "subscriptions" && <Subscribe userList={profile?.subscriptions}>
+                            <h1>Howdy</h1>
+                        </Subscribe>}
                 </div>
             </div>
         </div>

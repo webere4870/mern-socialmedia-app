@@ -106,7 +106,7 @@ function App() {
               <Route path="register" element={<Register/>}/>
               <Route path={"profile"} element={
                 <ProtectedRoute>
-                  <Profile/>
+                  <Profile></Profile>
                 </ProtectedRoute>}/>
               <Route path="search" element={<Search/>}/>
               <Route path="user/:user" element={<User/>}/>

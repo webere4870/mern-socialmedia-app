@@ -9,6 +9,7 @@ let UserSchema = new mongoose.Schema({
     bio: String,
     city: String,
     state: String,
+    availableReviews: Array,
     reviews: Array,
     overall: Number,
     saved: Array,

@@ -55,7 +55,7 @@ router.get("/profile", ValidateJWT, async (req, res)=>
 {
     console.log("Profile succeed")
     let jwt = req.auth || req.auth
-    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1})
+    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1, availableReviews: 1})
     console.log(user, "ehre")
     res.json({success: true, user: user})
 })
@@ -178,60 +178,7 @@ router.post("/listingSubscription", ValidateJWT, async (req, res)=>
       res.json({success: true, url: session.url})
 })
 
-router.post("/webhook", async (req, res) => {
-    let data;
-    let eventType;
-    console.log('haer')
-    // Check if webhook signing is configured.
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY
-    if (webhookSecret) {
-      // Retrieve the event by verifying the signature using the raw body and secret.
-      let event;
-      let signature = req.headers["stripe-signature"];
-  
-      try {
-        event = stripe.webhooks.constructEvent(
-          req.body,
-          signature,
-          webhookSecret
-        );
-      } catch (err) {
-        console.log(`  Webhook signature verification failed.`);
-        return res.sendStatus(400);
-      }
-      // Extract the object from the event.
-      data = event.data;
-      eventType = event.type;
-    } else {
-      // Webhook signing is recommended, but if the secret is not configured in `config.js`,
-      // retrieve the event data directly from the request body.
-      data = req.body.data;
-      eventType = req.body.type;
-    }
 
-    console.log(data, eventType)
-  
-    switch (eventType) {
-        case 'checkout.session.completed':
-          // Payment is successful and the subscription is created.
-          // You should provision the subscription and save the customer ID to your database.
-          break;
-        case 'invoice.paid':
-          // Continue to provision the subscription as payments continue to be made.
-          // Store the status in your database and check when a user accesses your service.
-          // This approach helps you avoid hitting rate limits.
-          break;
-        case 'invoice.payment_failed':
-          // The payment failed or the customer does not have a valid payment method.
-          // The subscription becomes past_due. Notify your customer and send them to the
-          // customer portal to update their payment information.
-          break;
-        default:
-        // Unhandled event type
-      }
-  
-    res.sendStatus(200);
-  });
 
 router.get("/listing/:id", async (req, res)=>
 {
@@ -380,6 +327,33 @@ router.post("/stripe/payment", ValidateJWT, async (req, res)=>
       res.json({clientSecret: paymentIntent.client_secret, key: process.env.STRIPE_PUBLIC_KEY})
 })
 
+router.post('/paymentConfirmation', express.raw({type: 'application/json'}), (request, response) => {
+    const sig = request.headers['stripe-signature'];
+  
+    let event;
+  
+    try {
+      event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET_KEY);
+    } catch (err) {
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+  
+    // Handle the event
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const session = event.data.object;
+        // Then define and call a function to handle the event checkout.session.completed
+        break;
+      // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+  
+    // Return a 200 response to acknowledge receipt of the event
+    response.send();
+  });
+
 router.get("/searchUsers", async (req, res)=>
 {
     let {user} = req.query
@@ -424,6 +398,27 @@ router.post("/profileList", async (req, res)=>
     let userList = await UserSchema.find({_id: {$in: req.body.list}})
     console.log(userList)
     res.json({success: true, userList: userList})
+})
+
+router.get("/reviewables", ValidateJWT, async (req, res)=>
+{
+    let {users} = req.body
+    let userList = await UserSchema.find({_id: {$in: users}})
+    res.json({success: true, users: userList})
+})
+
+router.post("/reviewables", ValidateJWT, async (req, res)=>
+{
+    let {user, insert} = req.body
+    if(insert)
+    {
+        await UserSchema.updateOne({_id: req.auth.email}, {$push: {availableReviews: user}})
+    }
+    else
+    {
+        await UserSchema.updateOne({_id: req.auth.email}, {$pull: {availableReviews: user}})
+    }
+    res.json({success: true, users: userList})
 })
 
 module.exports = router
