@@ -53,10 +53,8 @@ router.post("/findOrCreate", ValidateToken, async (req, res)=>
 
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
-    console.log("Profile succeed")
     let jwt = req.auth || req.auth
     let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1, availableReviews: 1})
-    console.log(user, "ehre")
     res.json({success: true, user: user})
 })
 
@@ -174,7 +172,6 @@ router.post("/listingSubscription", ValidateJWT, async (req, res)=>
         success_url: 'http://localhost:3000/successMessage?session_id={CHECKOUT_SESSION_ID}',
         cancel_url: 'http://localhost:3000/login',
       });
-      console.log(session)
       res.json({success: true, url: session.url})
 })
 
@@ -223,7 +220,6 @@ router.get("/messageThreads", ValidateJWT, async (req, res)=>
 router.post("/listings", async (req, res)=>
 {
     let {city, state, price} = req.body
-    console.log(city, state, price)
     let listings
     if(price)
     {
@@ -239,7 +235,6 @@ router.post("/listings", async (req, res)=>
 router.get('/userListings/:owner', async (req, res)=>
 {
     let listings = await ListingSchema.find({owner: req.params.owner})
-    console.log(listings, "Listings")
     res.json({success: true, listings: listings})
 })
 
@@ -259,7 +254,6 @@ router.get("/savedList", ValidateJWT, async (req,res)=>
 {
     console.log("Saved list success")
     let response = await UserSchema.findOne({_id: req.auth.email})
-    console.log(response.saved)
     res.json({success: true, saved: response.saved})
 })
 
@@ -267,7 +261,6 @@ router.get("/savedList", ValidateJWT, async (req,res)=>
 router.post("/bookmarks", ValidateJWT, async (req, res)=>
 {
     let {bookmark, _id} = req.body 
-    console.log(req.body)
     if(bookmark)
     {
         let response = await UserSchema.updateOne({_id: req.auth.email}, {$push:{saved: _id}})
@@ -302,17 +295,14 @@ router.post("/stripe/account", ValidateJWT, async (req, res)=>
         return_url: 'http://localhost:3000/search',
         type: 'account_onboarding',
     });
-    console.log(req.auth.email)
     let response = await UserSchema.updateOne({_id: req.auth.email}, {$set: {stripe: id}})
-    console.log(response)
-    console.log(accountLink)
+
     res.json({success: true, link: accountLink.url})
 })
 
 router.post("/stripe/payment", ValidateJWT, async (req, res)=>
 {
     let {amount, user} = req.body 
-    console.log(amount, user)
     let userData = await UserSchema.findOne({_id: user})
     const paymentIntent = await stripe.paymentIntents.create({
         amount: Number(amount),
@@ -323,7 +313,6 @@ router.post("/stripe/payment", ValidateJWT, async (req, res)=>
           destination: userData.stripe,
         },
       });
-      console.log(paymentIntent)
       res.json({clientSecret: paymentIntent.client_secret, key: process.env.STRIPE_PUBLIC_KEY})
 })
 
@@ -357,7 +346,6 @@ router.post('/paymentConfirmation', express.raw({type: 'application/json'}), (re
 router.get("/searchUsers", async (req, res)=>
 {
     let {user} = req.query
-    console.log(user)
     let userList = await UserSchema.find({$or: [{_id: {'$regex': String(user)}}, {name: {'$regex': String(user)}}]})
     res.json({success: true, users: userList})
 })
@@ -376,7 +364,6 @@ router.post("/deleteUnread", ValidateJWT, async (req, res)=>
 
 router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
 {
-    console.log("here")
     let {other, subscribe} = req.body
     let user = req.auth.email
 
@@ -395,9 +382,15 @@ router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
 
 router.post("/profileList", async (req, res)=>
 {
-    let userList = await UserSchema.find({_id: {$in: req.body.list}})
-    console.log(userList)
-    res.json({success: true, userList: userList})
+    console.log("Hadf")
+    let newList = req.body.list.map((temp)=>
+    {
+        return ObjectId(temp)
+    })
+    let listingList = await ListingSchema.find({_id: {$in: newList}})
+    console.log(listingList)
+    console.log( "adsf")
+    res.json({success: true, listingList: listingList})
 })
 
 router.get("/reviewables", ValidateJWT, async (req, res)=>

@@ -11,7 +11,6 @@ const MODAL_STYLES = {
     padding: '50px',
     zIndex: 1000,
     borderRadius: "10px",
-    height: "400px"
   }
   
   const OVERLAY_STYLES = {

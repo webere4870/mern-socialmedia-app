@@ -25,10 +25,8 @@ export default function Profile(props)
      
      let [isBioShown, setIsBioShown] = React.useState(false) 
      const {user} = useAuth0()
-     let [fullUserData, setFullUserData] = React.useState()
      let [reviewProfile, setReviewProfile] = React.useState()
      let [togglePortal, setTogglePortal] = React.useState(false)
-     const isAuth = useAuth0().isAuthenticated
     const getAccessToken = useAuth0().getAccessTokenSilently
      let bioStyle = {right: isBioShown ? 0 : "-40vw"}
      // Handles the image that was input by user
