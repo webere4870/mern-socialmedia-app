@@ -9,6 +9,7 @@ const UUID = require('uuid')
 const https = require('https')
 const ListingSchema = require('./../MongoDB/ListingSchema')
 let ChatSchema = require('./../MongoDB/ChatSchema')
+let ReviewSchema = require('./../MongoDB/ReviewSchema')
 let {ObjectId} = require('mongodb')
 const ValidateToken = require('./../utils/ValidateToken')
 let fetch = require('node-fetch')
@@ -382,15 +383,20 @@ router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
 
 router.post("/profileList", async (req, res)=>
 {
-    console.log("Hadf")
-    let newList = req.body.list.map((temp)=>
+    if(req.body.tab == "reviews")
     {
-        return ObjectId(temp)
-    })
-    let listingList = await ListingSchema.find({_id: {$in: newList}})
-    console.log(listingList)
-    console.log( "adsf")
-    res.json({success: true, listingList: listingList})
+        let newList = req.body.list.map((temp)=>
+        {
+            return ObjectId(temp)
+        })
+        let listingList = await ListingSchema.find({_id: {$in: newList}})
+        res.json({success: true, listingList: listingList})
+    }
+    else
+    {
+        let listingList = await UserSchema.find({_id: {$in: req.body.list}})
+        res.json({success: true, userList: listingList})
+    }
 })
 
 router.get("/reviewables", ValidateJWT, async (req, res)=>
@@ -412,6 +418,23 @@ router.post("/reviewables", ValidateJWT, async (req, res)=>
         await UserSchema.updateOne({_id: req.auth.email}, {$pull: {availableReviews: user}})
     }
     res.json({success: true, users: userList})
+})
+
+router.post("/calculateRatings", async (req, res)=>
+{
+    let data = await ReviewSchema.aggregate([
+        {
+            $hospitality: {
+              quizAvg: { $avg: "$hospitality"}
+            }
+        }
+    ])
+    console.log(data)
+})
+
+router.post("review", ValidateJWT, async (req, res)=>
+{
+    await ReviewSchema.create({})
 })
 
 module.exports = router

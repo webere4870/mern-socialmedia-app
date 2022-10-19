@@ -9,19 +9,21 @@ export default function Subscribe(props)
     let {tab} = props
     let [userDataList, setUserDataList] = React.useState([])
     let [toolTipState, setToolTipState] = React.useState(false)
-    console.log(props.userList)
     React.useEffect(()=>
     {
-        Fetch("profileList", {method: "POST", headers: {"Content-Type": "application/json"},body: JSON.stringify({list: props?.userList})}).then((response)=>
+        props?.tab == "reviews" ? Fetch("profileList", {method: "POST", headers: {"Content-Type": "application/json"},body: JSON.stringify({list: props?.userList, tab: props?.tab})}).then((response)=>
         {
             setUserDataList(response.listingList)
-
+        }) 
+        :
+        Fetch("profileList", {method: "POST", headers: {"Content-Type": "application/json"},body: JSON.stringify({list: props?.userList, tab: props?.tab})}).then((response)=>
+        {
+            setUserDataList(response.userList)
         })
     }, [])
 
-    let userMap = userDataList?.map((temp)=>
+    let userMap = props?.tab == "reviews" ? userDataList?.map((temp)=>
     {
-        console.log(temp)
         return (<div className='subscribeCard'>
             {toolTipState && 
             <ToolTip>
@@ -54,7 +56,44 @@ export default function Subscribe(props)
             </svg>
             </div>
         </div>)
+    }) : 
+    userDataList?.map((temp)=>
+    {
+        return (<div className='subscribeCard'>
+            {toolTipState && 
+            <ToolTip>
+                {tab == "reviews" && 
+                <>
+                    <div className='toolTipRow'>
+                    <p onClick={()=>props?.setReviewProfile(temp)}>Review</p>
+                    </div>
+                    <div className='toolTipRow'>
+                        <p>Delete Reviewable</p>
+                    </div>
+                </>}
+            </ToolTip>}
+            <div style={{marginRight: "auto", gap: "10px"}} className="rowFlex">
+            <img className='listImg' src={"https://webere4870.blob.core.windows.net/react-app/"+temp._id} alt="" />
+            <div>
+            <div className='rowFlex'>
+                <div>
+                <p>{temp.name}</p>
+                <Link to={"/user/"+temp._id}><p>{temp._id}</p></Link>
+                </div>
+
+                
+            </div>
+
+            </div>
+            </div>
+            <div className='toolTipBubble' onClick={()=>setToolTipState(!toolTipState)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+            </svg>
+            </div>
+        </div>)
     })
+    
     return (
     <div id='subscribe'>
         {userMap}

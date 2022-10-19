@@ -305,6 +305,20 @@ h3{
 	padding: 20px;
   }
 
+  .absoluter{
+	position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+
+  .absoluter span{
+	color: red;
+  }
+
 .reviewStack
 {
 	display: flex;
@@ -412,6 +426,116 @@ h3{
 #searchBar input{
 	width: 100px;
 	padding: 8px;
+}
+
+#listingPage
+{
+	display: flex;
+	padding: 20px 0;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	width: 90%;
+	gap: 5px;
+}
+
+
+
+#listingPage p, #listingPage h1, #listingPage h6
+{
+	margin: 0;
+	padding: 0;
+}
+
+.breaker{
+	margin: unset;
+	padding: unset;
+	background: black;
+	height: 3px;
+	width: 3px;
+	border-radius: 50%;
+	margin: 0 15px;
+}
+
+.linker{
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+
+#listingPage img{
+	margin: 0;
+	padding: 0;
+}
+
+#farSide
+{
+	margin-left: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+}
+
+#imageGrid
+{
+	display: grid;
+	width: 100%;
+	height: 300px;
+	grid-template-columns: 25% 25% 25% 25%;
+	grid-template-rows: 150px 150px;
+	grid-gap: 10px;
+	border-radius: 10px;
+}
+
+#mainPhoto
+{
+	grid-row-start: 1;
+	grid-row-end: 3;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	background: red;
+
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+#secondPhoto
+{
+	grid-row-start: 1;
+	grid-row-end: 2;
+	grid-column-start: 3;
+	grid-column-end: 4;
+	background: pink;
+}
+
+#thirdPhoto
+{
+	grid-row-start: 2;
+	grid-row-end: 3;
+	grid-column-start: 3;
+	grid-column-end: 4;
+	background: orange;
+}
+
+#fourthPhoto
+{
+	grid-row-start: 1;
+	grid-row-end: 2;
+	grid-column-start: 4;
+	grid-column-end: 5;
+	background: purple;
+	border-top-right-radius: 10px;
+}
+
+#fifthPhoto
+{
+	grid-row-start: 2;
+	grid-row-end: 3;
+	grid-column-start: 4;
+	grid-column-end: 5;
+	background: blue;
+	border-bottom-right-radius: 10px;
 }
 
 #bigListing
@@ -918,10 +1042,11 @@ nav
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid rgb(230, 230, 230);
   z-index: 1000;
   padding: 0 30px;
 }
+
 
 nav > p, nav svg
 {

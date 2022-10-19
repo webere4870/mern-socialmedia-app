@@ -117,7 +117,7 @@ export default function ListingItem(props)
     <div className='overListing'>
       <div className="topListing">
         <div className='hiddenData'>
-          <button>See More</button>
+          <Link to={"/listing/"+_id}><button>See More</button></Link>
           <button onClick={startSubscription}>Sub</button>
         </div>
         <div className={`topListingRow ${_id}`}>

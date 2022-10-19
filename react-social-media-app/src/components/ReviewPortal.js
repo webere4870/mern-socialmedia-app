@@ -1,14 +1,47 @@
 import React from 'react'
 import Stars from './Stars'
+import AuthFetch from './../utils/authFetch'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export default function ReviewPortal(props)
 {
-    let starterObject = {hospitality: 1, cleanliness: 1, communication: 1, location: 1, comment: ""}
+    let {_id, name, pictures, address, city, state, ZIP, owner, tenant} = props.reviewProfile
+    let starterObject = {hospitality: 0, cleanliness: 0, communication: 0, location: 0, comment: ""}
     let [starForm, setStarForm] = React.useState(starterObject)
+    let [isValid, setIsValid] = React.useState()
+    let {getAccessTokenSilently} = useAuth0()
     console.log(starForm)
-    let {_id, name, pictures, address, city, state, ZIP} = props.reviewProfile
+    
+    function changeComment(evt)
+    {
+        let newVal = evt.currentTarget.value
+        setStarForm((prev)=>
+        {
+            return {...prev, comment: newVal}
+        })
+    }
+    function submit(evt)
+    {
+        if(starForm.cleanliness == 0 || starForm.comment == "" || starForm.communication==0 || starForm.hospitality == 0 || starForm.location ==0)
+        {
+            setIsValid(false)
+        }
+        else
+        {
+            let postReview = {...starForm}
+            postReview.landlord = owner
+            postReview.tenant = tenant
+            postReview.property = _id
+            
+            AuthFetch("review", {method:"POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify()}, getAccessTokenSilently).then((response)=>
+            {
+
+            })
+        }   
+    }
     return (
     <div id='reviewPortal'>
+        {isValid == false && <div className='absoluter'><span>*Need comment and at least one star*</span></div>}
         <div id='leftReview'>
             <img src={`https://webere4870.blob.core.windows.net/react-app/${pictures[0]}`} className="profileBig" alt="" />
             <h3>{name}</h3>
@@ -24,10 +57,10 @@ export default function ReviewPortal(props)
             <Stars label={"Cleanliness"} formValue={"cleanliness"} setStarForm={setStarForm}/>
             <Stars label={"Communication"} formValue={"communication"} setStarForm={setStarForm}/>
             <Stars label={"Location"} formValue={"location"} setStarForm={setStarForm}/>
-            <textarea id="reviewComment" name=""  cols="30" rows="10"></textarea>
+            <textarea id="reviewComment" value={starForm.comment} onChange={changeComment} name="comment"  cols="30" rows="10"></textarea>
         </div>
         <div className='buttonFlex'>
-            <button>Submit</button>
+            <button onClick={(evt)=>submit(evt)}>Submit</button>
         </div>
     </div>)
 }
