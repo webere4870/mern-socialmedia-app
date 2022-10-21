@@ -35,6 +35,65 @@ h6{
 
 }
 
+
+#listingBlock
+{
+	padding: 80px 0;
+	width: 100%;
+	display: grid;
+	grid-template-columns: auto auto auto auto;
+	grid-gap: 60px;
+}
+
+
+#subListingBlock
+{
+	grid-column-start: 1;
+	grid-column-end: 4;
+}
+
+
+#bookingForm
+{
+	grid-column-start: 4; 
+	grid-column-end: 5;
+	height: min-content;
+	padding: 40px;
+	border-radius: 10px;
+	box-shadow: 0 0 8px gray;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	flex-direction: column;
+	gap: 10px;
+}
+
+
+.blockButton
+{
+	background: linear-gradient(var(--mainColor), var(--secondaryColor));
+	padding: 10px 30px;
+	border-radius: 10px;
+	width: 100%;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+
+
+#rentalRequest
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+}
+
 #registeredPage
 {
 	display: flex;
@@ -463,6 +522,16 @@ h3{
 }
 
 
+.link{
+	color: gray;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.link:hover{
+	cursor: pointer;
+}
+
 #listingPage img{
 	margin: 0;
 	padding: 0;
@@ -494,10 +563,16 @@ h3{
 	grid-row-end: 3;
 	grid-column-start: 1;
 	grid-column-end: 3;
-	background: red;
 
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
+}
+
+.pictureGridStyle
+{
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 
 #secondPhoto
@@ -506,7 +581,6 @@ h3{
 	grid-row-end: 2;
 	grid-column-start: 3;
 	grid-column-end: 4;
-	background: pink;
 }
 
 #thirdPhoto
@@ -515,7 +589,6 @@ h3{
 	grid-row-end: 3;
 	grid-column-start: 3;
 	grid-column-end: 4;
-	background: orange;
 }
 
 #fourthPhoto
@@ -524,7 +597,6 @@ h3{
 	grid-row-end: 2;
 	grid-column-start: 4;
 	grid-column-end: 5;
-	background: purple;
 	border-top-right-radius: 10px;
 }
 
@@ -534,7 +606,6 @@ h3{
 	grid-row-end: 3;
 	grid-column-start: 4;
 	grid-column-end: 5;
-	background: blue;
 	border-bottom-right-radius: 10px;
 }
 
@@ -617,6 +688,9 @@ h3{
 	padding: 0;
 	box-shadow: 0 0 10px gray;
 }
+
+
+
 
 
 .coverBubble

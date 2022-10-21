@@ -2,6 +2,7 @@ import React from 'react'
 import Fetch from './../utils/fetch'
 import Nav from './Nav'
 import SlideShow from './SlideShow'
+import RentalRequest from './RentalRequest'
 import {useNavigate, useSearchParams, Link} from 'react-router-dom'
 
 export default function ListingPage(props)
@@ -55,13 +56,18 @@ export default function ListingPage(props)
                         </div>
                     </div>
                     <div id="imageGrid">
-                        <div id="mainPhoto"></div>
-                        <div id="secondPhoto"></div>
-                        <div id="thirdPhoto"></div>
-                        <div id="fourthPhoto"></div>
-                        <div id="fifthPhoto"></div>
+                        <div id="mainPhoto" className='pictureGridStyle' style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/${pictures?.[0]})`}}></div>
+                        <div id="secondPhoto" className='pictureGridStyle' style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/${pictures?.[1]})`}}></div>
+                        <div id="thirdPhoto" className='pictureGridStyle' style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/${pictures?.[2]})`}}></div>
+                        <div id="fourthPhoto" className='pictureGridStyle' style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/${pictures?.[3]})`}}></div>
+                        <div id="fifthPhoto" className='pictureGridStyle' style={{backgroundImage: `url(https://webere4870.blob.core.windows.net/react-app/${pictures?.[4]})`}}></div>
                     </div>
-                    <SlideShow pictures={listing.pictures}/>
+                    <div id="listingBlock">
+                        <div id="subListingBlock">
+
+                        </div>
+                        <RentalRequest listing={listing}/>
+                    </div>
                 </div>
             </div>
         </div>
