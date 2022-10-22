@@ -10,6 +10,7 @@ const https = require('https')
 const ListingSchema = require('./../MongoDB/ListingSchema')
 let ChatSchema = require('./../MongoDB/ChatSchema')
 let ReviewSchema = require('./../MongoDB/ReviewSchema')
+let LeaseSchema = require('./../MongoDB/Lease')
 let {ObjectId} = require('mongodb')
 const ValidateToken = require('./../utils/ValidateToken')
 let fetch = require('node-fetch')
@@ -379,6 +380,24 @@ router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
         await UserSchema.updateOne({_id: other}, {$pull: {subscribers: user}})
     }
     res.json({success: true})
+})
+
+router.post("/leaseRequest", ValidateJWT, async (req, res)=>
+{
+    let leaseRequestObject = req.body
+    leaseRequestObject.tenant = req.auth.email
+    leaseRequestObject.startDate = new Date(leaseRequestObject.startDate)
+    leaseRequestObject.endDate = new Date(leaseRequestObject.endDate)
+    leaseRequestObject.price = Number(leaseRequestObject.price)
+    leaseRequestObject.active = false
+    let lease = await LeaseSchema.create(leaseRequestObject)
+    await lease.save()
+    res.json({success: true})
+})
+
+router.post("/closeLeaseRequest", ValidateJWT, async (req, res)=>
+{
+    
 })
 
 router.post("/profileList", async (req, res)=>

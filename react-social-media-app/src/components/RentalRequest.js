@@ -7,14 +7,37 @@ import { useAuth0 } from '@auth0/auth0-react'
 export default function RentalRequest(props)
 {
 
-    let {price, owner, } = props?.listing
+    let {price, owner, _id} = props?.listing
     let [propOwner, setPropOwner] = React.useState()
     let {getAccessTokenSilently} = useAuth0()
-    let [requestForm, setRequest] = React.useState({startDate: "", endDate: "", price: '0'})
+    let [requestForm, setRequestForm] = React.useState({startDate: "", endDate: "", price: '' + price, landlord: owner, property: _id})
 
     function buildRequest(evt)
     {
-        AuthFetch("")
+        AuthFetch("leaseRequest", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(requestForm)}, getAccessTokenSilently).then((response)=>
+        {
+
+        })
+    }
+
+    function changePrice(evt)
+    {
+        let newVal = evt.currentTarget.value
+        setRequestForm((prev)=>
+        {
+            return {...prev, price: newVal}
+        })
+    }
+
+    function toggleDate(evt)
+    {
+        let name = evt.currentTarget.name
+        let val = evt.currentTarget.value
+        console.log(name, val)
+        setRequestForm((prev)=>
+        {
+            return {...prev, [name]: val}
+        })
     }
 
     React.useEffect(()=>
@@ -36,11 +59,11 @@ export default function RentalRequest(props)
             {propOwner && <p>{propOwner?.name}</p>}
         </div>
         <label htmlFor="askingPrice">Request Price</label>
-        <input type="text" id='askingPrice'/>
+        <input type="text" id='askingPrice' value={requestForm.price} onChange={changePrice}/>
         <label htmlFor="askingPrice">Start Date</label>
-        <input type="date" id='startDate'/>
+        <input type="date" id='startDate' name='startDate' value={requestForm.startDate} onChange={toggleDate}/>
         <label htmlFor="askingPrice">End Date</label>
-        <input type="date" id='endDate' onChange={(evt)=>console.log(evt.currentTarget.value)}/>
-        <button className="blockButton" onClick={{buildRequest}}>Request Lease</button>
+        <input type="date" id='endDate' name='endDate' value={requestForm.endDate} onChange={toggleDate}/>
+        <button className="blockButton" onClick={buildRequest}>Request Lease</button>
     </div>)
 }

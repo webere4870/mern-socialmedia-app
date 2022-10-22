@@ -17,7 +17,9 @@ let UserSchema = new mongoose.Schema({
     active: Boolean,
     stripe: String,
     subscribers: Array,
-    subscriptions: Array
+    subscriptions: Array,
+    myRequests: Array,
+    tenantRequests: Array
 })
 
 module.exports = mongoose.model("UserSchema", UserSchema)
