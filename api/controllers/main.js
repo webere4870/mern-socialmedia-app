@@ -56,7 +56,7 @@ router.post("/findOrCreate", ValidateToken, async (req, res)=>
 router.get("/profile", ValidateJWT, async (req, res)=>
 {
     let jwt = req.auth || req.auth
-    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1, availableReviews: 1})
+    let user = await UserSchema.findOne({_id: jwt.email}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1, availableReviews: 1, tenantRequests: 1, myRequests: 1})
     res.json({success: true, user: user})
 })
 
@@ -385,6 +385,7 @@ router.post("/changeSubscribers", ValidateJWT, async (req, res)=>
 router.post("/leaseRequest", ValidateJWT, async (req, res)=>
 {
     let leaseRequestObject = req.body
+    console.log(leaseRequestObject)
     leaseRequestObject.tenant = req.auth.email
     leaseRequestObject.startDate = new Date(leaseRequestObject.startDate)
     leaseRequestObject.endDate = new Date(leaseRequestObject.endDate)
@@ -392,7 +393,16 @@ router.post("/leaseRequest", ValidateJWT, async (req, res)=>
     leaseRequestObject.active = false
     let lease = await LeaseSchema.create(leaseRequestObject)
     await lease.save()
+    await UserSchema.updateOne({_id: req.auth.email}, {$push: {myRequests: leaseRequestObject.landlord}})
+    await UserSchema.updateOne({_id: req.body.landlord}, {$push: {tenantRequests: req.auth.email}})
     res.json({success: true})
+})
+
+router.get("/tenantRequests", ValidateJWT, async (req, res)=>
+{
+    let userList = await LeaseSchema.find({landlord: req.auth.email})
+    console.log(userList)
+    res.json({success: true, leases: userList})
 })
 
 router.post("/closeLeaseRequest", ValidateJWT, async (req, res)=>

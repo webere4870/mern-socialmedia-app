@@ -21,4 +21,13 @@ function mergeSort(arr) {
   let right = mergeSort(arr.slice(mid))
   return merge(left, right)
 }
-console.log(mergeSort([3, 5, 8, 5, 99, 1]) )
+
+
+let randArr = []
+
+for(let counter=0; counter < 1000; counter++)
+{
+  randArr.push(Math.floor(Math.random() * 100))
+}
+
+console.log(mergeSort(randArr) )

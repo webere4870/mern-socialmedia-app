@@ -9,7 +9,7 @@
 {
   --mainColor: #FF4B2B;
   --secondaryColor: #FF416C;
-  --offWhite: #ecf0f4;
+  --offWhite: white;
 }
 
 body
@@ -28,11 +28,96 @@ h6{
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-
   min-height: calc(100vh -70px);
   width: 100vw;
 	margin-top: 70px;
+}
 
+#dashboard
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: repeat(4, auto);
+	grid-template-areas: 
+	"profile profile reviews reviews reviews"
+	"profile profile reviews reviews reviews"
+	"profile profile calendar calendar calendar"
+	". . calendar calendar calendar";
+	width: 100%;
+	padding: 20px 30px;
+	gap: 20px;
+}
+
+#calendarGrid
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.calendarRow
+{
+    display: flex;
+    justify-content: space-between;
+	width: 100%;
+    align-items: center;
+    flex-direction: row;
+	gap: 10px;
+}
+
+
+
+.calendarRow p{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    transition: .2s background linear;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+}
+
+.calendarRow p:hover{
+    background: linear-gradient(var(--mainColor), var(--secondaryColor));
+	cursor: pointer;
+	color: white;
+}
+
+#reviewTile
+{
+	grid-area: reviews;
+	width: 100%;
+	padding: 10px;
+}
+
+#profileTile
+{
+	grid-area: profile;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 0;
+	width: 100%;
+	padding: 10px;
+}
+
+#profileTile label
+{
+	align-self: flex-start;
+	margin-left: 3px;
+}
+
+.tile{
+	background: white;
+	border-radius: 10px;
+	margin: unset;
+	padding: unset;
+	box-shadow: 0 0 20px rgb(234, 234, 234);
 }
 
 
@@ -68,6 +153,12 @@ h6{
 	gap: 10px;
 }
 
+.customCard
+{
+	padding: 20px;
+	background: white;
+	border-radius: 10px;
+}
 
 .blockButton
 {
@@ -690,7 +781,11 @@ h3{
 }
 
 
-
+#profileTile input
+{
+	width: 100%;
+	border-radius: 10px;
+}
 
 
 .coverBubble
@@ -1269,6 +1364,7 @@ input {
 	padding: 12px 15px;
 	margin: 8px 0;
 	width: 100%;
+	box-sizing: border-box;
 }
 
 .containerMe {

@@ -14,7 +14,9 @@ export default function RentalRequest(props)
 
     function buildRequest(evt)
     {
-        AuthFetch("leaseRequest", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(requestForm)}, getAccessTokenSilently).then((response)=>
+        let newForm = {...requestForm}
+        newForm.landlord = owner
+        AuthFetch("leaseRequest", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(newForm)}, getAccessTokenSilently).then((response)=>
         {
 
         })

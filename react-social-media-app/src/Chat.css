@@ -2,7 +2,7 @@
 {
   --mainColor: #FF4B2B;
   --secondaryColor: #FF416C;
-  --offWhite: #ecf0f4;
+  --offWhite: white;
 }
 
 #fullChat

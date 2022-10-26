@@ -24,6 +24,7 @@ import Success from './components/Success';
 import Auth0 from './auth/Auth0';
 import TokenWrapper from './auth/TokenWrapper'
 import ProtectedRoute from './auth/ProtectedRoute';
+import Dashboard from './components/Dashboard';
 import {v4} from 'uuid'
 import { useAuth0 } from '@auth0/auth0-react';
 import { get } from 'jquery';
@@ -106,7 +107,7 @@ function App() {
               <Route path="register" element={<Register/>}/>
               <Route path={"profile"} element={
                 <ProtectedRoute>
-                  <Profile></Profile>
+                  <Dashboard/>
                 </ProtectedRoute>}/>
               <Route path="search" element={<Search/>}/>
               <Route path="user/:user" element={<User/>}/>

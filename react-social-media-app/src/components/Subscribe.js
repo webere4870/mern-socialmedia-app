@@ -60,18 +60,33 @@ export default function Subscribe(props)
     userDataList?.map((temp)=>
     {
         return (<div className='subscribeCard'>
-            {toolTipState && 
+            
+            
+            {tab == "reviews" && 
             <ToolTip>
-                {tab == "reviews" && 
-                <>
-                    <div className='toolTipRow'>
-                    <p onClick={()=>props?.setReviewProfile(temp)}>Review</p>
-                    </div>
-                    <div className='toolTipRow'>
-                        <p>Delete Reviewable</p>
-                    </div>
-                </>}
-            </ToolTip>}
+                <div className='toolTipRow'>
+                <p onClick={()=>props?.setReviewProfile(temp)}>Review</p>
+                </div>
+                <div className='toolTipRow'>
+                    <p>Delete Reviewable</p>
+                </div>
+                </ToolTip>
+            }
+
+            {tab == "tenantRequests" && 
+            <ToolTip>
+                <div className='toolTipRow'>
+                <p onClick={()=>props?.setReviewProfile(temp)}>Accept</p>
+                </div>
+                <div className='toolTipRow'>
+                <p onClick={()=>props?.setReviewProfile(temp)}>Reject</p>
+                </div>
+                <div className='toolTipRow'>
+                    <p>Delete Reviewable</p>
+                </div>
+                </ToolTip>
+            }
+            
             <div style={{marginRight: "auto", gap: "10px"}} className="rowFlex">
             <img className='listImg' src={"https://webere4870.blob.core.windows.net/react-app/"+temp._id} alt="" />
             <div>

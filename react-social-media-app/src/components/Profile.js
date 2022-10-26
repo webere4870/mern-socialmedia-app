@@ -14,6 +14,7 @@ import $ from 'jquery'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import ReviewPortal from './ReviewPortal'
+import CustomProfileCard from './CustomProfileCard'
 
 import Portal from './Portal'
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
@@ -76,7 +77,7 @@ reader.readAsDataURL(inFile);
     let [bookmarksArray, setBookmarksArray] = React.useState([])
     let [selected, setSelected] = React.useState({})
     let [saved, setSaved] = React.useState([])
-
+    let [tenantRequestsToMe, setTenantRequestsToMe] = React.useState([])
 
     let navigate = useNavigate()
 
@@ -172,7 +173,11 @@ console.log(user)
             {
                 console.log(response)
             })
-            
+            AuthFetch("tenantRequests", {method: "GET"}, getAccessToken).then((response)=>
+            {
+                console.log(response)
+                setTenantRequestsToMe(response.leases)
+            })
         }
         catch(e)
         {
@@ -241,6 +246,17 @@ console.log(user)
         return <ListingItem setSelected={setSelected} saved={saved} listing={temp}/>
     })
 
+    console.log(tenantRequestsToMe)
+    let tenantRequests = tenantRequestsToMe?.map((temp)=>
+    {
+        <CustomProfileCard tab={"tenantRequests"}>
+            <div className='rowFlex'>
+                <p>{temp.owner}</p>
+                <p>{temp.property}</p>
+            </div>
+        </CustomProfileCard>
+    })
+
     console.log(profile)
 
     return (
@@ -294,6 +310,8 @@ console.log(user)
             <div id='viewToggler'><p id="myListingsP" className={viewToggle == "myListings" ? "underlinedP" : ""} onClick={()=>setViewToggle("myListings")}>Listings</p><p className={viewToggle == "reviews" ? "underlinedP" : ""} id="reviewsP" onClick={()=>setViewToggle("reviews")}>Reviews</p><p className={viewToggle == "bookmarks" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("bookmarks")}>Saved Listings</p>
             <p className={viewToggle == "subscribers" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("subscribers")}>Subscribers</p>
             <p className={viewToggle == "subscriptions" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("subscriptions")}>Subscriptions</p>
+            <p className={viewToggle == "myRequests" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("myRequests")}>My Requests</p>
+            <p className={viewToggle == "tenantRequests" ? "underlinedP" : ""} id='bookmarksP' onClick={()=>setViewToggle("tenantRequests")}>Tenant Requests</p>
             </div>
             </div>
             <div id="bottomDiv">
@@ -307,6 +325,8 @@ console.log(user)
                     {viewToggle == "subscriptions" && <Subscribe userList={profile?.subscriptions}>
                             <h1>Howdy</h1>
                         </Subscribe>}
+                    {viewToggle == "myRequests" && <Subscribe userList={profile?.myRequests} tab={"myRequests"}/>}
+                    {viewToggle == "tenantRequests" && tenantRequests}
                 </div>
             </div>
         </div>
