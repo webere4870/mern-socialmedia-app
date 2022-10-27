@@ -41,11 +41,35 @@ h6{
 	grid-template-areas: 
 	"profile profile reviews reviews reviews"
 	"profile profile reviews reviews reviews"
-	"profile profile calendar calendar calendar"
-	". . calendar calendar calendar";
+	"calendar calendar calendar profile2 profile2"
+	"calendar calendar calendar profile2 profile2";
 	width: 100%;
 	padding: 20px 30px;
-	gap: 20px;
+	gap: 30px;
+}
+
+#profileImgTile
+{
+	grid-area: profile;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+.absoluteBG
+{
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 50%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 #calendarGrid
@@ -97,7 +121,7 @@ h6{
 
 #profileTile
 {
-	grid-area: profile;
+	grid-area: profile2;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -815,6 +839,37 @@ h3{
 
 	z-index: 3;
 	position: relative;
+}
+
+.progressCircle
+{
+	height: 70px;
+	width: 70px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 0 0 10px rgb(202, 202, 202);
+}
+
+.bottomAbsolute
+{
+	position: absolute;
+	height: 50%;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.innerCircle
+{
+	background: white;
+	border-radius: 50%;
+	height: 65px;
+	width: 65px;
 }
 
 #bottomDiv

@@ -1,10 +1,11 @@
 import React from 'react'
 import Nav from './Nav'
 import AuthFetch from '../utils/authFetch'
-import { useAuth0 } from '@auth0/auth0-react'
+import { useAuth0, User } from '@auth0/auth0-react'
 import $ from 'jquery'
 import axios from 'axios'
 import Calendar from './Calendar'
+import UserHover from './UserHover'
 
 import Loading from './Loading'
 
@@ -78,17 +79,11 @@ export default function Dashboard(props)
     <div className='App'>
         <Nav/>
         <div id="dashboard">
+            <UserHover username={user?._id} isProfile={true}/>
             <div className="tile" id='profileTile'>
                 {user && 
                 <div id='profileTile'>
-                    <div className='coverBubble'>
-            <img className='profileBig' src={user.picture} alt=""/>
-            <div id="svgProfile" onClick={()=>$("#profileSelect").trigger("click")}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" className="bi bi-plus" viewBox="0 0 16 16">
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-            </div>
-            </div>
+                    
             <input type="file"
                 accept="image/*"
                 onChange={handleImageChange}

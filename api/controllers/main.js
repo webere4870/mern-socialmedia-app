@@ -60,6 +60,12 @@ router.get("/profile", ValidateJWT, async (req, res)=>
     res.json({success: true, user: user})
 })
 
+router.get("/publicProfile/:id", async (req, res)=>
+{
+    let user = await UserSchema.findOne({_id: req.params.id}, {_id:1, followers: 1, following: 1, posts: 1, bio: 1, city:1, state:1, name: 1, picture: 1, overall: 1, reviews: 1, saved: 1, stripe: 1, subscribers: 1, subscriptions: 1, availableReviews: 1, tenantRequests: 1, myRequests: 1})
+    res.json({success: true, user: user})
+})
+
 router.get("/getUser/:id", async (req, res)=>
 {
     let id = req.params.id
