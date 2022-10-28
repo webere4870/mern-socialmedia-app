@@ -193,6 +193,14 @@ router.get("/listing/:id", async (req, res)=>
     res.json({success: true, listing: listing})
 })
 
+router.post("/listingsArray", async (req, res)=>
+{
+    let {listings} = req.body
+    let map = listings.map((temp)=>ObjectId(temp))
+    let listingsArr = await ListingSchema.find({_id: {$in: map}})
+    res.json({success: true, listings: listingsArr})
+})
+
 router.get("/messages/:room", ValidateJWT, async (req, res)=>
 {
     let email = req.auth.email

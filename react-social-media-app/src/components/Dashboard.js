@@ -6,6 +6,7 @@ import $ from 'jquery'
 import axios from 'axios'
 import Calendar from './Calendar'
 import UserHover from './UserHover'
+import AvailableReviews from './AvailableReviews'
 
 import Loading from './Loading'
 
@@ -102,6 +103,7 @@ export default function Dashboard(props)
             <div id="reviewTile" className='tile'>
                     <Calendar/>
             </div>
+            <AvailableReviews listingsArr={user?.availableReviews}/>
         </div>
     </div>)
 }
