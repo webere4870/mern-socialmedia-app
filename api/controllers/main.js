@@ -196,7 +196,9 @@ router.get("/listing/:id", async (req, res)=>
 router.post("/listingsArray", async (req, res)=>
 {
     let {listings} = req.body
-    let map = listings.map((temp)=>ObjectId(temp))
+    console.log(req.body)
+    console.log(listings)
+    let map = listings?.map((temp)=>ObjectId(temp))
     let listingsArr = await ListingSchema.find({_id: {$in: map}})
     res.json({success: true, listings: listingsArr})
 })
@@ -416,7 +418,7 @@ router.get("/tenantRequests", ValidateJWT, async (req, res)=>
 {
     let userList = await LeaseSchema.find({landlord: req.auth.email})
     console.log(userList)
-    res.json({success: true, leases: userList})
+    res.json({success: true, leases: [...userList]})
 })
 
 router.post("/closeLeaseRequest", ValidateJWT, async (req, res)=>

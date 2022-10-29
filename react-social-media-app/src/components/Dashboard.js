@@ -7,6 +7,7 @@ import axios from 'axios'
 import Calendar from './Calendar'
 import UserHover from './UserHover'
 import AvailableReviews from './AvailableReviews'
+import Requests from './Requests'
 
 import Loading from './Loading'
 
@@ -104,6 +105,7 @@ export default function Dashboard(props)
                     <Calendar/>
             </div>
             <AvailableReviews listingsArr={user?.availableReviews}/>
+            <Requests/>
         </div>
     </div>)
 }

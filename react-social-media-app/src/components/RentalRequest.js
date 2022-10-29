@@ -8,6 +8,7 @@ export default function RentalRequest(props)
 {
 
     let {price, owner, _id} = props?.listing
+    console.log(props?.listing)
     let [propOwner, setPropOwner] = React.useState()
     let {getAccessTokenSilently} = useAuth0()
     let [requestForm, setRequestForm] = React.useState({startDate: "", endDate: "", price: '' + price, landlord: owner, property: _id})
@@ -16,6 +17,7 @@ export default function RentalRequest(props)
     {
         let newForm = {...requestForm}
         newForm.landlord = owner
+        newForm.property = _id
         AuthFetch("leaseRequest", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(newForm)}, getAccessTokenSilently).then((response)=>
         {
 

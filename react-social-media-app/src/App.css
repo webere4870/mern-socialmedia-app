@@ -42,14 +42,81 @@ h6{
 	grid-template-areas: 
 	"profile profile reviews reviews reviews"
 	"profile profile reviews reviews reviews"
-	"calendar calendar calendar profile2 profile2"
-	"calendar calendar calendar profile2 profile2";
+	"calendar calendar calendar requests requests"
+	"calendar calendar calendar requests requests"
+	"profile2 profile2 . . .";
 	width: 100%;
 	padding: 20px 30px;
 	gap: 30px;
 }
 
+#incomingRequests
+{
+	grid-area: requests;
+	padding: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow-y: scroll;
+}
 
+.requestRow
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 90%;
+	min-height: 200px;
+	padding: 40px 20px;
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgb(220, 220, 220);
+
+}
+
+.requestRow *
+{
+	text-align: center;
+}
+
+.requestImage
+{
+	height: 90px;
+	width: 90px;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	border-radius: 5px;
+	position: relative;
+}
+
+.profileToRequest
+{
+	height:50px;
+	width: 50px;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	padding: 10px;
+	background: white;
+	border-radius: 50%;
+
+}
+
+.overProfileRequest
+{
+	position: absolute;
+	top: -25px;
+	left: -25px;
+	background: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60px;
+	width: 60px;
+	border-radius: 50%;
+}
 
 #profileImgTile
 {
@@ -101,6 +168,7 @@ h6{
 
 #availableReviews{
 	grid-area: calendar;
+	padding: 30px;
 }
 
 .calendarRow p{
@@ -1415,6 +1483,22 @@ button {
 	margin: 10px;
 }
 
+.whiteBtn
+{
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background: white;
+	color: var(--secondaryColor);
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+	z-index: 110;
+	margin: 10px;
+}
+
 #closeModal
 {
 	position: absolute;
@@ -1717,6 +1801,16 @@ nav p{
   width: 250px;
   margin: 10px;
   padding: 0;
+}
+
+.myRental
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	width: fit-content;
+	gap: 5px;
 }
 
 .myCard p{

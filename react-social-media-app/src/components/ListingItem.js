@@ -28,8 +28,8 @@ export default function ListingItem(props)
 
     React.useEffect(()=>
     {
-      console.log(props.saved)
-      for(let temp of props.saved)
+      console.log(props?.saved)
+      for(let temp of props?.saved)
       {
         if(temp == props?.listing?._id)
         {
@@ -117,8 +117,8 @@ export default function ListingItem(props)
     <div className='overListing'>
       <div className="topListing">
         <div className='hiddenData'>
-          <Link to={"/listing/"+_id}><button>See More</button></Link>
-          <button onClick={startSubscription}>Sub</button>
+          <Link style={{marginBottom: '10px'}} to={"/listing/"+_id}><button style={{bottom: '10px'}}>See More</button></Link>
+          {/* <button onClick={startSubscription}>Sub</button> */}
         </div>
         <div className={`topListingRow ${_id}`}>
           {picturesArr}

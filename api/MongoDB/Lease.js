@@ -7,6 +7,8 @@ let schema = new mongoose.Schema({
     price: Number,
     startDate: Date,
     endDate: Date,
+    address: String,
+    
     active: Boolean
 })
 
