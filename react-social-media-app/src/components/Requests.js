@@ -10,6 +10,11 @@ export default function Requests(props)
     let [requests, setRequests] = React.useState()
     let [properties, setProperties] = React.useState()
 
+    function changeLease(activate, id)
+    {
+        AuthFetch("closeLeaseRequest", {method: "POST", headers:{"Content-Type": "application/json"}, body: JSON.stringify({_id: id, activate: activate})}, getAccessTokenSilently)
+    }
+
     React.useEffect(()=>
     {
         console.log("Here")
@@ -45,7 +50,7 @@ export default function Requests(props)
                 <p>{property?.address}</p>
                 <Link to={"/user/"+temp?.tenant}><p style={{margin: "unset"}} className="link">{temp?.tenant}</p></Link>
                 <p>{new Date(temp?.startDate)?.toDateString()} &#x2014; {new Date(temp?.endDate)?.toDateString()}</p>
-                <div className="btnRow"><button>Accept</button><button className="whiteBtn">Decline</button></div>
+                <div className="btnRow" onClick={()=>changeLease(true, temp?._id)}><button>Accept</button><button onClick={()=>changeLease(false, temp?._id)} className="whiteBtn">Decline</button></div>
             </div>
         </div>)
     })

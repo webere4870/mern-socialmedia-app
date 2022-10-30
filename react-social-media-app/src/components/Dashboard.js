@@ -7,13 +7,16 @@ import axios from 'axios'
 import Calendar from './Calendar'
 import UserHover from './UserHover'
 import AvailableReviews from './AvailableReviews'
+import DateContext from './DateContext'
 import Requests from './Requests'
+import Events from './Events'
 
 import Loading from './Loading'
 
 export default function Dashboard(props)
 {
     let [user, setUser] = React.useState({})
+    let [currentDate, setCurrentDate] = React.useState(new Date())
     let [userForm, setUserForm] = React.useState(user?._id ? {name: user.name, city: user.city, state: user.state} : {name: "", city: "", state: ""})
     const {getAccessTokenSilently} = useAuth0()
     console.log(user)
@@ -79,33 +82,37 @@ export default function Dashboard(props)
 
     return (
     <div className='App'>
-        <Nav/>
-        <div id="dashboard">
-            <UserHover username={user?._id} isProfile={true}/>
-            <div className="tile" id='profileTile'>
-                {user && 
-                <div id='profileTile'>
-                    
-            <input type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{display: "none"}}
-                id="profileSelect"
-                ref={fileInput}/>
-                    <label htmlFor="name">Name</label>
-                    <input type="text" name='name' value={userForm.name} onChange={changeInput}/>
-                    <label htmlFor="name">State</label>
-                    <input type="text" name='name' value={userForm.state} onChange={changeInput}/>
-                </div>}
-                <button className="blockButton">
-                    Submit Changes
-                </button>
+        <DateContext.Provider value={[currentDate, setCurrentDate]}>
+            <Nav/>
+            <div id="dashboard">
+                <UserHover username={user?._id} isProfile={true}/>
+                <div className="tile" id='profileTile'>
+                    {user && 
+                    <div id='profileTile'>
+                        
+                <input type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    style={{display: "none"}}
+                    id="profileSelect"
+                    ref={fileInput}/>
+                        <label htmlFor="name">Name</label>
+                        <input type="text" name='name' value={userForm.name} onChange={changeInput}/>
+                        <label htmlFor="name">State</label>
+                        <input type="text" name='name' value={userForm.state} onChange={changeInput}/>
+                    </div>}
+                    <button className="blockButton">
+                        Submit Changes
+                    </button>
+                </div>
+                <div id="reviewTile" className='tile'>
+                        <Calendar/>
+                </div>
+                <AvailableReviews listingsArr={user?.availableReviews}/>
+                <Requests/>
+                <Events/>
             </div>
-            <div id="reviewTile" className='tile'>
-                    <Calendar/>
-            </div>
-            <AvailableReviews listingsArr={user?.availableReviews}/>
-            <Requests/>
-        </div>
+        </DateContext.Provider>
+        
     </div>)
 }

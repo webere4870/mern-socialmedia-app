@@ -8,7 +8,8 @@ let schema = new mongoose.Schema({
     startDate: Date,
     endDate: Date,
     address: String,
-    
+    paymentPlan: String,
+    paymentDates: Array,
     active: Boolean
 })
 

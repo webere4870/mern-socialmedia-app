@@ -40,14 +40,20 @@ h6{
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-template-rows: repeat(4, auto);
 	grid-template-areas: 
-	"profile profile reviews reviews reviews"
-	"profile profile reviews reviews reviews"
+	"events events reviews reviews reviews"
+	"events events reviews reviews reviews"
 	"calendar calendar calendar requests requests"
 	"calendar calendar calendar requests requests"
-	"profile2 profile2 . . .";
+	"profile2 profile2 profile profile profile"
+	". . profile profile profile";
 	width: 100%;
 	padding: 20px 30px;
 	gap: 30px;
+}
+
+#eventsList
+{
+	grid-area: events;
 }
 
 #incomingRequests
@@ -57,7 +63,10 @@ h6{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-wrap: wrap;
 	overflow-y: scroll;
+	max-height: 470px;
+	gap: 20px;
 }
 
 .requestRow
@@ -155,6 +164,16 @@ h6{
 	padding: 20px;
 }
 
+#calendarGrid .circleSVG{
+	background: linear-gradient(var(--mainColor), var(--secondaryColor));
+	padding: 15px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
 .calendarRow
 {
     display: flex;
@@ -162,7 +181,6 @@ h6{
 	width: 100%;
     align-items: center;
     flex-direction: row;
-	gap: 5px 0;
 	margin: 0;
 }
 
@@ -180,7 +198,7 @@ h6{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 15px;
+	padding: 20px;
 }
 
 .calendarRow p:hover{

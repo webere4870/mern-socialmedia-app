@@ -407,6 +407,8 @@ router.post("/leaseRequest", ValidateJWT, async (req, res)=>
     leaseRequestObject.endDate = new Date(leaseRequestObject.endDate)
     leaseRequestObject.price = Number(leaseRequestObject.price)
     leaseRequestObject.active = false
+    leaseRequestObject.paymentPlan = "Monthly"
+    leaseRequestObject.paymentDates = []
     let lease = await LeaseSchema.create(leaseRequestObject)
     await lease.save()
     await UserSchema.updateOne({_id: req.auth.email}, {$push: {myRequests: leaseRequestObject.landlord}})
@@ -423,7 +425,82 @@ router.get("/tenantRequests", ValidateJWT, async (req, res)=>
 
 router.post("/closeLeaseRequest", ValidateJWT, async (req, res)=>
 {
-    
+    let {activate, _id} = req.body
+    let id = ObjectId(_id)
+    if(activate)
+    {
+        
+        let LeaseItem = await LeaseSchema.findOne({_id: id})
+        await LeaseSchema.updateOne({_id: id}, {active: true})
+        let paymentArray = []
+        console.log(LeaseItem)
+        let startDate = new Date(LeaseItem.startDate)
+        let endDate = new Date(LeaseItem.endDate)
+        if(LeaseItem.paymentPlan == "Weekly")
+        {
+            while(startDate < endDate)
+            {
+                paymentArray.push(new Date(startDate.toLocaleDateString()))
+                console.log(startDate)
+                startDate.setDate(startDate.getDate()+7)
+            }
+        }
+        else if(LeaseItem.paymentPlan == "Monthly")
+        {
+            
+            while(startDate < endDate)
+            {
+                paymentArray.push(new Date(startDate.toLocaleDateString()))
+                for(let counter = 0; counter < 4; counter++)
+                {
+                    console.log(startDate)
+                    startDate.setDate(startDate.getDate()+7)
+                }
+            }
+        }
+        else
+        {
+            while(startDate < endDate)
+            {
+                paymentArray.push(startDate)
+                for(let counter = 0; counter < 55; counter++)
+                {
+                    startDate.setDate(startDate.getDate()+7)
+                }
+            }
+        }
+        await LeaseSchema.updateOne({_id: id}, {paymentDates: paymentArray})
+    }
+    else
+    {
+        await LeaseSchema.remove({_id: id})
+    }
+    res.json({success: true})
+})
+
+router.post("/eventList", ValidateJWT, async (req, res)=>
+{
+    let {amITheLandlord, date} = req.body
+    let LeaseList
+    if(amITheLandlord)
+    {
+        LeaseList = await LeaseSchema.find({landlord: req.auth.email})
+    }
+    else
+    {
+        LeaseList = await LeaseSchema.find({tenant: req.auth.email})
+    }
+    LeaseList.filter((temp)=>{
+        date?.setMonth(date?.getMonth() + 1)
+        date?.setDay(1)
+        let newDate = new Date(date)
+        if(temp?.paymentDates.find((tempDate)=>tempDate < newDate))
+        {
+            return temp
+        }
+    })
+    console.log(LeaseList)
+    res.json({success: true, events: LeaseList})
 })
 
 router.post("/profileList", async (req, res)=>

@@ -11,7 +11,11 @@ export default function RentalRequest(props)
     console.log(props?.listing)
     let [propOwner, setPropOwner] = React.useState()
     let {getAccessTokenSilently} = useAuth0()
-    let [requestForm, setRequestForm] = React.useState({startDate: "", endDate: "", price: '' + price, landlord: owner, property: _id})
+    let [requestForm, setRequestForm] = React.useState({startDate: "", endDate: "", price: '' + price, landlord: owner, property: _id, paymentMethod: "Monthly"})
+
+    let monthlyRef = React.useRef()
+    let weeklyRef = React.useRef()
+    let yearlyRef = React.useRef()
 
     function buildRequest(evt)
     {
@@ -23,7 +27,7 @@ export default function RentalRequest(props)
 
         })
     }
-
+    console.log(requestForm)
     function changePrice(evt)
     {
         let newVal = evt.currentTarget.value
@@ -68,6 +72,17 @@ export default function RentalRequest(props)
         <input type="date" id='startDate' name='startDate' value={requestForm.startDate} onChange={toggleDate}/>
         <label htmlFor="askingPrice">End Date</label>
         <input type="date" id='endDate' name='endDate' value={requestForm.endDate} onChange={toggleDate}/>
+        <div className="rowFlex" style={{width: "100%", justifyContent: "space-evenly"}}>
+            <div className='rowFlex' style={{gap: "5px"}}>
+                <input type="radio" ref={weeklyRef} name="paymentMethod" title='Weekly' value={"Weekly"} checked={"Weekly"== requestForm.paymentMethod} onClick={toggleDate}/> <p>Weekly</p>
+            </div>
+            <div className='rowFlex' style={{gap: "5px"}}>
+                <input type="radio" ref={monthlyRef} name="paymentMethod" title='Monthly' value={"Monthly"} checked={"Monthly" == requestForm.paymentMethod}  onClick={toggleDate}/> <p>Monthly</p>
+            </div>
+            <div className='rowFlex' style={{gap: "5px"}}>
+                <input type="radio" checked={"Yearly" == requestForm.paymentMethod} ref={yearlyRef} name="paymentMethod" title='Yearly' value={"Yearly"}  onClick={toggleDate}/> <p>Yearly</p>
+            </div>
+        </div>
         <button className="blockButton" onClick={buildRequest}>Request Lease</button>
     </div>)
 }
