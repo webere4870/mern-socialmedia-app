@@ -484,11 +484,11 @@ router.post("/eventList", ValidateJWT, async (req, res)=>
     let LeaseList
     if(amITheLandlord)
     {
-        LeaseList = await LeaseSchema.find({landlord: req.auth.email})
+        LeaseList = await LeaseSchema.find({$and: [{landlord: req.auth.email}, {active: true}]})
     }
     else
     {
-        LeaseList = await LeaseSchema.find({tenant: req.auth.email})
+        LeaseList = await LeaseSchema.find({$and: [{tenant: req.auth.email}, {active: true}]})
     }
     LeaseList.filter((temp)=>{
         date?.setMonth(date?.getMonth() + 1)

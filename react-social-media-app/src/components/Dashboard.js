@@ -106,11 +106,11 @@ export default function Dashboard(props)
                     </button>
                 </div>
                 <div id="reviewTile" className='tile'>
+                        <Events/>
                         <Calendar/>
                 </div>
                 <AvailableReviews listingsArr={user?.availableReviews}/>
                 <Requests/>
-                <Events/>
             </div>
         </DateContext.Provider>
         

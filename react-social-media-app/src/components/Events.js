@@ -18,13 +18,38 @@ export default function Events(props)
         })
     }, [currentDate])
     
-    let sortedEvents = events?.map((event)=>
+    let newEvents = []
+    let nextMonthDate = new Date(currentDate?.toLocaleDateString())
+    console.log(currentDate.getMonth())
+    nextMonthDate.setMonth(nextMonthDate.getMonth() + 1)
+    nextMonthDate.setDate(1)
+    events?.map((event, index)=>
     {
-        
+        for(let temp of event?.paymentDates)
+        {
+            if(new Date(temp).getMonth() < nextMonthDate?.getMonth()-1)
+            {
+                newEvents.push({...event, eventDate: new Date(temp)})
+            }
+        }
+    })
+
+    let sortedEvents = newEvents.sort(
+        (event1, event2) => (event1?.eventDate < event2?.eventDate) ? 1 : (event1?.eventDate > event2?.eventDate)  ? -1 : 0);
+
+    let eventMap = sortedEvents?.map((temp)=>
+    {
+        return (
+        <div>
+
+        </div>)
     })
 
     return (
-    <div id="eventsList" className="tile">
-
+    <div id="eventsList">
+        <div className="colFlex">
+            <h1 id="blockNumber">{currentDate?.getDate()}</h1>
+            <h1>{currentDate?.getMonth()}</h1>
+        </div>
     </div>)
 }

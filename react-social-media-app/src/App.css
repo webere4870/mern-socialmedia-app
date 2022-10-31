@@ -40,8 +40,8 @@ h6{
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-template-rows: repeat(4, auto);
 	grid-template-areas: 
-	"events events reviews reviews reviews"
-	"events events reviews reviews reviews"
+	"reviews reviews reviews reviews reviews"
+	"reviews reviews reviews reviews reviews"
 	"calendar calendar calendar requests requests"
 	"calendar calendar calendar requests requests"
 	"profile2 profile2 profile profile profile"
@@ -53,7 +53,25 @@ h6{
 
 #eventsList
 {
-	grid-area: events;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 30px;
+	width: 30%;
+	height: 100%;
+	background: linear-gradient(var(--mainColor), var(--secondaryColor));
+}
+
+#blockNumber
+{
+	color: white;
+	font-size: 130px;
+}
+
+.event
+{
+
 }
 
 #incomingRequests
@@ -161,7 +179,14 @@ h6{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-	padding: 20px;
+	padding: 40px 30px;
+	height: 100%;
+	width: 70%;
+}
+
+#calendarGrid > div:last-of-type
+{
+	padding-bottom: 20px;
 }
 
 #calendarGrid .circleSVG{
@@ -181,7 +206,7 @@ h6{
 	width: 100%;
     align-items: center;
     flex-direction: row;
-	margin: 0;
+	margin: -3px;
 }
 
 #availableReviews{
@@ -210,8 +235,12 @@ h6{
 #reviewTile
 {
 	grid-area: reviews;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 100%;
-	padding: 10px;
+	height: 450px;
+	overflow: hidden;
 }
 
 #profileTile

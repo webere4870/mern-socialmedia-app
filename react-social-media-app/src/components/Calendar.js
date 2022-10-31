@@ -82,8 +82,8 @@ export default function Calendar(props)
         return index == indexer
     })
     return (
-        <div id='calendarGrid'>
-            <div className='rowFlex' style={{justifyContent: "space-between", width: "100%"}}>
+        <div id='calendarGrid' style={{padding: "40px 20px"}}>
+            <div className='rowFlex' style={{justifyContent: "space-between", width: "100%", marginTop: '40px'}}>
                 {/* <div className="circleSVG">
                     <svg onClick={(evt)=>newDate(-12)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
