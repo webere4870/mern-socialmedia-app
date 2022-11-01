@@ -175,11 +175,15 @@
   width: 100%;
   border-radius: 15px;
   padding: 5px 5px 5px 45px;
-  position: absolute;
-  top: 0;
-  left: 0;
+  background: rgba(0,0,0,.2);
+  color: white;
   z-index: 5;
   font-size: 15px;
+}
+
+.round::placeholder
+{
+  color: rgb(174, 174, 174);
 }
 
 .corner {
@@ -194,10 +198,12 @@
 
 .search {
   position: relative;
-  width: 85%;
+  width: 270px;
   height: 30px;
   margin: 0px 0 20px 0;
+  background: rgba(0,0,0,0);
 }
+
 
 #fullChat h3{
   margin: 10px 25px 0 25px;

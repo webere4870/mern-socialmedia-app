@@ -89,7 +89,6 @@ export default function SearchBar(props)
     return(
     <div className='colFlex'>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossOrigin="anonymous"/>
-        <form action="" id='former'>
         <div id='searcher'>
         <div className="search">
         <input type="search" className="round"  onChange={(evt)=> setData(evt)} value={inputData} placeholder='Address, Name, Username' required/><Navigator/>
@@ -99,6 +98,5 @@ export default function SearchBar(props)
         
         
 
-        </form>
     </div>)
 }
