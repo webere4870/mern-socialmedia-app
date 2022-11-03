@@ -2158,6 +2158,11 @@ nav *
 	fill: var(--secondaryColor) !important;
 }
 
+#citySelect
+{
+	width: 200px;
+}
+
 .filterTile
 {
 	padding: 30px;

@@ -13,6 +13,7 @@ import UserContext from './Context'
 import QueryString from 'query-string'
 import StateSelect from './StateSelect'
 import * as Icon from 'react-bootstrap-icons'
+import CitySelect from './CitySelect'
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
 Geocode.setLanguage("en");
@@ -80,11 +81,11 @@ export default function Search(props)
     async function getListings()
     {
       console.log(form)
-      let response = await Fetch("listings", {method: "POST", headers:{'Content-Type': 'application/json'}, body: JSON.stringify(form)})
+      let response = await Fetch("listings", {method: "POST", headers:{'Content-Type': 'application/json'}, body: JSON.stringify(filterValues)})
       console.log(response)
       setListings((prev)=>
       {
-        return response.listings
+        return [...response.listings]
       })
     }
 
@@ -110,7 +111,7 @@ export default function Search(props)
     
     React.useEffect(()=>
     {
-        Geocode.fromAddress(`${form.city}, ${form.state}`).then(
+        Geocode.fromAddress(`${filterValues.city}, ${filterValues.state}`).then(
             (response) => {
               const { lat, lng } = response.results[0].geometry.location;
               setMapCenter((prev)=>
@@ -136,18 +137,20 @@ export default function Search(props)
 
     React.useEffect(()=>
     {
+      console.log("Retrig")
       getListings().then(()=>
       {
         console.log("Suc")
       })
-    },[])
+    },[filterValues])
 
     
-
+    console.log(filterValues)
     return (<div className='App' id="searchPage" style={{flexDirection: "row", flexWrap: "wrap", gap: "30px"}}>
         <Nav/>
 
         {filterObj.state && <StateSelect filterValues={filterValues} setFilterValues={setFilterValues}/>}
+        {filterObj.city && <CitySelect filterValues={filterValues} setFilterValues={setFilterValues}/>}
         {/* <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/> */}
         {/* {sideToggle && <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray} sideToggle={sideToggle} setSideToggle={setSideToggle}/>} */}
         {!sideToggle && <BigListing selected={selected} setSelected={setSelected} listingsArray={listingsArray} setSideToggle={setSideToggle}/>}
@@ -158,7 +161,7 @@ export default function Search(props)
               <Icon.PinMap color='rgba(128,128,128,.5)' size={"30"} fontWeight={"lighter"} />
               <p>State</p>
             </div>
-            <div className="colFlex filterOption" name="state" onClick={()=>toggleFilters("state")}>
+            <div className="colFlex filterOption" name="state" onClick={()=>toggleFilters("city")}>
               <Icon.PinMap color='rgba(128,128,128,.5)' size={"30"} fontWeight={"lighter"} />
               <p>City</p>
             </div>

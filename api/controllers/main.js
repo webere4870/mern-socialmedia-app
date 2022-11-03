@@ -238,15 +238,22 @@ router.get("/messageThreads", ValidateJWT, async (req, res)=>
 router.post("/listings", async (req, res)=>
 {
     let {city, state, price} = req.body
-    let listings
-    if(price)
+    let listings = []
+    if(!city || !state)
     {
-        listings = await ListingSchema.find({city: city, state: state})
+        
     }
-    else
-    {
-        listings = await ListingSchema.find({$and: [{state: state}]})
+    else{
+        if(price)
+        {
+            listings = await ListingSchema.find({city: city, state: state})
+        }
+        else
+        {
+            listings = await ListingSchema.find({$and: [{state: state}]})
+        }
     }
+    
     res.json({success: true, listings: listings})
 })
 
