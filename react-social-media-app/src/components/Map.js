@@ -21,10 +21,39 @@ const Map = (props) => {
     />
     )
   })
-  
+  let mapStyless = [{
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [
+        {
+            color: "#eeeeee",
+        },
+    ],
+},
+{
+    featureType: "poi",
+    elementType: "labels.text",
+    stylers: [
+        {
+            visibility: "off",
+        },
+    ],
+},
+{
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [
+        {
+            color: "#9e9e9e",
+        },
+    ],
+},]
   return (
      
         <GoogleMap
+        options={{
+          styles: mapStyless
+        }}
           mapContainerStyle={mapStyles}
           zoom={13}
           center={props.center}>

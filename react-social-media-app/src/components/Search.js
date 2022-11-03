@@ -11,6 +11,8 @@ import BigListing from './BigListing'
 import SlideShow from './SlideShow'
 import UserContext from './Context'
 import QueryString from 'query-string'
+import StateSelect from './StateSelect'
+import * as Icon from 'react-bootstrap-icons'
 
 Geocode.setApiKey("AIzaSyBM30jMWwV1hwTHUTJcSijFCnu-3XcunUE");
 Geocode.setLanguage("en");
@@ -22,13 +24,14 @@ export default function Search(props)
 {
     let {city, state, lat, lng} = QueryString.parse(window.location.search)
     let [mapCenter, setMapCenter] = React.useState({lat: lat, lng: lng})
-    let [form, setForm] = React.useState({city: "Findlay", state: "OH", price: "0"})
+    let [form, setForm] = React.useState({city: "", state: "", price: "0"})
     let [user, setUser] = React.useContext(UserContext)
     let [selected, setSelected] = React.useState({})
     let [listings, setListings] = React.useState([])
     let [sideToggle, setSideToggle] = React.useState(true)
     let [saved, setSaved] = React.useState([])
-    
+    let [filterObj, setFilterObj] = React.useState({state: false, city: false, cost: false})
+    let [filterValues, setFilterValues] = React.useState({state: "", city: "", cost: ""})
     const onSelect = item => {
       console.log("selected budy", item)
       setSelected(item);
@@ -42,7 +45,27 @@ export default function Search(props)
       })
       setMapCenter({lat: selected.lat, lng: selected.lng})
     }
-    
+
+    function toggleFilters(names)
+    {
+      let name = names
+      setFilterObj((prev)=>
+      {
+        let newObj = {}
+        for(let [key, val] of Object.entries(prev))
+        {
+          if(key == name)
+          {
+            newObj[name] = !val
+          }
+          else{
+            newObj[key] = false
+          }
+        }
+        return newObj
+      })
+    }
+    console.log("Filter obj",filterObj)
 
     function handleState(evt)
     {
@@ -121,14 +144,32 @@ export default function Search(props)
 
     
 
-    return (<div id='searchPage'>
+    return (<div className='App' id="searchPage" style={{flexDirection: "row", flexWrap: "wrap", gap: "30px"}}>
         <Nav/>
-        
-        <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/>
+
+        {filterObj.state && <StateSelect filterValues={filterValues} setFilterValues={setFilterValues}/>}
+        {/* <BigMap mapCenter={mapCenter} setMapCenter={setMapCenter} markersArray={markersArray}/> */}
         {/* {sideToggle && <SearchForm  getListings={getListings} form={form} setForm={setForm} handleState={handleState} listingsArray={listingsArray} sideToggle={sideToggle} setSideToggle={setSideToggle}/>} */}
         {!sideToggle && <BigListing selected={selected} setSelected={setSelected} listingsArray={listingsArray} setSideToggle={setSideToggle}/>}
-        <div id="sideToggle">
-          {listingsArray}
+        
+        <div id="searchContainer">
+          <div id="filterNav">
+            <div className="colFlex filterOption" name="state" onClick={()=>toggleFilters("state")}>
+              <Icon.PinMap color='rgba(128,128,128,.5)' size={"30"} fontWeight={"lighter"} />
+              <p>State</p>
+            </div>
+            <div className="colFlex filterOption" name="state" onClick={()=>toggleFilters("state")}>
+              <Icon.PinMap color='rgba(128,128,128,.5)' size={"30"} fontWeight={"lighter"} />
+              <p>City</p>
+            </div>
+          </div>
+          <div id='searchSub'>
+            {listingsArray.length == 0 && filterObj.state==false && filterObj.city==false && filterObj.cost == false && <div className='rowFlex'><Icon.Search color='gray' size={"20"}/><p style={{margin: "0 10px"}}>No listings found</p></div>}
+            {listingsArray}
+          </div>
+          
         </div>
+        
+        
     </div>)
 }

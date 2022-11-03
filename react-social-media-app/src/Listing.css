@@ -4,13 +4,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 300px;
+  width: 250px;
 }
 
 .topListing
 {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   box-shadow: 0 0 10px gray;
   border-radius: 10px;
   background-repeat: no-repeat;

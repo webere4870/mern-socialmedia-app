@@ -12,6 +12,7 @@
   --offWhite: white;
 }
 
+
 body
 {
   overflow-x: hidden;
@@ -686,20 +687,90 @@ h3{
 
 #profileMap
 {
-	width: 600px;
-	height: 400px;
+	width: 100%;
+	height: 100%;
 }
 
 #searchPage
 {
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	flex-direction: row;
 	flex-wrap: wrap;
-	height: 100vh;
-	width: 100vw;
-	overflow: hidden;
+}
+
+#filterNav
+{
+	height: 90px;
+	width: calc(100% - 300px);
+	background: white;
+	box-shadow: 0 0 10px rgb(185, 185, 185);
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+}
+
+#filterNav > div{
+	margin-top: 20px;
+}
+
+#searchContainer
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	flex-wrap: wrap;
+	gap: 40px;
+}
+#us-map{
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+  }
+  path:hover, circle:hover {
+	stroke: #002868 !important;
+	stroke-width:2px;
+	stroke-linejoin: round;
+	fill: #002868 !important;
+	cursor: pointer;
+  }
+  #path67 {
+	fill: none !important;
+	stroke: #A9A9A9 !important;
+	cursor: default;
+  }
+  #info-box {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+	background-color: #ffffff;
+	border: 2px solid #BF0A30;
+	border-radius: 5px;
+	padding: 5px;
+	font-family: arial;
+  }
+#searchSub
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	flex-wrap: wrap;
+	gap: 40px;
+	margin-top: 50px;
 }
 
 #searchMap
@@ -880,21 +951,7 @@ h3{
 
 #sideToggle
 {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 100vw;
-	min-height: 100vh;
-	margin-top: 70px;
-	z-index: 5;
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	text-align: center;
-	flex-direction: row;
-	flex-wrap: wrap;
-	padding: 20px;
-	background: var(--offWhite);
+	
 }
 
 #profilePage{
@@ -2082,4 +2139,47 @@ div{
 nav *
 {
 	color: white;
+}
+
+.outlines path:hover{
+	opacity: .9;
+	fill: var(--secondaryColor) !important;
+	stroke: none !important;
+	border-color: white !important;
+}
+
+#filterNav svg:hover > path {
+	fill: unset !important;
+	cursor: pointer;
+}
+
+.selectedState
+{
+	fill: var(--secondaryColor) !important;
+}
+
+.filterTile
+{
+	padding: 30px;
+	border-radius: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: white;
+	box-shadow: 0 0 10px rgb(198, 198, 198);
+}
+
+.filterOption
+{
+
+}
+
+.filterOption:hover{
+	cursor: pointer;
+}
+
+#stateBlock
+{
+	height: 400px;
+	width: 500px;
 }
